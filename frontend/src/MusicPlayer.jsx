@@ -37,6 +37,7 @@ function MusicPlayer() {
 
     audio.pause();
     audio.currentTime = 0;
+
     setPlaying(false);
     setCurrentTime(0);
     setDuration(0);
@@ -55,7 +56,6 @@ function MusicPlayer() {
     const handleEnded = () => {
       setPlaying(false);
       setCurrentTime(0);
-
       setSongIndex((current) => (current + 1) % songs.length);
     };
 
@@ -105,6 +105,11 @@ function MusicPlayer() {
     }
   }
 
+  function selectSong(index) {
+    setSongIndex(index);
+    setError("");
+  }
+
   function previousSong() {
     setSongIndex((current) =>
       current === 0 ? songs.length - 1 : current - 1
@@ -120,14 +125,12 @@ function MusicPlayer() {
     if (!audio) return;
 
     const value = Number(event.target.value);
-
     audio.currentTime = value;
     setCurrentTime(value);
   }
 
   function changeVolume(event) {
-    const value = Number(event.target.value);
-    setVolume(value);
+    setVolume(Number(event.target.value));
   }
 
   function formatTime(seconds) {
@@ -150,14 +153,14 @@ function MusicPlayer() {
       <div className="player-info">
         <div className="player-cover">🎵</div>
 
-        <div>
+        <div className="player-track-text">
           <strong>{song.title}</strong>
           <span>{song.artist}</span>
         </div>
       </div>
 
       <div className="player-controls">
-        <button type="button" onClick={previousSong}>
+        <button type="button" onClick={previousSong} aria-label="Previous song">
           ⏮
         </button>
 
@@ -165,11 +168,12 @@ function MusicPlayer() {
           type="button"
           className="player-play"
           onClick={togglePlay}
+          aria-label={playing ? "Pause" : "Play"}
         >
           {playing ? "⏸" : "▶"}
         </button>
 
-        <button type="button" onClick={nextSong}>
+        <button type="button" onClick={nextSong} aria-label="Next song">
           ⏭
         </button>
       </div>
@@ -184,13 +188,14 @@ function MusicPlayer() {
           step="0.1"
           value={Math.min(currentTime, duration || 0)}
           onChange={seek}
+          aria-label="Song progress"
         />
 
         <span>{formatTime(duration)}</span>
       </div>
 
       <div className="player-volume">
-        <span>🔊</span>
+        <span>{volume === 0 ? "🔇" : "🔊"}</span>
 
         <input
           type="range"
@@ -203,11 +208,33 @@ function MusicPlayer() {
         />
       </div>
 
-      {error && (
-        <div className="player-error">
-          {error}
-        </div>
-      )}
+      {error && <div className="player-error">{error}</div>}
+
+      <div className="music-queue">
+        <div className="queue-title">🎶 AP-STREAM Queue</div>
+
+        {songs.map((item, index) => (
+          <button
+            type="button"
+            key={item.src}
+            className={`queue-song ${
+              index === songIndex ? "active" : ""
+            }`}
+            onClick={() => selectSong(index)}
+          >
+            <span className="queue-number">
+              {index === songIndex && playing ? "🔊" : index + 1}
+            </span>
+
+            <span className="queue-details">
+              <strong>{item.title}</strong>
+              <small>{item.artist}</small>
+            </span>
+
+            {index === songIndex && <span>✓</span>}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
