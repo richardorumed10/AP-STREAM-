@@ -1,0 +1,1852 @@
+.music-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 14px 18px;
+  background: #0b1115;
+  color: white;
+  border-top: 2px solid #16833a;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.music-player strong {
+  display: block;
+}
+
+.music-player small {
+  color: #aaa;
+}
+
+.music-player button {
+  background: #16833a;
+  color: white;
+  border: none;
+  padding: 9px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.news-section {
+  padding: 40px 20px;
+}
+
+.news-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.news-categories button,
+.news-search button,
+.news-card button {
+  cursor: pointer;
+}
+
+.news-search {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0 30px;
+}
+
+.news-search input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 18px;
+}
+
+.news-card {
+  padding: 20px;
+  border-radius: 14px;
+  background: #111a1f;
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 4px 14px rgba(0,0,0,.08);
+}
+
+.news-card h3 {
+  margin: 10px 0;
+}
+
+.news-label {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.news-card.breaking {
+  border-left: 5px solid #d62828;
+}
+
+.news-footer {
+  margin-top: 25px;
+  padding: 15px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #101820, #16252b);
+}
+
+@media (max-width: 600px) {
+  .news-search {
+    flex-direction: column;
+  }
+
+  .news-section {
+    padding: 30px 14px;
+  }
+}
+
+
+/* =========================================================
+   AP-STREAM NEW HOME
+   ========================================================= */
+
+.ap-home {
+  width: 100%;
+  overflow: hidden;
+}
+
+.home-hero {
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  padding: 80px 7%;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(0, 120, 255, .18), transparent 35%),
+    radial-gradient(circle at 20% 80%, rgba(120, 0, 255, .14), transparent 35%);
+}
+
+.hero-content {
+  max-width: 850px;
+}
+
+.hero-kicker,
+.home-heading span,
+.home-feature span,
+.home-community > span {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.home-hero h1 {
+  font-size: clamp(46px, 8vw, 88px);
+  line-height: .98;
+  margin: 18px 0;
+}
+
+.home-hero p {
+  max-width: 680px;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.hero-actions,
+.community-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.home-button,
+.community-actions a {
+  display: inline-block;
+  padding: 13px 20px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 800;
+  border: 1px solid rgba(128,128,128,.3);
+}
+
+.home-button.primary {
+  background: #0b1115;
+  color: white;
+}
+
+.home-section {
+  padding: 70px 7%;
+}
+
+.home-heading {
+  margin-bottom: 28px;
+}
+
+.home-heading h2,
+.home-feature h2,
+.home-community h2 {
+  font-size: clamp(28px, 5vw, 48px);
+  margin: 8px 0;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.home-card {
+  min-height: 240px;
+  padding: 25px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #101820, #16252b);
+}
+
+.home-card h3 {
+  font-size: 23px;
+}
+
+.home-card p {
+  line-height: 1.6;
+}
+
+.home-card a,
+.game-preview a {
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.home-feature {
+  margin: 0 7%;
+  padding: 55px;
+  border-radius: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  background: linear-gradient(145deg, #101820, #16252b);
+}
+
+.feature-icon {
+  font-size: 120px;
+}
+
+.game-preview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.game-preview article {
+  padding: 25px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #101820, #16252b);
+}
+
+.game-icon {
+  font-size: 48px;
+}
+
+.home-community {
+  text-align: center;
+  max-width: 850px;
+  margin: auto;
+}
+
+.community-actions {
+  justify-content: center;
+}
+
+.home-join {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.home-join p {
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+@media (max-width: 900px) {
+  .home-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .game-preview {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-hero {
+    min-height: 500px;
+    padding: 60px 20px;
+  }
+
+  .home-section {
+    padding: 50px 20px;
+  }
+
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-feature {
+    margin: 0 20px;
+    padding: 30px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    font-size: 80px;
+  }
+}
+
+
+/* ===== AP-STREAM NEON BRAND HEADER ===== */
+header {
+  background:
+    radial-gradient(circle at 8% 50%, rgba(0, 255, 180, 0.10), transparent 28%),
+    radial-gradient(circle at 92% 50%, rgba(120, 70, 255, 0.10), transparent 28%),
+    rgba(5, 9, 16, 0.97);
+  border-bottom: 1px solid rgba(0, 255, 180, 0.30);
+  box-shadow:
+    0 8px 30px rgba(0,0,0,.35),
+    0 1px 18px rgba(0,255,180,.08);
+}
+
+.ap-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: max-content;
+}
+
+.ap-logo {
+  width: 150px;
+  height: 58px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  flex-shrink: 0;
+  border-radius: 8px;
+}
+
+
+.ap-brand-name {
+  font-weight: 900;
+  font-size: 21px;
+  letter-spacing: .8px;
+  color: #fff;
+  text-shadow:
+    0 0 10px rgba(0,255,190,.22),
+    0 0 20px rgba(120,70,255,.12);
+}
+
+.ap-brand .account-indicator {
+  margin-left: 6px;
+  font-size: 12px;
+  opacity: .9;
+}
+
+header nav a {
+  transition: .2s ease;
+}
+
+header nav a:hover {
+  color: #00ffb3;
+  text-shadow: 0 0 10px rgba(0,255,179,.45);
+}
+
+@media (max-width: 700px) {
+  .ap-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ap-brand-name {
+    font-size: 18px;
+  }
+}
+
+/* =====================================================
+   AP-STREAM HOME — STRICT GREEN + PINK THEME
+   ===================================================== */
+
+body {
+  background: #e8f8ee;
+}
+
+#home,
+.home,
+.home-page {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255, 190, 215, 0.75), transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(180, 235, 205, 0.8), transparent 40%),
+    linear-gradient(135deg, #dff7e8 0%, #f9dce9 50%, #dff7e8 100%);
+  color: #173b2a;
+}
+
+#home *,
+.home *,
+.home-page * {
+  --ap-green: #b9e8c9;
+  --ap-pink: #f5c5d8;
+}
+
+#home .hero,
+.home .hero,
+.home-page .hero {
+  background:
+    linear-gradient(135deg, #b9e8c9, #f5c5d8);
+  border-radius: 24px;
+}
+
+#home .card,
+#home .section,
+.home .card,
+.home-page .card {
+  background: rgba(245, 197, 216, 0.72);
+  border: 1px solid rgba(105, 170, 130, 0.35);
+}
+
+#home button,
+.home button,
+.home-page button {
+  background: linear-gradient(135deg, #9fd9b4, #efb6ce);
+  color: #173b2a;
+  border: 0;
+}
+
+#home a,
+.home a,
+.home-page a {
+  color: #397653;
+}
+
+
+/* AP-STREAM — clean pale green + pale pink */
+body {
+  background: #e8f7ee !important;
+}
+
+main {
+  background: linear-gradient(135deg, #e4f6ea, #f8dfe9) !important;
+}
+
+main > section {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+main > section > div {
+  box-shadow: none;
+}
+
+
+/* AP-STREAM: flat feature layout — no card boxes */
+.cards,
+.card,
+.news-card,
+.artist-profile-card,
+.artist-card-cover,
+.artist-card-body,
+.artist-card-actions,
+.login-card,
+.home-card,
+.game-preview {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* AP-STREAM SOCIAL THEME */
+:root {
+  --ap-green: #dff5e5;
+  --ap-green-strong: #bfe8cc;
+  --ap-pink: #f8dce8;
+  --ap-pink-strong: #efb7cf;
+  --ap-text: #18352a;
+  --ap-white: #ffffff;
+}
+
+body {
+  background: linear-gradient(135deg, var(--ap-green), #f8fbf9 48%, var(--ap-pink));
+  color: var(--ap-text);
+}
+
+.ap-home {
+  background: transparent;
+}
+
+.home-card,
+.home-feature,
+.music-player-card,
+.home-button.primary {
+  background: linear-gradient(135deg, #9bd9ad, var(--ap-pink-strong));
+  color: #18352a;
+  border: none;
+}
+
+.home-button {
+  border-radius: 999px;
+}
+
+.music-player-card {
+  background: linear-gradient(135deg, #e8f8ed, #f9e4ed);
+}
+
+.music-visualizer {
+  color: #d85b91;
+  font-size: 2rem;
+  letter-spacing: 8px;
+}
+
+.short-preview {
+  background: linear-gradient(135deg, #bfe8cc, #f0bfd5);
+  border-radius: 16px;
+}
+
+.home-section {
+  background: transparent;
+}
+
+a {
+  color: #23734a;
+}
+
+button {
+  border-radius: 999px;
+}
+
+
+
+/* AP-STREAM SHORTS + VIDEOS */
+.media-section {
+  margin: 28px 0;
+  padding: 0;
+}
+
+.media-heading {
+  margin-bottom: 12px;
+}
+
+.media-heading h2 {
+  margin-bottom: 4px;
+}
+
+.shorts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  overflow-x: auto;
+}
+
+.short-card {
+  min-width: 150px;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(160deg, #dff5e7, #f9dce7);
+}
+
+.short-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+}
+
+.short-card h3 {
+  margin: 6px 0 2px;
+  font-size: 15px;
+}
+
+.short-card p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.videos-heading {
+  margin-top: 30px;
+}
+
+.featured-video {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #111;
+}
+
+.video-placeholder {
+  min-height: 260px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  color: white;
+}
+
+.video-placeholder span {
+  font-size: 48px;
+}
+
+.video-placeholder strong {
+  font-size: 18px;
+}
+
+.video-placeholder small {
+  opacity: 0.8;
+}
+
+.video-controls-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  background: #181818;
+}
+
+.video-controls-preview button {
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .shorts-grid {
+    grid-template-columns: repeat(3, minmax(135px, 1fr));
+    overflow-x: auto;
+  }
+
+  .short-card {
+    min-width: 135px;
+  }
+
+  .video-placeholder {
+    min-height: 220px;
+  }
+}
+
+
+.social-menu {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0;
+  margin-bottom: 14px;
+  white-space: nowrap;
+}
+
+.social-menu button {
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 10px;
+  padding: 9px 12px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.social-menu::-webkit-scrollbar {
+  height: 4px;
+}
+
+
+.home-header {
+  padding: 28px 5%;
+}
+
+.home-header h1 {
+  margin: 8px 0;
+}
+
+.home-header p {
+  margin: 0;
+}
+
+.home-tabs,
+.home-quick-actions {
+  display: flex;
+  gap: 10px;
+  padding: 0 5% 18px;
+  overflow-x: auto;
+}
+
+.home-tabs button,
+.home-quick-actions button {
+  border: 0;
+  padding: 10px 16px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.home-tabs .active {
+  background: var(--ap-green-strong);
+  color: var(--ap-text);
+}
+
+.home-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 0 5% 28px;
+}
+
+.home-card {
+  border-radius: 16px;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.home-card-media {
+  min-height: 100px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--ap-green-strong), var(--ap-pink-strong));
+  font-weight: 800;
+}
+
+.home-card-content {
+  padding: 12px;
+}
+
+.home-card-content p {
+  margin: 5px 0 10px;
+  font-size: 13px;
+}
+
+.home-card-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.home-card-actions button {
+  border: 0;
+  background: transparent;
+  padding: 5px;
+  cursor: pointer;
+}
+
+@media (max-width: 520px) {
+  .home-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* AP STREAM — HORIZONTAL SOCIAL HUB */
+
+.social-hub {
+  width: 100%;
+  padding: 24px 5%;
+  box-sizing: border-box;
+}
+
+.social-hub-header {
+  margin-bottom: 14px;
+}
+
+.social-hub-header h2 {
+  margin: 4px 0;
+}
+
+.social-menu {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 4px 2px 12px;
+  scrollbar-width: thin;
+}
+
+.social-menu button {
+  flex: 0 0 auto;
+  min-width: 130px;
+  padding: 14px 18px;
+  border: 0;
+  border-radius: 16px;
+  background: #f8dce8;
+  color: #18352a;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.social-menu button:hover,
+.social-menu button:focus-visible {
+  background: #bfe8cc;
+}
+
+@media (max-width: 600px) {
+  .social-hub {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .social-menu {
+    gap: 8px;
+  }
+
+  .social-menu button {
+    min-width: 120px;
+  }
+}
+
+
+/* AP STREAM — HORIZONTAL SOCIAL HUB */
+
+.social-hub {
+  width: 100%;
+  padding: 24px 5%;
+  box-sizing: border-box;
+}
+
+.social-hub-header {
+  margin-bottom: 14px;
+}
+
+.social-menu {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 4px 2px 12px;
+  scrollbar-width: thin;
+}
+
+.social-menu button {
+  flex: 0 0 auto;
+  min-width: 130px;
+  padding: 14px 18px;
+  border: 0;
+  border-radius: 16px;
+  background: #f8dce8;
+  color: #18352a;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.social-menu button:hover,
+.social-menu button:focus-visible {
+  background: #bfe8cc;
+}
+
+@media (max-width: 600px) {
+  .social-hub {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .social-menu {
+    gap: 8px;
+  }
+
+  .social-menu button {
+    min-width: 120px;
+  }
+}
+
+
+/* AP-STREAM Trending Music — horizontal row */
+#music .cards {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 4px 16px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+#music .cards .card {
+  flex: 0 0 220px;
+  scroll-snap-align: start;
+}
+
+#music .cards::-webkit-scrollbar {
+  height: 6px;
+}
+
+@media (max-width: 600px) {
+  #music .cards .card {
+    flex-basis: 190px;
+  }
+}
+
+
+/* AP-STREAM Neon Music Equalizer */
+.neon-equalizer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  height: 38px;
+  margin: 8px 0;
+}
+
+.neon-equalizer span {
+  width: 5px;
+  height: 10px;
+  border-radius: 5px;
+  background: linear-gradient(to top, #00ff88, #00eaff, #ff2bd6);
+  box-shadow:
+    0 0 5px #00eaff,
+    0 0 10px #00ff88,
+    0 0 15px #ff2bd6;
+  animation: apEqualizer 0.65s ease-in-out infinite alternate;
+}
+
+.neon-equalizer span:nth-child(2) { animation-delay: .12s; }
+.neon-equalizer span:nth-child(3) { animation-delay: .24s; }
+.neon-equalizer span:nth-child(4) { animation-delay: .08s; }
+.neon-equalizer span:nth-child(5) { animation-delay: .20s; }
+.neon-equalizer span:nth-child(6) { animation-delay: .32s; }
+.neon-equalizer span:nth-child(7) { animation-delay: .16s; }
+
+@keyframes apEqualizer {
+  from { height: 7px; }
+  to { height: 36px; }
+}
+
+/* AP STREAM — LARGE MUSIC PLAYER */
+
+.home-player-large {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-height: 260px;
+  padding: 28px;
+  border-radius: 24px;
+  background: #f8f9f7;
+  border: 1px solid #e5e9e5;
+}
+
+.player-art-large {
+  width: 190px;
+  height: 190px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 22px;
+  background: #f8dce8;
+  font-size: 64px;
+}
+
+.player-main {
+  flex: 1;
+}
+
+.player-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+.player-main > strong {
+  display: block;
+  font-size: 28px;
+  margin: 5px 0;
+}
+
+.player-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.player-progress input {
+  flex: 1;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.player-controls button {
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.player-controls .player-play {
+  min-width: 56px;
+  min-height: 56px;
+}
+
+@media (max-width: 600px) {
+  .home-player-large {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .player-art-large {
+    width: 100%;
+    height: 180px;
+  }
+}
+
+
+.player-tools {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.player-tools button {
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: #f8dce8;
+  color: #18352a;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.player-tools button:hover,
+.player-tools button:focus-visible {
+  background: #bfe8cc;
+}
+
+/* AP STREAM — ADMIN DASHBOARD */
+
+.admin-dashboard {
+  width: 100%;
+  padding: 32px 5%;
+  box-sizing: border-box;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.official-badge {
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: #bfe8cc;
+  color: #18352a;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.admin-stats div {
+  padding: 18px;
+  border-radius: 18px;
+  background: #f8f9f7;
+  border: 1px solid #e5e9e5;
+}
+
+.admin-stats strong,
+.admin-stats span {
+  display: block;
+}
+
+.admin-stats strong {
+  font-size: 24px;
+}
+
+.admin-stats span {
+  margin-top: 4px;
+  opacity: .7;
+}
+
+.admin-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.admin-upload-card,
+.admin-manage-card {
+  padding: 24px;
+  border-radius: 22px;
+  background: #f8f9f7;
+  border: 1px solid #e5e9e5;
+}
+
+.admin-type-menu {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 18px 0;
+}
+
+.admin-type-menu button {
+  flex: 0 0 auto;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 12px;
+  background: #f8dce8;
+  color: #18352a;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-upload-card form {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-upload-card input,
+.admin-upload-card textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #d9ded9;
+  border-radius: 12px;
+}
+
+.admin-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-checkbox input {
+  width: auto;
+}
+
+.admin-publish-button {
+  padding: 14px;
+  border: 0;
+  border-radius: 14px;
+  background: #bfe8cc;
+  color: #18352a;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.admin-upload-list {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-upload-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: white;
+}
+
+.admin-upload-item strong,
+.admin-upload-item small {
+  display: block;
+}
+
+.admin-upload-item button {
+  border: 0;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+@media (max-width: 800px) {
+  .admin-content {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .admin-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+
+/* AP STREAM — HOME BEAUTIFICATION */
+
+.clean-home {
+  padding-bottom: 24px;
+}
+
+.clean-home .home-header {
+  position: relative;
+  padding: 42px 5% 30px;
+  border-radius: 0 0 30px 30px;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(248, 220, 232, .9), transparent 35%),
+    radial-gradient(circle at 15% 80%, rgba(191, 232, 204, .8), transparent 38%),
+    var(--ap-bg, #ffffff);
+}
+
+.clean-home .hero-kicker {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  color: var(--ap-green-strong);
+}
+
+.clean-home .home-header h1 {
+  font-size: clamp(32px, 6vw, 54px);
+  line-height: 1.05;
+  max-width: 720px;
+  margin: 6px 0 12px;
+}
+
+.clean-home .home-header p {
+  font-size: 17px;
+  opacity: .75;
+}
+
+.clean-home .home-tabs,
+.clean-home .home-quick-actions {
+  padding-top: 18px;
+}
+
+.clean-home .home-tabs button,
+.clean-home .home-quick-actions button {
+  border-radius: 14px;
+  background: #f4f5f2;
+  font-weight: 750;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.clean-home .home-tabs button:hover,
+.clean-home .home-quick-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(24, 53, 42, .08);
+}
+
+.clean-home .home-tabs .active {
+  box-shadow: 0 8px 20px rgba(24, 53, 42, .12);
+}
+
+.clean-home .home-card-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.clean-home .home-card {
+  background: #ffffff;
+  border: 1px solid #e7ebe7;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(24, 53, 42, .06);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.clean-home .home-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(24, 53, 42, .11);
+}
+
+.clean-home .home-card-media {
+  min-height: 145px;
+  font-size: 18px;
+}
+
+.clean-home .home-card-content {
+  padding: 16px;
+}
+
+.clean-home .home-card-actions {
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.clean-home .home-card-actions button {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #f5f6f3;
+  font-size: 16px;
+}
+
+.clean-home .home-media-section {
+  margin: 8px 5% 0;
+}
+
+.clean-home .home-section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.clean-home .home-section-title strong {
+  font-size: 15px;
+  letter-spacing: .08em;
+}
+
+.clean-home .home-section-title a {
+  font-weight: 800;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .clean-home .home-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .clean-home .home-header {
+    padding: 32px 5% 24px;
+  }
+
+  .clean-home .home-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .clean-home .home-card-media {
+    min-height: 110px;
+  }
+}
+
+
+/* AP STREAM — ADMIN MONETIZATION */
+
+.admin-monetization-card {
+  grid-column: 1 / -1;
+  margin-top: 20px;
+  padding: 24px;
+  border-radius: 22px;
+  background: #ffffff;
+  border: 1px solid #e5e9e5;
+  box-shadow: 0 8px 24px rgba(24, 53, 42, .06);
+}
+
+.admin-monetization-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.admin-monetization-header h3 {
+  margin: 6px 0;
+}
+
+.monetization-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.monetization-stats div {
+  padding: 16px;
+  border-radius: 16px;
+  background: #f8f9f7;
+}
+
+.monetization-stats strong,
+.monetization-stats span {
+  display: block;
+}
+
+.monetization-stats strong {
+  font-size: 24px;
+}
+
+.monetization-stats span {
+  margin-top: 4px;
+  opacity: .7;
+  font-size: 13px;
+}
+
+.monetization-requirements {
+  padding: 18px;
+  border-radius: 16px;
+  background: #f8dce8;
+}
+
+.monetization-requirements h4 {
+  margin-top: 0;
+}
+
+.monetization-requirements li {
+  margin: 7px 0;
+}
+
+.monetization-actions {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.monetization-actions button {
+  border: 0;
+  padding: 10px 13px;
+  border-radius: 12px;
+  background: #bfe8cc;
+  color: #18352a;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.monetization-empty {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #f8f9f7;
+}
+
+.monetization-empty p {
+  margin-bottom: 0;
+  opacity: .7;
+}
+
+@media (max-width: 800px) {
+  .monetization-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .admin-monetization-header {
+    flex-direction: column;
+  }
+}
+
+
+/* AP STREAM — ADMIN ARTIST MANAGEMENT */
+
+.admin-artists-card {
+  grid-column: 1 / -1;
+  margin-top: 20px;
+  padding: 24px;
+  border-radius: 22px;
+  background: #ffffff;
+  border: 1px solid #e5e9e5;
+  box-shadow: 0 8px 24px rgba(24, 53, 42, .06);
+}
+
+.admin-artists-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.admin-artists-header h3 {
+  margin: 6px 0;
+}
+
+.artist-management-actions {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.artist-management-actions button {
+  border: 0;
+  padding: 10px 13px;
+  border-radius: 12px;
+  background: #bfe8cc;
+  color: #18352a;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.artist-management-empty {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #f8f9f7;
+}
+
+.artist-management-empty p {
+  margin-bottom: 0;
+  opacity: .7;
+}
+
+@media (max-width: 800px) {
+  .admin-artists-header {
+    flex-direction: column;
+  }
+}
+
+
+/* AP STREAM — PRIVATE ADMIN ENTRY */
+.home-admin-entry {
+  display: flex;
+  justify-content: center;
+  padding: 32px 5% 40px;
+}
+
+.home-admin-entry button {
+  border: 1px solid #dfe7e1;
+  border-radius: 14px;
+  padding: 11px 18px;
+  background: #ffffff;
+  color: #18352a;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.home-admin-entry button:hover,
+.home-admin-entry button:focus-visible {
+  background: #f8dce8;
+}
+
+
+/* AP STREAM — FOOTBALL NEWS SUBSECTION */
+
+.news-categories {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 6px;
+}
+
+.football-news-panel {
+  margin: 18px 0;
+  padding: 20px;
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid #e5e9e5;
+}
+
+.football-news-header h3 {
+  margin: 6px 0;
+  font-size: 24px;
+}
+
+.football-news-header p {
+  margin-bottom: 0;
+  opacity: .7;
+}
+
+.football-links {
+  display: flex;
+  gap: 9px;
+  overflow-x: auto;
+  white-space: nowrap;
+  margin-top: 18px;
+  padding-bottom: 6px;
+}
+
+.football-links button {
+  border: 0;
+  border-radius: 12px;
+  padding: 11px 14px;
+  background: #bfe8cc;
+  color: #18352a;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.football-channels {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #f8f9f7;
+}
+
+.football-channels strong {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.football-channels a {
+  display: inline-block;
+  margin-right: 14px;
+  font-weight: 700;
+}
+
+
+/* AP STREAM — COMPACT FEATURE SPACING */
+
+.home-tabs,
+.home-quick-actions {
+  gap: 6px;
+  padding-bottom: 10px;
+}
+
+.home-card-grid {
+  gap: 8px;
+  padding-bottom: 18px;
+}
+
+.home-media-section {
+  margin-top: 10px;
+}
+
+.news-section {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.news-categories {
+  gap: 6px;
+  padding-bottom: 3px;
+}
+
+.news-categories button {
+  padding: 8px 12px;
+}
+
+.news-search {
+  margin: 12px 0 18px;
+}
+
+.football-news-panel {
+  margin: 10px 0;
+  padding: 14px;
+}
+
+.football-links {
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.football-links button {
+  padding: 9px 11px;
+}
+
+
+/* AP STREAM — TIGHT FEATURE LAYOUT */
+
+.home-tabs,
+.home-quick-actions {
+  gap: 4px;
+  padding-top: 0;
+  padding-bottom: 6px;
+  margin: 0;
+}
+
+.home-tabs button,
+.home-quick-actions button {
+  padding: 7px 11px;
+  margin: 0;
+}
+
+.home-card-grid {
+  gap: 6px;
+  padding-top: 0;
+  padding-bottom: 12px;
+  margin-top: 0;
+}
+
+.home-card {
+  margin: 0;
+}
+
+.home-media-section {
+  margin-top: 4px;
+  padding-top: 0;
+}
+
+.news-categories {
+  gap: 4px;
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 2px;
+}
+
+.news-categories button {
+  padding: 7px 10px;
+  margin: 0;
+}
+
+.news-search {
+  margin: 8px 0 12px;
+}
+
+.football-news-panel {
+  margin: 6px 0;
+  padding: 12px;
+}
+
+.football-links {
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.football-links button {
+  padding: 8px 10px;
+}
+
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+main > section {
+  scroll-margin-top: 90px;
+}
+
+
+/* AP-STREAM Go Live compact camera */
+.go-live-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.go-live-screen .call-video {
+  width: min(92vw, 720px);
+  height: min(62vh, 480px);
+  object-fit: cover;
+  border-radius: 18px;
+}
+
+.go-live-screen .call-top {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.go-live-screen .call-controls {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* =====================================================
+   AP-STREAM MAIN NAV — MOBILE FRIENDLY
+   ===================================================== */
+
+.ap-main-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding: 8px 4px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ap-main-nav a,
+.ap-main-nav button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .ap-main-nav {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 8px 2px;
+  }
+
+  .ap-main-nav a,
+  .ap-main-nav button {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+}
+
+
+
+/* =====================================================
+   AP-STREAM — FULL BRAND LOGO HEADER
+   ===================================================== */
+
+.ap-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.ap-logo {
+  width: 150px;
+  height: 58px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  flex-shrink: 0;
+}
+
+.ap-brand-name {
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  .ap-logo {
+    width: 125px;
+    height: 52px;
+  }
+
+  .ap-brand {
+    gap: 4px;
+  }
+}
+
+/* ===== FINAL AP-STREAM LOGO VISIBILITY FIX ===== */
+header .ap-brand {
+  display: flex !important;
+  align-items: center !important;
+  width: auto !important;
+  min-width: 150px !important;
+  height: 58px !important;
+  flex-shrink: 0 !important;
+  overflow: visible !important;
+}
+
+header .ap-logo {
+  display: block !important;
+  width: 190px !important;
+  height: 72px !important;
+  min-width: 190px !important;
+  min-height: 72px !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex-shrink: 0 !important;
+}

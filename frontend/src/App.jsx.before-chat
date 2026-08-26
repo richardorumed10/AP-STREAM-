@@ -1,0 +1,468 @@
+import { useState } from "react";
+
+const musicTracks = [
+  {
+    id: 1,
+    title: "Midnight Waves",
+    artist: "AP Artist",
+    file: "/music/midnight-waves.mp3",
+    icon: "♫",
+  },
+  {
+    id: 2,
+    title: "African Pulse",
+    artist: "African Pulse",
+    file: "/music/african-pulse.mp3",
+    icon: "♪",
+  },
+  {
+    id: 3,
+    title: "City Lights",
+    artist: "AP Artist",
+    file: "/music/test-song-clean.mp3",
+    icon: "♬",
+  },
+];
+
+const artists = [
+  {
+    id: 1,
+    name: "AP Artist",
+    description: "Artist profile coming soon",
+  },
+  {
+    id: 2,
+    name: "African Pulse",
+    description: "Artist profile coming soon",
+  },
+];
+
+const initialPosts = [
+  {
+    id: 1,
+    artist: "AP Artist",
+    time: "2h ago",
+    text: "New music coming soon! 🎵 Stay tuned.",
+    likes: 0,
+    liked: false,
+    comments: [],
+  },
+  {
+    id: 2,
+    artist: "African Pulse",
+    time: "5h ago",
+    text: "Thank you for supporting African music. 🌍❤️",
+    likes: 0,
+    liked: false,
+    comments: [],
+  },
+];
+
+function App() {
+  const [currentAudio, setCurrentAudio] = useState(null);
+  const [audioElement, setAudioElement] = useState(null);
+
+  const [posts, setPosts] = useState(initialPosts);
+  const [newPost, setNewPost] = useState("");
+  const [commentText, setCommentText] = useState({});
+
+  const [showLoginMessage, setShowLoginMessage] = useState(false);
+
+  function playMusic(track) {
+    if (currentAudio === track.id && audioElement) {
+      if (audioElement.paused) {
+        audioElement.play();
+      } else {
+        audioElement.pause();
+      }
+      setAudioElement(audioElement);
+      return;
+    }
+
+    if (audioElement) {
+      audioElement.pause();
+    }
+
+    const audio = new Audio(track.file);
+
+    audio.onended = () => {
+      const index = musicTracks.findIndex((item) => item.id === track.id);
+      const nextTrack = musicTracks[index + 1];
+
+      if (nextTrack) {
+        playMusic(nextTrack);
+      } else {
+        setCurrentAudio(null);
+        setAudioElement(null);
+      }
+    };
+
+    audio.play().catch((error) => {
+      console.error("Audio playback failed:", error);
+    });
+
+    setAudioElement(audio);
+    setCurrentAudio(track.id);
+  }
+
+  function stopMusic() {
+    if (audioElement) {
+      audioElement.pause();
+      audioElement.currentTime = 0;
+    }
+
+    setCurrentAudio(null);
+    setAudioElement(null);
+  }
+
+  function toggleLike(postId) {
+    setPosts((currentPosts) =>
+      currentPosts.map((post) => {
+        if (post.id !== postId) {
+          return post;
+        }
+
+        return {
+          ...post,
+          liked: !post.liked,
+          likes: post.liked ? post.likes - 1 : post.likes + 1,
+        };
+      })
+    );
+  }
+
+  function createPost() {
+    const text = newPost.trim();
+
+    if (!text) {
+      return;
+    }
+
+    const post = {
+      id: Date.now(),
+      artist: "AP User",
+      time: "Just now",
+      text,
+      likes: 0,
+      liked: false,
+      comments: [],
+    };
+
+    setPosts((currentPosts) => [post, ...currentPosts]);
+    setNewPost("");
+  }
+
+  function addComment(postId) {
+    const text = (commentText[postId] || "").trim();
+
+    if (!text) {
+      return;
+    }
+
+    setPosts((currentPosts) =>
+      currentPosts.map((post) => {
+        if (post.id !== postId) {
+          return post;
+        }
+
+        return {
+          ...post,
+          comments: [...post.comments, text],
+        };
+      })
+    );
+
+    setCommentText((current) => ({
+      ...current,
+      [postId]: "",
+    }));
+  }
+
+  async function sharePost(text) {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: "AP-STREAM",
+          text,
+        });
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+        alert("Post copied to clipboard.");
+      } else {
+        alert(text);
+      }
+    } catch {
+      // Sharing cancelled.
+    }
+  }
+
+  function login() {
+    setShowLoginMessage(true);
+  }
+
+  return (
+    <div className="app">
+      <header>
+        <div className="logo">AP-STREAM</div>
+
+        <nav>
+          <a href="#home">Home</a>
+          <a href="#music">Music</a>
+          <a href="#
+videos">Videos</a>
+          <a href="#artists">Artists</a>
+          <a href="#community">Community</a>
+          <a href="#login">Login</a>
+        </nav>
+      </header>
+
+      <main>
+        {/* HERO */}
+        <section id="home" className="hero">
+          <p className="eyebrow">MUSIC • VIDEO • COMMUNITY</p>
+
+          <h1>
+            Your world.
+            <br />
+            Your sound.
+          </h1>
+
+          <p>
+            Discover music, watch videos, connect with artists,
+            and experience the next generation of African entertainment.
+          </p>
+
+          <div className="hero-buttons">
+            <a href="#music" className="button">
+              ▶ Start Listening
+            </a>
+
+            <a href="#videos" className="button secondary">
+              Explore Videos
+            </a>
+          </div>
+        </section>
+
+        {/* MUSIC */}
+        <section id="music">
+          <h2>🔥 Trending Music</h2>
+          <p className="section-subtitle">Fresh sounds</p>
+
+          <div className="cards">
+            {musicTracks.map((track) => (
+              <div className="card" key={track.id}>
+                <div className="music-icon">{track.icon}</div>
+
+                <h3>{track.title}</h3>
+
+                <p>{track.artist}</p>
+
+                <button onClick={() => playMusic(track)}>
+                  {currentAudio === track.id ? "⏸ Pause" : "▶ Play"}
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* VIDEOS */}
+        <section id="videos">
+          <h2>🎬 Featured Videos</h2>
+          <p className="section-subtitle">Watch now</p>
+
+          <div className="video-card">
+            <video controls preload="metadata">
+              <source
+                src="/videos/e1e2ea73-6b3d-49b1-9c6a-312777beb39b.mp4"
+                type="video/mp4"
+              />
+
+              Your browser does not support video playback.
+            </video>
+
+            <h3>AP-STREAM Video 1</h3>
+            <p>Featured on AP-STREAM</p>
+          </div>
+        </section>
+
+        {/* COMMUNITY */}
+        <section id="community">
+          <h2>🌍 Community</h2>
+
+          <p className="section-subtitle">
+            Connect with artists, creators and fans.
+          </p>
+
+          <div className="create-post">
+            <textarea
+              value={newPost}
+              onChange={(event) => setNewPost(event.target.value)}
+              placeholder="Share something with the AP-STREAM community..."
+              rows="3"
+            />
+
+            <button onClick={createPost}>Post</button>
+          </div>
+
+          <div className="feed">
+            {posts.map((post) => (
+              <div className="post" key={post.id}>
+                <div className="post-header">
+                  <strong>🎤 {post.artist}</strong>
+                  <small>{post.time}</small>
+                </div>
+
+                <p>{post.text}</p>
+
+                <div className="post-actions">
+                  <button onClick={() => toggleLike(post.id)}>
+                    {post.liked ? "❤️ Liked" : "♡ Like"}
+
+                    {post.likes > 0 && ` ${post.likes}`}
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      document
+                        .getElementById(`comment-${post.id}`)
+                        ?.focus();
+                    }}
+                  >
+                    💬 Comment
+                  </button>
+
+                  <button onClick={() => sharePost(post.text)}>
+                    ↗ Share
+                  </button>
+                </div>
+
+                {post.comments.length > 0 && (
+                  <div className="comments">
+                    {post.comments.map((comment, index) => (
+                      <p key={index}>
+                        💬 <strong>AP User:</strong> {comment}
+                      </p>
+                    ))}
+                  </div>
+                )}
+
+                <div className="comment-box">
+                  <input
+                    id={`comment-${post.id}`}
+                    value={commentText[post.id] || ""}
+                    onChange={(event) =>
+                      setCommentText((current) => ({
+                        ...current,
+                        [post.id]: event.target.value,
+                      }))
+                    }
+                    placeholder="Write a comment..."
+                  />
+
+                  <button onClick={() => addComment(post.id)}>
+                    Send
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ARTISTS */}
+        <section id="artists">
+          <h2>🎤 Popular Artists</h2>
+          <p className="section-subtitle">
+            Discover artists and creators
+          </p>
+
+          <div className="cards">
+            {artists.map((artist) => (
+              <div className="card" key={artist.id}>
+                <div className="artist-avatar">🎤</div>
+
+                <h3>{artist.name}</h3>
+
+                <p>{artist.description}</p>
+
+                <button
+                  onClick={() =>
+                    alert(`${artist.name} profile coming soon.`)
+                  }
+                >
+                  View Artist
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ABOUT */}
+        <section className="about">
+          <h2>🌍 More than music.</h2>
+
+          <p>
+            AP-STREAM is being built for music, video, artists,
+            creators and community. Discover new talent and enjoy
+            entertainment from one place.
+          </p>
+
+          <a href="#login" className="button">
+            Join AP-STREAM
+          </a>
+        </section>
+
+        {/* LOGIN */}
+        <section id="login" className="login-section">
+          <h2>🔐 Login</h2>
+
+          <p>
+            AP-STREAM account login coming soon.
+          </p>
+
+          <button onClick={login}>Login</button>
+
+          {showLoginMessage && (
+            <p className="login-message">
+              🔐 Login system will be connected to the AP-STREAM
+              account backend.            </p>
+          )}       </section>
+      </main>
+      {currentAudio && audioElement && (
+        <div className="music-player">
+          <div>
+            <strong>
+              🎵 {musicTracks.find((track) => track.id === currentAudio)?.title}
+            </strong>
+            <small>
+              {' • '}{musicTracks.find((track) => track.id === currentAudio)?.artist}
+            </small>
+          </div>
+
+          <button onClick={() => {
+            if (audioElement.paused) {
+              audioElement.play();
+            } else {
+              audioElement.pause();
+            }
+            setAudioElement(audioElement);
+          }}>
+            {audioElement.paused ? "▶ Play" : "⏸ Pause"}
+          </button>
+
+          <button onClick={() => {
+            audioElement.pause();
+            setCurrentAudio(null);
+            setAudioElement(null);
+          }}>
+            ⏹ Stop
+          </button>
+        </div>
+      )}
+      <footer>
+        © 2026 AP-STREAM • Music • Video • Community
+      </footer>
+    </div>
+  );
+}
+
+export default App;

@@ -1,0 +1,303 @@
+require('dotenv').config({ path: __dirname + '/.env' });
+const OpenAI = require("openai");
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const http = require('http');
+const { Server } = require('socket.io');
+const db = require('./db');
+
+const app = express();
+app.disable('x-powered-by');
+app.use(helmet());
+
+app.locals.db = db;
+
+app.use(cors({ origin: ['http://127.0.0.1:5173', 'http://localhost:5173', 'http://localhost:5174', 'http://10.56.44.253:5174', 'http://10.48.206.175:5173', 'http://10.191.44.125:5174'] }));
+app.use(express.json({ limit: '1mb' }));
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 30,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  message: {
+    message: 'Too many authentication requests. Please try again later.'
+  }
+});
+
+app.use('/api/auth', authLimiter, require('./routes/auth'));
+
+const PORT = process.env.PORT || 5000;
+
+const httpServer = http.createServer(app);
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: true,
+    methods: ["GET", "POST"]
+  }
+});
+
+const liveRooms = new Map();
+
+io.on("connection", (socket) => {
+  console.log("Live client connected:", socket.id);
+
+  socket.on("live:create", ({ liveId }) => {
+    if (!liveId) return;
+
+    liveRooms.set(liveId, {
+      host: socket.id,
+      viewers: new Set()
+    });
+
+    socket.join(liveId);
+    socket.emit("live:created", { liveId });
+
+    console.log("Live created:", liveId);
+  });
+
+  socket.on("live:join", ({ liveId }) => {
+    const live = liveRooms.get(liveId);
+
+    if (!live) {
+      socket.emit("live:error", {
+        message: "Live stream not found."
+      });
+      return;
+    }
+
+    live.viewers.add(socket.id);
+    socket.join(liveId);
+
+    socket.to(live.host).emit("live:viewer-joined", {
+      viewerId: socket.id
+    });
+
+    socket.emit("live:joined", {
+      liveId,
+      hostId: live.host,
+      viewerCount: live.viewers.size
+    });
+  });
+
+  socket.on("live:signal", ({ targetId, data }) => {
+    if (!targetId || !data) return;
+
+    io.to(targetId).emit("live:signal", {
+      senderId: socket.id,
+      data
+    });
+  });
+
+  socket.on("live:end", ({ liveId }) => {
+    const live = liveRooms.get(liveId);
+
+    if (!live || live.host !== socket.id) return;
+
+    io.to(liveId).emit("live:ended");
+    liveRooms.delete(liveId);
+
+    console.log("Live ended:", liveId);
+  });
+
+  socket.on("disconnect", () => {
+    for (const [liveId, live] of liveRooms.entries()) {
+      if (live.host === socket.id) {
+        io.to(liveId).emit("live:ended");
+        liveRooms.delete(liveId);
+      } else if (live.viewers.delete(socket.id)) {
+        io.to(live.host).emit("live:viewer-left", {
+          viewerId: socket.id
+        });
+      }
+    }
+
+    console.log("Live client disconnected:", socket.id);
+  });
+});
+
+app.get('/', (req, res) => {
+  res.json({
+    message: 'AP Stream backend is running',
+    status: 'OK'
+  });
+});
+app.get('/api/songs', async (req, res) => {
+  try {
+    const result = await db.query(
+      'SELECT * FROM songs ORDER BY id DESC'
+    );
+
+    res.json({
+      status: 'OK',
+      songs: result.rows
+    });
+  } catch (error) {
+    console.error('Songs error:', error);
+    res.status(500).json({
+      status: 'ERROR',
+      message: 'Could not load songs'
+    });
+  }
+});
+
+
+app.post("/api/ai/song", async (req, res) => {
+  try {
+    const { topic, musicStyle } = req.body || {};
+
+    if (!topic || !topic.trim()) {
+      return res.status(400).json({
+        status: "ERROR",
+        message: "Song idea is required."
+      });
+    }
+
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(503).json({
+        status: "ERROR",
+        message: "AI service is not configured."
+      });
+    }
+
+    const response = await openai.responses.create({
+      model: "gpt-5.6-luna",
+      input: `Create completely original song lyrics.
+
+Song idea: ${topic.trim()}
+Music style: ${musicStyle || "Afrobeat"}
+
+Return JSON with:
+verse1
+chorus
+verse2
+bridge
+
+Do not copy or imitate existing songs.`
+    });
+
+    let lyrics;
+
+    try {
+      lyrics = JSON.parse(response.output_text);
+    } catch {
+      lyrics = {
+        verse1: response.output_text,
+        chorus: "",
+        verse2: "",
+        bridge: ""
+      };
+    }
+
+    res.json({
+      status: "OK",
+      lyrics
+    });
+
+  } catch (error) {
+    console.error("AI Song error:", error);
+
+    res.status(500).json({
+      status: "ERROR",
+      message: "Could not generate the song."
+    });
+  }
+});
+
+ 
+app.post("/api/ai/creative", async (req, res) => {
+  try {
+    const { tool, topic, musicStyle, duration } = req.body || {};
+
+    if (!topic || !topic.trim()) {
+      return res.status(400).json({
+        status: "ERROR",
+        message: "An idea is required."
+      });
+    }
+
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(503).json({
+        status: "ERROR",
+        message: "AI service is not configured."
+      });
+    }
+
+    const toolInstructions = {
+      social:
+        "Create an engaging AP-STREAM social media post and a short caption.",
+      story:
+        "Create an original short story or video script with a clear beginning, middle and ending.",
+      voice:
+        "Create a natural narration script suitable for a voice-over.",
+      thumbnail:
+        "Create a detailed thumbnail concept including subject, composition, text suggestion and visual mood.",
+      cover:
+        "Create an original music cover-art concept including visual theme, composition, typography suggestion and mood."
+    };
+
+    const instruction =
+      toolInstructions[tool] ||
+      "Create useful original creative content for AP-STREAM.";
+
+    const response = await openai.responses.create({
+      model: "gpt-5.6-luna",
+      input: `${instruction}
+
+Idea: ${topic.trim()}
+Music style: ${musicStyle || "Afrobeat"}
+Duration: ${duration || "60 seconds"}
+
+Return JSON with:
+title
+content
+caption
+notes
+
+Keep everything original. Do not copy or imitate existing copyrighted works.`
+    });
+
+    let result;
+
+    try {
+      result = JSON.parse(response.output_text);
+    } catch {
+      result = {
+        title: "AI Creation",
+        content: response.output_text,
+        caption: "",
+        notes: ""
+      };
+    }
+
+    res.json({
+      status: "OK",
+      tool,
+      result
+    });
+
+  } catch (error) {
+    console.error("AI Creative error:", error);
+    console.error("AI Creative error message:", error?.message);
+    console.error("AI Creative error status:", error?.status);
+    console.error("AI Creative error code:", error?.code);
+
+    res.status(500).json({
+      status: "ERROR",
+      message: "Could not generate the creative content.",
+      debug: error?.message || "Unknown AI error"
+    });
+  }
+});
+
+app.use('/api/artists', require('./routes/artist'));
+httpServer.listen(PORT, "0.0.0.0", () => {
+  console.log(`AP Stream backend running on port ${PORT}`);
+});

@@ -1,0 +1,117 @@
+[32maapt[0m/stable 13.0.0.6-23 aarch64
+  Android Asset Packaging Tool
+
+[32maapt2[0m/stable 13.0.0.6-23 aarch64
+  AAPT2 (Android Asset Packaging Tool)
+
+[32mabootimg[0m/stable 0.6-3 aarch64
+  Pack or unpack android boot images
+
+[32maidl[0m/stable 13.0.0.6-23 aarch64
+  Android Interface Definition Language (AIDL)
+
+[32mandroid-tools[0m/stable 35.0.2-7 aarch64
+  Android platform tools
+
+[32mangle-android[0m/stable 2.1.24923-f09a19ce-2 aarch64
+  A conformant OpenGL ES implementation for Windows, Mac, Linux, iOS and Android
+
+[32mapksigner[0m/stable 33.0.1-1 all
+  APK signing tool from Android SDK
+
+[32md8[0m/stable 33.0.1-1 all
+  DEX bytecode compiler from Android SDK
+
+[32mdex2jar[0m/stable 2.4-1 all
+  Tools to work with android .dex and java .class files
+
+[32mlibandroid-complex-math[0m/stable 0.3-1 aarch64
+  Symlink to libm for compatibility
+
+[32mlibandroid-execinfo[0m/stable,now 0.1-3 aarch64 [installed,automatic]
+  Shared library for the backtrace system function
+
+[32mlibandroid-execinfo-static[0m/stable 0.1-3 aarch64
+  Static libraries for libandroid-execinfo
+
+[32mlibandroid-glob[0m/stable,now 0.7-1 aarch64 [installed]
+  Symlink to libc for compatibility
+
+[32mlibandroid-posix-semaphore[0m/stable,now 0.1-4 aarch64 [installed]
+  Shared library for the posix semaphore system function
+
+[32mlibandroid-posix-semaphore-static[0m/stable 0.1-4 aarch64
+  Static libraries for libandroid-posix-semaphore
+
+[32mlibandroid-selinux[0m/stable,now 14.0.0.11-1 aarch64 [installed]
+  Android fork of libselinux, an SELinux userland library
+
+[32mlibandroid-shmem[0m/stable,now 0.7 aarch64 [installed,automatic]
+  System V shared memory emulation on Android using ashmem
+
+[32mlibandroid-shmem-static[0m/stable 0.7 aarch64
+  Static libraries for libandroid-shmem
+
+[32mlibandroid-spawn[0m/stable,now 0.4-1 aarch64 [installed,automatic]
+  Symlink to libc for compatibility
+
+[32mlibandroid-stub[0m/stable,now 29-1 aarch64 [installed,automatic]
+  Stub libandroid.so for non-Android certified environment
+
+[32mlibandroid-support[0m/stable,now 28 aarch64 [installed]
+  Symlink to libc for compatibility
+
+[32mlibandroid-sysv-semaphore[0m/stable,now 0.1-1 aarch64 [installed,automatic]
+  A shared library providing System V semaphores
+
+[32mlibandroid-sysv-semaphore-static[0m/stable 0.1-1 aarch64
+  Static libraries for libandroid-sysv-semaphore
+
+[32mlibandroid-utimes[0m/stable 0.5-1 aarch64
+  Symlink to libc for compatibility
+
+[32mlibandroid-wordexp[0m/stable 0.1-1 aarch64
+  Shared library for the wordexp(3) system function
+
+[32mlibandroid-wordexp-static[0m/stable 0.1-1 aarch64
+  Static libraries for libandroid-wordexp
+
+[32mmkbootimg[0m/stable 2022.11.09-1 aarch64
+  Maintained fork with android's mkbootimg and unpackbootimg
+
+[32mndk-sysroot[0m/stable,now 29-2 aarch64 [installed,automatic]
+  System header and library files from the Android NDK needed for compiling C programs
+
+[32mplay-audio[0m/stable 0.6-3 aarch64
+  Simple command line audio player for Android
+
+[32mrust-std-aarch64-linux-android[0m/stable 1.96.0 aarch64
+  Component files for target aarch64-linux-android
+
+[32mrust-std-armv7-linux-androideabi[0m/stable 1.96.0 aarch64
+  Component files for target armv7-linux-androideabi
+
+[32mrust-std-i686-linux-android[0m/stable 1.96.0 aarch64
+  Component files for target i686-linux-android
+
+[32mrust-std-x86-64-linux-android[0m/stable 1.96.0 aarch64
+  Component files for target x86_64-linux-android
+
+[32mtergent[0m/stable 1.0.0-5 aarch64
+  A cryptoki/PKCS#11 library for Termux that uses Android Keystore as its backend
+
+[32mtermux-am[0m/stable,now 0.8.0-2 all [installed]
+  Android Oreo-compatible am command reimplementation
+
+[32mtermux-elf-cleaner[0m/stable 3.0.1-1 aarch64
+  Cleaner of ELF files for Android
+
+[32mtvheadend[0m/stable 4.2.8-12 aarch64
+  TV streaming server for Linux and Android supporting DVB-S, DVB-S2 and other formats.
+
+[32mvirglrenderer-android[0m/stable 1.3.0 aarch64
+  A virtual 3D GPU for use inside qemu virtual machines over OpenGLES libraries on Android
+
+[32mvulkan-loader-android[0m/stable 29 aarch64
+  Vulkan Loader for Android
+

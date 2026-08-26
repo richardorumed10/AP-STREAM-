@@ -1,0 +1,217 @@
+import { useState } from "react";
+
+const starterFriends = [
+  {
+    id: 1,
+    name: "AP Artist",
+    status: "active",
+  },
+  {
+    id: 2,
+    name: "African Pulse",
+    status: "active",
+  },
+  {
+    id: 3,
+    name: "AP Creator",
+    status: "offline",
+  },
+];
+
+export default function ConnectionsHub() {
+  const [friends, setFriends] = useState(starterFriends);
+  const [search, setSearch] = useState("");
+  const [selectedFriend, setSelectedFriend] = useState(null);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState({});
+  const [call, setCall] = useState(null);
+
+  const filteredFriends = friends.filter((friend) =>
+    friend.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  function addFriend() {
+    const name = search.trim();
+
+    if (!name) return;
+
+    const exists = friends.some(
+      (friend) =>
+        friend.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (exists) {
+      alert("This person is already in your friends list.");
+      return;
+    }
+
+    setFriends((current) => [
+      ...current,
+      {
+        id: Date.now(),
+        name,
+        status: "active",
+      },
+    ]);
+
+    setSearch("");
+  }
+
+  function sendMessage() {
+    const text = message.trim();
+
+    if (!text || !selectedFriend) return;
+
+    setMessages((current) => ({
+      ...current,
+      [selectedFriend.id]: [
+        ...(current[selectedFriend.id] || []),
+        {
+          id: Date.now(),
+          sender: "You",
+          text,
+        },
+      ],
+    }));
+
+    setMessage("");
+  }
+
+  const activeFriends = friends.filter(
+    (friend) => friend.status === "active"
+  );
+
+  return (
+    <section id="connections" className="connections-section">
+      <h2>👥 Friends & Connections</h2>
+
+      <p className="section-subtitle">
+        Chat, connect and call people on AP-STREAM.
+      </p>
+
+      <div className="connections-search">
+        <input
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Search for a friend..."
+        />
+
+        <button onClick={addFriend}>
+          ➕ Add Friend
+        </button>
+      </div>
+
+      <div className="connections-layout">
+        <div className="friends-panel">
+          <h3>🟢 Active Friends</h3>
+
+          {activeFriends.map((friend) => (
+            <button
+              className="friend-item"
+              key={friend.id}
+              onClick={() => setSelectedFriend(friend)}
+            >
+              🟢 {friend.name}
+            </button>
+          ))}
+
+          <h3>👥 Friends</h3>
+
+          {filteredFriends.map((friend) => (
+            <button
+              className="friend-item"
+              key={friend.id}
+              onClick={() => setSelectedFriend(friend)}
+            >
+              {friend.status === "active" ? "🟢" : "⚪"}{" "}
+              {friend.name}
+            </button>
+          ))}
+        </div>
+
+        <div className="chat-panel">
+          {selectedFriend ? (
+            <>
+              <div className="chat-header">
+                <strong>
+                  💬 {selectedFriend.name}
+                </strong>
+
+                <div>
+                  <button
+                    onClick={() =>
+                      setCall({
+                        type: "voice",
+                        friend: selectedFriend,
+                      })
+                    }
+                  >
+                    📞
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      setCall({
+                        type: "video",
+                        friend: selectedFriend,
+                      })
+                    }
+                  >
+                    📹
+                  </button>
+                </div>
+              </div>
+
+              <div className="messages">
+                {(messages[selectedFriend.id] || []).map(
+                  (item) => (
+                    <div className="message" key={item.id}>
+                      <strong>{item.sender}</strong>
+                      <p>{item.text}</p>
+                    </div>
+                  )
+                )}
+
+                {(!messages[selectedFriend.id] ||
+                  messages[selectedFriend.id].length === 0) && (
+                  <p>
+                    Start a conversation with{" "}
+                    {selectedFriend.name}.
+                  </p>
+                )}
+              </div>
+
+              <div className="chat-input">
+                <input
+                  value={message}
+                  onChange={(event) =>
+                    setMessage(event.target.value)
+                  }
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      sendMessage();
+                    }
+                  }}
+                  placeholder="Write a message..."
+                />
+
+                <button onClick={sendMessage}>
+                  Send
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="empty-chat">
+              <h3>💬 Your Chats</h3>
+              <p>
+                Select a friend to start chatting.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {call && (
+        <div className="call-panel">
+          <h3
+

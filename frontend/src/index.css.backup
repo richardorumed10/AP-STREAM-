@@ -1,0 +1,726 @@
+.music-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 14px 18px;
+  background: #0b1115;
+  color: white;
+  border-top: 2px solid #16833a;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.music-player strong {
+  display: block;
+}
+
+.music-player small {
+  color: #aaa;
+}
+
+.music-player button {
+  background: #16833a;
+  color: white;
+  border: none;
+  padding: 9px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.news-section {
+  padding: 40px 20px;
+}
+
+.news-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.news-categories button,
+.news-search button,
+.news-card button {
+  cursor: pointer;
+}
+
+.news-search {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0 30px;
+}
+
+.news-search input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 18px;
+}
+
+.news-card {
+  padding: 20px;
+  border-radius: 14px;
+  background: #111a1f;
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 4px 14px rgba(0,0,0,.08);
+}
+
+.news-card h3 {
+  margin: 10px 0;
+}
+
+.news-label {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.news-card.breaking {
+  border-left: 5px solid #d62828;
+}
+
+.news-footer {
+  margin-top: 25px;
+  padding: 15px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #101820, #16252b);
+}
+
+@media (max-width: 600px) {
+  .news-search {
+    flex-direction: column;
+  }
+
+  .news-section {
+    padding: 30px 14px;
+  }
+}
+
+
+/* =========================================================
+   AP-STREAM NEW HOME
+   ========================================================= */
+
+.ap-home {
+  width: 100%;
+  overflow: hidden;
+}
+
+.home-hero {
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  padding: 80px 7%;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(0, 120, 255, .18), transparent 35%),
+    radial-gradient(circle at 20% 80%, rgba(120, 0, 255, .14), transparent 35%);
+}
+
+.hero-content {
+  max-width: 850px;
+}
+
+.hero-kicker,
+.home-heading span,
+.home-feature span,
+.home-community > span {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.home-hero h1 {
+  font-size: clamp(46px, 8vw, 88px);
+  line-height: .98;
+  margin: 18px 0;
+}
+
+.home-hero p {
+  max-width: 680px;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.hero-actions,
+.community-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.home-button,
+.community-actions a {
+  display: inline-block;
+  padding: 13px 20px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 800;
+  border: 1px solid rgba(128,128,128,.3);
+}
+
+.home-button.primary {
+  background: #0b1115;
+  color: white;
+}
+
+.home-section {
+  padding: 70px 7%;
+}
+
+.home-heading {
+  margin-bottom: 28px;
+}
+
+.home-heading h2,
+.home-feature h2,
+.home-community h2 {
+  font-size: clamp(28px, 5vw, 48px);
+  margin: 8px 0;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.home-card {
+  min-height: 240px;
+  padding: 25px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #101820, #16252b);
+}
+
+.home-card h3 {
+  font-size: 23px;
+}
+
+.home-card p {
+  line-height: 1.6;
+}
+
+.home-card a,
+.game-preview a {
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.home-feature {
+  margin: 0 7%;
+  padding: 55px;
+  border-radius: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  background: linear-gradient(145deg, #101820, #16252b);
+}
+
+.feature-icon {
+  font-size: 120px;
+}
+
+.game-preview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.game-preview article {
+  padding: 25px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #101820, #16252b);
+}
+
+.game-icon {
+  font-size: 48px;
+}
+
+.home-community {
+  text-align: center;
+  max-width: 850px;
+  margin: auto;
+}
+
+.community-actions {
+  justify-content: center;
+}
+
+.home-join {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.home-join p {
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+@media (max-width: 900px) {
+  .home-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .game-preview {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-hero {
+    min-height: 500px;
+    padding: 60px 20px;
+  }
+
+  .home-section {
+    padding: 50px 20px;
+  }
+
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-feature {
+    margin: 0 20px;
+    padding: 30px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    font-size: 80px;
+  }
+}
+
+
+/* ===== AP-STREAM NEON BRAND HEADER ===== */
+header {
+  background:
+    radial-gradient(circle at 8% 50%, rgba(0, 255, 180, 0.10), transparent 28%),
+    radial-gradient(circle at 92% 50%, rgba(120, 70, 255, 0.10), transparent 28%),
+    rgba(5, 9, 16, 0.97);
+  border-bottom: 1px solid rgba(0, 255, 180, 0.30);
+  box-shadow:
+    0 8px 30px rgba(0,0,0,.35),
+    0 1px 18px rgba(0,255,180,.08);
+}
+
+.ap-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: max-content;
+}
+
+.ap-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  display: block;
+  border-radius: 12px;
+  filter: drop-shadow(0 0 10px rgba(0,255,190,.28));
+}
+
+.ap-brand-name {
+  font-weight: 900;
+  font-size: 21px;
+  letter-spacing: .8px;
+  color: #fff;
+  text-shadow:
+    0 0 10px rgba(0,255,190,.22),
+    0 0 20px rgba(120,70,255,.12);
+}
+
+.ap-brand .account-indicator {
+  margin-left: 6px;
+  font-size: 12px;
+  opacity: .9;
+}
+
+header nav a {
+  transition: .2s ease;
+}
+
+header nav a:hover {
+  color: #00ffb3;
+  text-shadow: 0 0 10px rgba(0,255,179,.45);
+}
+
+@media (max-width: 700px) {
+  .ap-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ap-brand-name {
+    font-size: 18px;
+  }
+}
+
+/* =====================================================
+   AP-STREAM HOME — STRICT GREEN + PINK THEME
+   ===================================================== */
+
+body {
+  background: #e8f8ee;
+}
+
+#home,
+.home,
+.home-page {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255, 190, 215, 0.75), transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(180, 235, 205, 0.8), transparent 40%),
+    linear-gradient(135deg, #dff7e8 0%, #f9dce9 50%, #dff7e8 100%);
+  color: #173b2a;
+}
+
+#home *,
+.home *,
+.home-page * {
+  --ap-green: #b9e8c9;
+  --ap-pink: #f5c5d8;
+}
+
+#home .hero,
+.home .hero,
+.home-page .hero {
+  background:
+    linear-gradient(135deg, #b9e8c9, #f5c5d8);
+  border-radius: 24px;
+}
+
+#home .card,
+#home .section,
+.home .card,
+.home-page .card {
+  background: rgba(245, 197, 216, 0.72);
+  border: 1px solid rgba(105, 170, 130, 0.35);
+}
+
+#home button,
+.home button,
+.home-page button {
+  background: linear-gradient(135deg, #9fd9b4, #efb6ce);
+  color: #173b2a;
+  border: 0;
+}
+
+#home a,
+.home a,
+.home-page a {
+  color: #397653;
+}
+
+
+/* AP-STREAM — clean pale green + pale pink */
+body {
+  background: #e8f7ee !important;
+}
+
+main {
+  background: linear-gradient(135deg, #e4f6ea, #f8dfe9) !important;
+}
+
+main > section {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+main > section > div {
+  box-shadow: none;
+}
+
+
+/* AP-STREAM: flat feature layout — no card boxes */
+.cards,
+.card,
+.short-card,
+.news-card,
+.artist-profile-card,
+.artist-card-cover,
+.artist-card-body,
+.artist-card-actions,
+.login-card,
+.home-card,
+.game-preview {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* AP-STREAM SOCIAL THEME */
+:root {
+  --ap-green: #dff5e5;
+  --ap-green-strong: #bfe8cc;
+  --ap-pink: #f8dce8;
+  --ap-pink-strong: #efb7cf;
+  --ap-text: #18352a;
+  --ap-white: #ffffff;
+}
+
+body {
+  background: linear-gradient(135deg, var(--ap-green), #f8fbf9 48%, var(--ap-pink));
+  color: var(--ap-text);
+}
+
+.ap-home {
+  background: transparent;
+}
+
+.home-card,
+.home-feature,
+.music-player-card,
+.short-card {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ap-text);
+  border: 1px solid rgba(24, 53, 42, 0.08);
+  box-shadow: 0 8px 28px rgba(24, 53, 42, 0.10);
+  border-radius: 20px;
+}
+
+.home-button.primary {
+  background: linear-gradient(135deg, #9bd9ad, var(--ap-pink-strong));
+  color: #18352a;
+  border: none;
+}
+
+.home-button {
+  border-radius: 999px;
+}
+
+.music-player-card {
+  background: linear-gradient(135deg, #e8f8ed, #f9e4ed);
+}
+
+.music-visualizer {
+  color: #d85b91;
+  font-size: 2rem;
+  letter-spacing: 8px;
+}
+
+.short-preview {
+  background: linear-gradient(135deg, #bfe8cc, #f0bfd5);
+  border-radius: 16px;
+}
+
+.home-section {
+  background: transparent;
+}
+
+a {
+  color: #23734a;
+}
+
+button {
+  border-radius: 999px;
+}
+
+
+/* AP-STREAM — COMPACT SHORTS + VIDEO LAYOUT */
+
+.shorts-grid {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 8px 2px 14px;
+  scroll-snap-type: x mandatory;
+}
+
+.shorts-grid .short-card {
+  flex: 0 0 190px;
+  scroll-snap-align: start;
+  background: #ffffff;
+  color: #18352a;
+  border: 1px solid #d7eee0;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.shorts-grid .reel-cover {
+  aspect-ratio: 9 / 13;
+  background: #dff5e5;
+  overflow: hidden;
+}
+
+.shorts-grid .reel-cover video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shorts-grid .reel-creator,
+.shorts-grid h3,
+.shorts-grid p,
+.shorts-grid .reel-actions,
+.shorts-grid .short-card-buttons {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.shorts-grid h3 {
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+.shorts-grid p {
+  font-size: 12px;
+}
+
+.shorts-grid .reel-actions {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.shorts-grid button,
+.shorts-grid a {
+  font-size: 12px;
+  border-radius: 999px;
+}
+
+
+/* AP-STREAM GREEN HOMEPAGE */
+.ap-home {
+  background: #d9f3df;
+  color: #123b29;
+}
+
+.ap-home .home-section,
+.ap-home .compact-top {
+  background: #c5ebcf;
+  border: 1px solid #8fd3a1;
+  border-radius: 18px;
+}
+
+.ap-home .home-button.primary {
+  background: #16833a;
+  color: #fff;
+}
+
+.ap-home .home-button {
+  border: 1px solid #16833a;
+  color: #12652e;
+  background: #effbf2;
+}
+
+.ap-home .short-card,
+.ap-home .video-card,
+.ap-home .featured-video {
+  background: #effbf2;
+  border: 1px solid #8fd3a1;
+}
+
+.ap-home .short-media,
+.ap-home .video-preview {
+  background: #b7e5c2;
+}
+
+.ap-home .compact-social a {
+  background: #16833a;
+  color: #fff;
+}
+
+
+/* COMPACT AP-STREAM VIDEO SIZE */
+.ap-home .featured-video {
+  width: min(100%, 680px);
+  margin: 0 auto;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.ap-home .featured-video .video-preview {
+  width: 100%;
+  height: 280px;
+  aspect-ratio: 16 / 9;
+  max-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ap-home .video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ap-home .video-grid .video-card {
+  min-width: 0;
+}
+
+@media (max-width: 600px) {
+  .ap-home .featured-video {
+    width: 92%;
+  }
+
+  .ap-home .featured-video .video-preview {
+    height: 190px;
+    max-height: 190px;
+  }
+}
+
+.youtube-media {
+  width: 100%;
+}
+
+.video-feed {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.youtube-video {
+  width: 100%;
+}
+
+.youtube-video video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 210px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.shorts-feed {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+}
+
+.short-video {
+  flex: 0 0 150px;
+}
+
+.short-video video {
+  width: 150px;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+@media (max-width: 600px) {
+  .video-feed {
+    grid-template-columns: 1fr;
+  }
+
+  .youtube-video video {
+    max-height: 190px;
+  }
+}
+

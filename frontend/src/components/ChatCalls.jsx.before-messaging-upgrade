@@ -1,0 +1,101 @@
+import { useState } from "react";
+
+export default function ChatCalls() {
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      sender: "AP-STREAM",
+      text: "Welcome to AP-STREAM Chat 👋",
+    },
+  ]);
+  const [callType, setCallType] = useState(null);
+
+  function sendMessage() {
+    const text = message.trim();
+
+    if (!text) return;
+
+    setMessages((current) => [
+      ...current,
+      {
+        id: Date.now(),
+        sender: "You",
+        text,
+      },
+    ]);
+
+    setMessage("");
+  }
+
+  return (
+    <section id="chat" className="chat-section">
+      <h2>💬 Chat & Calls</h2>
+
+      <p className="section-subtitle">
+        Connect with artists, creators and friends.
+      </p>
+
+      <div className="chat-card">
+        <div className="chat-header">
+          <strong>🌍 AP-STREAM Community Chat</strong>
+
+          <div className="call-buttons">
+            <button onClick={() => setCallType("voice")}>
+              📞 Voice
+            </button>
+
+            <button onClick={() => setCallType("video")}>
+              📹 Video
+            </button>
+          </div>
+        </div>
+
+        <div className="messages">
+          {messages.map((item) => (
+            <div className="message" key={item.id}>
+              <strong>{item.sender}</strong>
+              <p>{item.text}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="chat-input">
+          <input
+            value={message}
+            onChange={(event) => setMessage(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                sendMessage();
+              }
+            }}
+            placeholder="Write a message..."
+          />
+
+          <button onClick={sendMessage}>
+            Send
+          </button>
+        </div>
+      </div>
+
+      {callType && (
+        <div className="call-panel">
+          <h3>
+            {callType === "voice"
+              ? "📞 Voice Call"
+              : "📹 Video Call"}
+          </h3>
+
+          <p>
+            Call interface ready. Real-time calling will be connected
+            with WebRTC and the AP-STREAM backend.
+          </p>
+
+          <button onClick={() => setCallType(null)}>
+            End Call
+          </button>
+        </div>
+      )}
+    </section>
+  );
+

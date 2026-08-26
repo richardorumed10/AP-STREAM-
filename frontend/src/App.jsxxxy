@@ -1,0 +1,288 @@
+import { useRef, useState } from "react";
+import "./App.css";
+
+const songs = [
+  { name: "Midnight Waves", file: "/music/midnight-waves.mp3" },
+  { name: "African Pulse", file: "/music/african-pulse.mp3" },
+  { name: "Test Song", file: "/music/test-song-clean.mp3" },
+];
+
+const featuredVideo = "/videos/e1e2ea73-6b3d-49b1-9c6a-312777beb39b.mp4";
+
+function App() {
+  const [currentSong, setCurrentSong] = useState(null);
+  const [videoFile, setVideoFile] = useState(featuredVideo);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+
+  const videoRef = useRef(null);
+
+  const chooseVideo = (event) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setVideoFile(url);
+      setIsVideoPlaying(false);
+    }
+  };
+
+  const toggleVideo = () => {
+    if (!videoRef.current) return;
+
+    if (videoRef.current.paused) {
+      videoRef.current.play();
+    } else {
+      videoRef.current.pause();
+    }
+  };
+
+  const playNext = () => {
+    if (!currentSong) return;
+
+    const index = songs.findIndex(
+      (song) => song.name === currentSong.name
+    );
+
+    setCurrentSong(songs[(index + 1) % songs.length]);
+  };
+
+  const playPrevious = () => {
+    if (!currentSong) return;
+
+    const index = songs.findIndex(
+      (song) => song.name === currentSong.name
+    );
+
+    setCurrentSong(
+      songs[(index - 1 + songs.length) % songs.length]
+    );
+  };
+
+  return (
+    <div className="app">
+
+      <header>
+        <h1>AP-STREAM</h1>
+
+        <nav>
+          <button>Home</button>
+
+          <button
+            onClick={() =>
+              document
+                .getElementById("music")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+          >
+            Music
+          </button>
+
+          <button
+            onClick={() =>
+              document
+                .getElementById("videos")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+          >
+            Videos
+          </button>
+
+          <button>Artists</button>
+          <button>Login</button>
+        </nav>
+      </header>
+
+      <main>
+
+        <section className="hero">
+          <p>MUSIC • VIDEO • COMMUNITY</p>
+
+          <h2>Welcome to AP-STREAM</h2>
+
+          <p>
+            Discover music, watch videos and connect with creators.
+          </p>
+
+          <button
+            onClick={() =>
+              document
+                .getElementById("music")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+          >
+            Start Listening
+          </button>
+
+          <button
+            onClick={() =>
+              document
+                .getElementById("videos")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+          >
+            Explore Videos
+          </button>
+        </section>
+
+        <section id="music" className="music-section">
+          <h2>🎵 Trending Music</h2>
+
+          <div className="music-grid">
+            {songs.map((song) => (
+              <div className="music-card" key={song.name}>
+
+                <div className="music-icon">♫</div>
+
+                <h3>{song.name}</h3>
+
+                <p>AP Artist</p>
+
+                <button onClick={() => setCurrentSong(song)}>
+                  ▶ Play
+                </button>
+
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="videos" className="video-section">
+
+          <h2>🎬 Featured Video</h2>
+
+          <div className="video-player-container">
+
+            <video
+              ref={videoRef}
+              src={videoFile}
+              controls
+              playsInline
+              preload="metadata"
+              onPlay={() => setIsVideoPlaying(true)}
+              onPause={() => setIsVideoPlaying(false)}
+              onEnded={() => setIsVideoPlaying(false)}
+            />
+
+            <div className="video-controls">
+
+              <button onClick={toggleVideo}>
+                {isVideoPlaying ? "⏸ Pause" : "▶ Play"}
+              </button>
+
+              <button
+                onClick={() => {
+                  if (!videoRef.current) return;
+
+                  videoRef.current.currentTime = 0;
+                  videoRef.current.play();
+                }}
+              >
+                🔄 Restart
+              </button>
+
+            </div>
+
+            <div className="video-upload">
+
+              <label htmlFor="video-upload">
+                📁 Choose Another Video
+              </label>
+
+              <input
+                id="video-upload"
+                type="file"
+                accept="video/*"
+                onChange={chooseVideo}
+              />
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <section className="video-section">
+
+          <h2>🔥 Featured Videos</h2>
+
+          <div className="video-grid">
+
+            <div className="video-card">
+              <div className="video-placeholder">▶</div>
+              <h3>AP-STREAM Video 1</h3>
+              <p>Featured video</p>
+            </div>
+
+            <div className="video-card">
+              <div className="video-placeholder">▶</div>
+              <h3>AP-STREAM Video 2</h3>
+              <p>Featured video</p>
+            </div>
+
+            <div className="video-card">
+              <div className="video-placeholder">▶</div>
+              <h3>AP-STREAM Video 3</h3>
+              <p>Featured video</p>
+            </div>
+
+          </div>
+
+        </section>
+
+        {currentSong && (
+          <div className="player">
+
+            <div className="player-art">
+              ♫
+            </div>
+
+            <div className="player-info">
+              <span>NOW PLAYING</span>
+
+              <strong>
+                {currentSong.name}
+              </strong>
+
+              <small>
+                AP Artist
+              </small>
+            </div>
+
+            <div className="player-actions">
+
+              <button onClick={playPrevious}>
+                ⏮
+              </button>
+
+              <button onClick={playNext}>
+                ⏭
+              </button>
+
+            </div>
+
+            <div className="player-audio">
+
+              <audio
+                controls
+                autoPlay
+                src={currentSong.file}
+              >
+                Your browser does not support audio.
+              </audio>
+
+            </div>
+
+          </div>
+        )}
+
+      </main>
+
+      <footer>
+        © 2026 AP-STREAM
+      </footer>
+
+    </div>
+  );
+}
+
+

@@ -1,0 +1,713 @@
+
+/* AP-STREAM FOOTBALL HUB */
+
+.football-section {
+  padding: 55px 20px;
+  margin-top: 20px;
+}
+
+.football-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 25px 0;
+}
+
+.football-tabs button,
+.football-actions button,
+.football-card button {
+  border: none;
+  border-radius: 10px;
+  padding: 11px 16px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.football-tabs button.active {
+  transform: translateY(-2px);
+}
+
+.football-grid,
+.transfer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.football-card,
+.match-card,
+.transfer-card,
+.football-table-wrapper {
+  padding: 22px;
+  border-radius: 16px;
+  background: #f5f5f5;
+  margin-bottom: 18px;
+}
+
+.football-featured {
+  grid-column: span 2;
+}
+
+.football-label,
+.transfer-confirmed,
+.transfer-breaking,
+.transfer-rumour,
+.match-live,
+.match-upcoming {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+
+.football-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.match-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.match-score {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.match-score strong {
+  font-size: 22px;
+}
+
+.transfer-header {
+  margin-bottom: 20px;
+}
+
+.transfer-card h4 {
+  font-size: 18px;
+}
+
+.football-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.football-table th,
+.football-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+@media (max-width: 700px) {
+  .football-section {
+    padding: 35px 14px;
+  }
+
+  .football-featured {
+    grid-column: span 1;
+  }
+
+  .match-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* AP-STREAM GAMES */
+
+.games-section {
+  padding: 70px 20px;
+}
+
+.games-stats {
+  display: flex;
+  gap: 16px;
+  margin: 25px 0;
+  flex-wrap: wrap;
+}
+
+.game-stat {
+  padding: 18px 24px;
+  border-radius: 14px;
+  background: #f5f5f5;
+  min-width: 120px;
+}
+
+.game-stat strong,
+.game-stat span {
+  display: block;
+}
+
+.game-stat strong {
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+}
+
+.game-stat span {
+  opacity: 0.7;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.game-card {
+  padding: 25px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+.game-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.game-category {
+  font-size: 0.8rem;
+  opacity: 0.65;
+  text-transform: uppercase;
+}
+
+.game-card h3 {
+  margin: 10px 0;
+}
+
+.game-card p {
+  opacity: 0.75;
+  min-height: 45px;
+}
+
+.game-card button,
+.game-message button {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 18px;
+  cursor: pointer;
+}
+
+.game-message {
+  margin-top: 25px;
+  padding: 25px;
+  border-radius: 16px;
+  background: #f5f5f5;
+}
+
+@media (max-width: 800px) {
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .games-section {
+    padding: 45px 14px;
+  }
+}
+
+/* AP-STREAM PLAYABLE FOOTBALL */
+
+.football-game {
+  padding: 60px 15px;
+  text-align: center;
+}
+
+.football-game-header {
+  margin-bottom: 20px;
+}
+
+.football-canvas {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  border-radius: 18px;
+  display: block;
+  margin: 15px auto;
+}
+
+.scoreboard {
+  max-width: 900px;
+  margin: auto;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  border-radius: 14px;
+  background: #111;
+  color: white;
+}
+
+.scoreboard span {
+  font-size: 2rem;
+}
+
+.scoreboard small {
+  font-size: 1rem;
+}
+
+.commentary {
+  max-width: 900px;
+  margin: 15px auto;
+  padding: 16px;
+  border-radius: 14px;
+  background: #f5f5f5;
+}
+
+.commentary p {
+  margin: 8px 0 0;
+}
+
+.virtual-controller {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin: 18px auto;
+}
+
+.virtual-controller div {
+  display: flex;
+  gap: 8px;
+}
+
+.virtual-controller button,
+.match-controls button {
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.match-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.play-match-button {
+  border: 0;
+  border-radius: 14px;
+  padding: 15px 25px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .football-game {
+    padding: 40px 8px;
+  }
+
+  .scoreboard {
+    gap: 10px;
+    font-size: 0.85rem;
+  }
+
+  .scoreboard span {
+    font-size: 1.5rem;
+  }
+
+  .match-controls button {
+    padding: 12px 14px;
+  }
+}
+
+/* AP-STREAM AI ASSISTANT */
+
+.ai-floating-button {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 58px;
+  height: 58px;
+  border: 0;
+  border-radius: 50%;
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.ai-assistant {
+  position: fixed;
+  right: 20px;
+  bottom: 90px;
+  width: 340px;
+  max-width: calc(100vw - 30px);
+  height: 480px;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  z-index: 9998;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+  border: 1px solid #e5e5e5;
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-header {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #111;
+  color: #fff;
+}
+
+.ai-header strong,
+.ai-header small {
+  display: block;
+}
+
+.ai-header small {
+  opacity: 0.7;
+  margin-top: 3px;
+}
+
+.ai-header button {
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.ai-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px;
+}
+
+.ai-message {
+  padding: 11px 13px;
+  border-radius: 13px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+  max-width: 85%;
+}
+
+.ai-bot {
+  background: #f1f1f1;
+  margin-right: auto;
+}
+
+.ai-user {
+  background: #111;
+  color: #fff;
+  margin-left: auto;
+}
+
+.ai-input {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.ai-input input {
+  flex: 1;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+}
+
+.ai-input button {
+  border: 0;
+  border-radius: 10px;
+  padding: 0 15px;
+  cursor: pointer;
+}
+
+@media (max-width: 500px) {
+  .ai-assistant {
+    right: 10px;
+    bottom: 80px;
+    width: calc(100vw - 20px);
+    height: 70vh;
+  }
+
+  .ai-floating-button {
+    right: 12px;
+    bottom: 12px;
+  }
+}
+
+
+/* AP-STREAM AI — BLACK & WHITE */
+.ai-floating-button {
+  background: #000;
+  color: #fff;
+  border: 2px solid #fff;
+}
+
+.ai-assistant {
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
+}
+
+.ai-header {
+  background: #000;
+  color: #fff;
+}
+
+.ai-header button {
+  color: #fff;
+}
+
+.ai-bot {
+  background: #eee;
+  color: #000;
+}
+
+.ai-user {
+  background: #000;
+  color: #fff;
+}
+
+.ai-input {
+  background: #fff;
+  border-top: 1px solid #000;
+}
+
+.ai-input input {
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+}
+
+.ai-input button {
+  background: #000;
+  color: #fff;
+}
+
+.ai-floating-button:hover,
+.ai-input button:hover {
+  opacity: 0.75;
+}
+
+
+/* =========================================================
+   AP-STREAM RAINBOW HOME EXPERIENCE
+   ========================================================= */
+
+body {
+  background: #050509;
+  color: #fff;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.hero,
+.home,
+.home-section {
+  position: relative;
+}
+
+/* Rainbow atmospheric glow */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -120px -20px auto;
+  height: 500px;
+  background:
+    radial-gradient(circle at 10% 40%, rgba(255, 0, 80, .28), transparent 28%),
+    radial-gradient(circle at 30% 20%, rgba(255, 140, 0, .25), transparent 28%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 0, .20), transparent 28%),
+    radial-gradient(circle at 70% 20%, rgba(0, 255, 120, .25), transparent 28%),
+    radial-gradient(circle at 85% 45%, rgba(0, 160, 255, .28), transparent 28%),
+    radial-gradient(circle at 60% 80%, rgba(150, 0, 255, .28), transparent 28%);
+  filter: blur(45px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Rainbow title */
+.hero h1 {
+  background: linear-gradient(
+    90deg,
+    #ff1744,
+    #ff9100,
+    #ffe600,
+    #00e676,
+    #00b0ff,
+    #7c4dff,
+    #ff00c8
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbowFlow 7s linear infinite;
+}
+
+@keyframes rainbowFlow {
+  0% { background-position: 0% center; }
+  100% { background-position: 300% center; }
+}
+
+/* Feature cards */
+.feature-card,
+.home-card,
+.section-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.06);
+  backdrop-filter: blur(14px);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.feature-card::before,
+.home-card::before,
+.section-card::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    90deg,
+    #ff1744,
+    #ff9100,
+    #ffe600,
+    #00e676,
+    #00b0ff,
+    #7c4dff,
+    #ff00c8,
+    #ff1744
+  );
+  background-size: 300% 100%;
+  animation: rainbowBorder 6s linear infinite;
+  opacity: .8;
+  z-index: -2;
+}
+
+.feature-card::after,
+.home-card::after,
+.section-card::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: #08080d;
+  border-radius: inherit;
+  z-index: -1;
+}
+
+.feature-card:hover,
+.home-card:hover,
+.section-card:hover {
+  transform: translateY(-7px);
+  box-shadow:
+    0 0 25px rgba(255, 0, 120, .18),
+    0 0 45px rgba(0, 180, 255, .12);
+}
+
+@keyframes rainbowBorder {
+  0% { background-position: 0% center; }
+  100% { background-position: 300% center; }
+}
+
+/* Rainbow feature strip */
+.ap-rainbow-strip {
+  margin: 25px 0;
+  padding: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    #ff1744,
+    #ff9100,
+    #ffe600,
+    #00e676,
+    #00b0ff,
+    #7c4dff,
+    #ff00c8
+  );
+  background-size: 300% 100%;
+  animation: rainbowBorder 6s linear infinite;
+}
+
+.ap-rainbow-strip-inner {
+  padding: 16px;
+  border-radius: 999px;
+  background: #08080d;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+/* Glowing section headings */
+section h2 {
+  text-shadow:
+    0 0 10px rgba(255,255,255,.15),
+    0 0 25px rgba(0,180,255,.12);
+}
+
+/* Rainbow buttons */
+.hero button,
+.hero a,
+.home button {
+  border: 0;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    #ff1744,
+    #ff9100,
+    #ffe600,
+    #00e676,
+    #00b0ff,
+    #7c4dff
+  );
+  background-size: 250% 100%;
+  color: #fff;
+  font-weight: 800;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.hero button:hover,
+.hero a:hover,
+.home button:hover {
+  transform: translateY(-2px);
+  animation: rainbowButton 2s linear infinite;
+  box-shadow: 0 0 25px rgba(255,255,255,.25);
+}
+
+@keyframes rainbowButton {
+  0% { background-position: 0% center; }
+  100% { background-position: 250% center; }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .hero::before {
+    height: 380px;
+    filter: blur(35px);
+  }
+
+  .ap-rainbow-strip-inner {
+    padding: 12px 8px;
+    font-size: .78rem;
+  }
+}
+
+

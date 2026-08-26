@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AP-STREAM</string>
+    <string name="title_activity_main">AP-STREAM</string>
+    <string name="package_name">com.apstream.app</string>
+    <string name="custom_url_scheme">com.apstream.app</string>
+</resources>
