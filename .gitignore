@@ -26,3 +26,5 @@ android/.idea/
 Thumbs.db
 .vscode/
 .idea/
+backend/uploads/
+streaming/

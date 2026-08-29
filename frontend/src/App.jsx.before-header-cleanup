@@ -114,7 +114,6 @@ const newsItems = [
 function App() {
   const [shortViewerOpen, setShortViewerOpen] = useState(false);
   const [activeStudio, setActiveStudio] = useState(null);
-  const [musicOpen, setMusicOpen] = useState(false);
   const [currentAudio, setCurrentAudio] = useState(null);
   const [audioElement, setAudioElement] = useState(null);
   const [musicProgress, setMusicProgress] = useState(0);
@@ -807,29 +806,49 @@ function App() {
     <div className="app">
       <header>
         <div className="logo ap-brand">
-          <img src="/apstream-logo.png" alt="AP-STREAM" className="ap-logo" />
-          <span className="ap-brand-name">AP-STREAM</span>
-          {authUser && (
-            <span className="account-indicator">
-              🟢 {authUser.username}
-            </span>
-          )}
-        </div>
-
+              <img src="/apstream-logo.png" alt="AP-STREAM" className="ap-logo" />
+              <span className="ap-brand-name">AP-STREAM</span>
+              {authUser && (
+                <span className="account-indicator">
+                  🟢 {authUser.username}
+                </span>
+              )}
+            </div>
         <nav className="ap-main-nav">
-          <a href="#home" onClick={() => setActiveStudio(null)}>🏠 Home</a>
-          <a href="#social">👥 Social</a>
-          <button type="button" onClick={() => setMusicOpen((open) => !open)}>🎵 Music</button>
-          <a href="#artists">🎤 Artists</a>
-          <a href="#creators">⭐ Creators</a>
-          <a href="#tv">📺 TV</a>
-          <a href="#radio">📻 Radio</a>
-          <a href="#news">📰 News</a>
-          <button type="button" onClick={() => setActiveStudio("ai")}>🤖 AI</button>
-          <button type="button" onClick={() => setActiveStudio("recording")}>🎙️ Studio</button>
-          <a href="#boda">🛵 Boda</a>
-          <a href="#admin">🛠️ Admin</a>
+          <button
+            type="button"
+            onClick={() => setActiveStudio("ai")}
+          >
+            🤖 AI Studio
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveStudio("recording")}
+          >
+            🎙️ Recording Studio
+          </button>
+
+          <a
+            href="#home"
+            onClick={() => setActiveStudio(null)}
+          >
+            🏠 Home
+          </a>
           <a href="#search">🔎 Search</a>
+          <button
+            type="button"
+            onClick={() => {
+              const el = document.querySelector(".create-post textarea");
+              if (el) {
+                el.scrollIntoView({ behavior: "smooth", block: "center" });
+                setTimeout(() => el.focus(), 400);
+              }
+            }}
+          >
+            ➕ Create
+          </button>
+          <a href="#messages">💬 Messages</a>
           <a href="#profile">👤 Profile</a>
         </nav>
       </header>

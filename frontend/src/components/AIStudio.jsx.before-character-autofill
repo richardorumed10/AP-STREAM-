@@ -22,7 +22,6 @@ export default function AIStudio() {
   const [kidsVisual, setKidsVisual] = useState("");
   const [generatingKidsVisual, setGeneratingKidsVisual] = useState(false);
   const [showKidsPreview, setShowKidsPreview] = useState(false);
-  const [currentKidsPreviewScene, setCurrentKidsPreviewScene] = useState(1);
   const [kidsAudio, setKidsAudio] = useState("");
   const [showKidsAudio, setShowKidsAudio] = useState(false);
   const [showKidsTimeline, setShowKidsTimeline] = useState(false);
@@ -606,84 +605,6 @@ export default function AIStudio() {
             ✨ Create Kids Cartoon
           </button>
 
-          <button
-            onClick={() => {
-              const character =
-                kidsCharacters[0] || {
-                  id: "demo",
-                  name: kidsCharacter.trim() || "Kato",
-                  role: "Main Character",
-                  personality: "Kind, curious and brave.",
-                  visual: "Bright, colorful child-friendly cartoon character.",
-                  visualPrompt:
-                    "Keep the character design consistent across every scene.",
-                };
-
-              const demoScenes = [
-                {
-                  number: 1,
-                  title: "The Garden Adventure",
-                  visual: `${character.visual} in a bright colorful garden.`,
-                  narration:
-                    "Kato discovers a beautiful garden and decides to explore.",
-                  dialogue: `${character.name}: What an amazing place!`,
-                  sound: "Birds chirping and gentle playful music.",
-                  duration: "30 seconds",
-                },
-                {
-                  number: 2,
-                  title: "A New Friend",
-                  visual: `${character.visual} meeting a friendly animal friend.`,
-                  narration:
-                    "Along the way, Kato meets a new friend who needs help.",
-                  dialogue: `${character.name}: Don't worry, I'll help you!`,
-                  sound: "Happy footsteps and cheerful sounds.",
-                  duration: "30 seconds",
-                },
-                {
-                  number: 3,
-                  title: "Working Together",
-                  visual: `${character.visual} working together with friends.`,
-                  narration:
-                    "The friends discover that teamwork makes the problem easier.",
-                  dialogue: `${character.name}: We can do it together!`,
-                  sound: "Upbeat playful music.",
-                  duration: "30 seconds",
-                },
-                {
-                  number: 4,
-                  title: "The Big Discovery",
-                  visual: `${character.visual} discovering something colorful and wonderful.`,
-                  narration:
-                    "Together they discover something that teaches them an important lesson.",
-                  dialogue: `${character.name}: Look what we found!`,
-                  sound: "Gentle magical discovery sound.",
-                  duration: "30 seconds",
-                },
-                {
-                  number: 5,
-                  title: "The Happy Ending",
-                  visual: `${character.visual} smiling with friends in the garden.`,
-                  narration:
-                    "The friends celebrate their adventure and what they learned.",
-                  dialogue: `${character.name}: Helping each other makes every adventure better!`,
-                  sound: "Cheerful music and happy laughter.",
-                  duration: "30 seconds",
-                },
-              ];
-
-              setKidsSceneData(demoScenes);
-              setKidsScenes(JSON.stringify({
-                title: "The Garden Adventure",
-                characters: [character],
-                scenes: demoScenes,
-                lesson: "Teamwork and kindness make adventures better.",
-              }, null, 2));
-            }}
-          >
-            🧪 Load Demo 5 Scenes
-          </button>
-
           {kidsResult && !generatingKidsScenes && (
             <button
               onClick={async () => {
@@ -700,13 +621,6 @@ export default function AIStudio() {
                       character:
                         kidsCharacter.trim() ||
                         "a friendly cartoon character",
-                      characters: kidsCharacters.map((character) => ({
-                        name: character.name,
-                        role: character.role,
-                        personality: character.personality,
-                        visual: character.visual,
-                        visualPrompt: character.visualPrompt || "",
-                      })),
                       story:
                         kidsStory.trim() ||
                         "a fun adventure where friends learn something new",
@@ -1252,20 +1166,6 @@ export default function AIStudio() {
                                     (character) =>
                                       String(character.id) === e.target.value
                                   )?.visualPrompt || "",
-                                visual:
-                                  kidsCharacters.find(
-                                    (character) =>
-                                      String(character.id) === e.target.value
-                                  )?.visual ||
-                                  scene.visual,
-                                dialogue:
-                                  `${
-                                    kidsCharacters.find(
-                                      (character) =>
-                                        String(character.id) ===
-                                        e.target.value
-                                    )?.name || "Character"
-                                  }: Let's continue our adventure!`,
                               },
                             })
                           }
@@ -1382,25 +1282,6 @@ export default function AIStudio() {
             </div>
           )}
 
-          {kidsSceneData.length > 0 && (
-            <div className="kids-scene-strip">
-              <h3>🎬 Scene Timeline</h3>
-              <div className="kids-scene-buttons">
-                {kidsSceneData.map((scene) => (
-                  <button
-                    key={scene.number}
-                    onClick={() => {
-                      setEditingKidsScene(scene.number);
-                      setCurrentKidsPreviewScene(scene.number);
-                    }}
-                  >
-                    🎬 {scene.number}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
           {(kidsResult || kidsScenes || kidsVisual) && (
             <button
               onClick={() => setShowKidsPreview(!showKidsPreview)}
@@ -1436,113 +1317,12 @@ export default function AIStudio() {
                 </p>
               </div>
 
-              <div className="kids-preview-section">
-                <h3>🎞️ Episode Scenes</h3>
-
-                {kidsSceneData.length > 0 ? (
-                  (() => {
-                    const previewScene =
-                      kidsSceneData.find(
-                        (scene) =>
-                          scene.number === currentKidsPreviewScene
-                      ) || kidsSceneData[0];
-
-                    const sceneIndex = Math.max(
-                      0,
-                      kidsSceneData.findIndex(
-                        (scene) => scene.number === previewScene.number
-                      )
-                    );
-
-                    return (
-                      <div className="kids-preview-scenes">
-                        <div className="kids-preview-scene">
-                          <h4>
-                            🎬 Scene {previewScene.number}:{" "}
-                            {previewScene.title || "Untitled Scene"}
-                          </h4>
-
-                          <p>
-                            <strong>🖼️ Visual:</strong>{" "}
-                            {previewScene.visual ||
-                              "No visual description yet."}
-                          </p>
-
-                          <p>
-                            <strong>🎙️ Narration:</strong>{" "}
-                            {previewScene.narration ||
-                              "No narration yet."}
-                          </p>
-
-                          <p>
-                            <strong>💬 Dialogue:</strong>{" "}
-                            {previewScene.dialogue || "No dialogue yet."}
-                          </p>
-
-                          <p>
-                            <strong>🔊 Sound:</strong>{" "}
-                            {previewScene.sound ||
-                              "Gentle background sounds."}
-                          </p>
-
-                          <p>
-                            <strong>⏱️ Duration:</strong>{" "}
-                            {previewScene.duration || "30 seconds"}
-                          </p>
-
-                          {previewScene.characterName && (
-                            <p>
-                              <strong>👤 Character:</strong>{" "}
-                              {previewScene.characterName}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="kids-preview-navigation">
-                          <button
-                            disabled={sceneIndex === 0}
-                            onClick={() =>
-                              setCurrentKidsPreviewScene(
-                                kidsSceneData[
-                                  Math.max(0, sceneIndex - 1)
-                                ].number
-                              )
-                            }
-                          >
-                            ⬅️ Previous
-                          </button>
-
-                          <span>
-                            Scene {sceneIndex + 1} / {kidsSceneData.length}
-                          </span>
-
-                          <button
-                            disabled={
-                              sceneIndex === kidsSceneData.length - 1
-                            }
-                            onClick={() =>
-                              setCurrentKidsPreviewScene(
-                                kidsSceneData[
-                                  Math.min(
-                                    kidsSceneData.length - 1,
-                                    sceneIndex + 1
-                                  )
-                                ].number
-                              )
-                            }
-                          >
-                            Next ➡️
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })()
-                ) : kidsScenes ? (
+              {kidsScenes && (
+                <div className="kids-preview-section">
+                  <h3>🎞️ Scenes</h3>
                   <pre>{kidsScenes}</pre>
-                ) : (
-                  <p>No scenes created yet.</p>
-                )}
-              </div>
+                </div>
+              )}
 
               {kidsVisual && (
                 <div className="kids-preview-section">

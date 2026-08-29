@@ -1082,87 +1082,19 @@ function App() {
           </div>
         </section>
 
-        <section id="videos" className="media-section shorts-only-section">
-  <div className="media-heading">
-    <h2>📱 Shorts / Reels</h2>
-    <p className="section-subtitle">Quick moments from AP-STREAM creators</p>
-  </div>
-
-  <div className="shorts-shelf">
-    {shorts.length > 0 ? (
-      shorts.map((short, index) => (
-        <button
-          type="button"
-          className="short-tile"
-          key={short.id}
-          onClick={() => {
-            setActiveShort(index);
-            setShortViewerOpen(true);
-          }}
-        >
-          <div className="short-tile-video">
-            <video
-              src={short.video}
-              muted
-              playsInline
-              preload="metadata"
-            />
-            <span className="short-play">▶</span>
+        <section id="videos" className="media-section videos-vertical-section">
+          <div className="media-heading">
+            <h2>🎬 Videos</h2>
+            <p className="section-subtitle">Watch videos from AP-STREAM creators.</p>
           </div>
-
-          <div className="short-tile-info">
-            <strong>{short.title}</strong>
-            <span>{short.creator}</span>
+          <div className="videos-vertical-feed">
+            <article className="video-card">
+              <div className="video-placeholder">▶</div>
+              <h3>AP-STREAM Videos</h3>
+              <p>Creator videos will appear here.</p>
+            </article>
           </div>
-        </button>
-      ))
-    ) : (
-      <article className="short-empty">
-        <div className="short-placeholder">▶</div>
-        <h3>No Shorts yet</h3>
-        <p>Upload the first Reel to AP-STREAM.</p>
-      </article>
-    )}
-  </div>
-
-  {shortViewerOpen && shorts[activeShort] && (
-    <div
-      className="short-viewer"
-      role="dialog"
-      aria-modal="true"
-      onClick={(event) => {
-        if (event.target === event.currentTarget) {
-          setShortViewerOpen(false);
-        }
-      }}
-    >
-      <button
-        type="button"
-        className="short-viewer-close"
-        onClick={() => setShortViewerOpen(false)}
-        aria-label="Close"
-      >
-        ✕
-      </button>
-
-      <div className="short-viewer-content">
-        <video
-          key={shorts[activeShort].id}
-          className="short-viewer-video"
-          src={shorts[activeShort].video}
-          controls
-          autoPlay
-          playsInline
-        />
-
-        <div className="short-viewer-info">
-          <h3>{shorts[activeShort].title}</h3>
-          <p>{shorts[activeShort].creator}</p>
-        </div>
-      </div>
-    </div>
-  )}
-</section>
+        </section>
 
 <section id="community">
           <h2>🌍 Community</h2>

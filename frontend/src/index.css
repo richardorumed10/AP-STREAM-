@@ -1850,3 +1850,1132 @@ header .ap-logo {
   opacity: 1 !important;
   flex-shrink: 0 !important;
 }
+
+/* AP-STREAM — compact Shorts / Reels shelf */
+.shorts-only-section {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.shorts-only-section .shorts-shelf {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 10px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 6px 2px 14px !important;
+  box-sizing: border-box;
+}
+
+.shorts-only-section .short-tile {
+  flex: 0 0 105px !important;
+  width: 105px !important;
+  min-width: 105px !important;
+  max-width: 105px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-sizing: border-box;
+}
+
+.shorts-only-section .short-tile-video {
+  width: 105px !important;
+  height: 150px !important;
+  min-height: 150px !important;
+  max-height: 150px !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  box-sizing: border-box;
+}
+
+.shorts-only-section .short-tile-video video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.shorts-only-section .short-tile-info {
+  width: 105px !important;
+  max-width: 105px !important;
+  padding: 5px 2px 0 !important;
+  box-sizing: border-box;
+}
+
+.shorts-only-section .short-tile-info strong,
+.shorts-only-section .short-tile-info span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .shorts-only-section .short-tile {
+    flex-basis: 92px !important;
+    width: 92px !important;
+    min-width: 92px !important;
+    max-width: 92px !important;
+  }
+
+  .shorts-only-section .short-tile-video {
+    width: 92px !important;
+    height: 132px !important;
+    min-height: 132px !important;
+    max-height: 132px !important;
+  }
+
+  .shorts-only-section .short-tile-info {
+    width: 92px !important;
+    max-width: 92px !important;
+  }
+}
+
+
+/* FINAL AP-STREAM SHORTS / REELS — STORIES STYLE */
+.shorts-only-section {
+  width: 100% !important;
+  max-width: 100vw !important;
+  overflow: hidden !important;
+}
+
+.shorts-only-section .shorts-shelf {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  box-sizing: border-box !important;
+  padding: 4px 2px 12px !important;
+}
+
+.shorts-only-section .short-tile {
+  flex: 0 0 82px !important;
+  width: 82px !important;
+  min-width: 82px !important;
+  max-width: 82px !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: block !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-sizing: border-box !important;
+}
+
+.shorts-only-section .short-tile-video {
+  width: 82px !important;
+  height: 112px !important;
+  min-height: 112px !important;
+  max-height: 112px !important;
+  border-radius: 9px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.shorts-only-section .short-tile-video video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.shorts-only-section .short-play {
+  width: 25px !important;
+  height: 25px !important;
+  font-size: 11px !important;
+}
+
+.shorts-only-section .short-tile-info {
+  width: 82px !important;
+  max-width: 82px !important;
+  padding: 4px 1px 0 !important;
+  gap: 1px !important;
+  box-sizing: border-box !important;
+}
+
+.shorts-only-section .short-tile-info strong {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+}
+
+.shorts-only-section .short-tile-info span {
+  font-size: 9px !important;
+  line-height: 1.2 !important;
+}
+
+
+/* ===== AP-STREAM FINAL NORMAL VIDEO PLAYER SIZE ===== */
+
+.apstream-now-playing {
+  width: 100%;
+  max-width: 760px;
+  margin: 18px auto 24px;
+  box-sizing: border-box;
+}
+
+.apstream-big-player {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #000;
+}
+
+.apstream-big-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 405px;
+  object-fit: contain;
+  background: #000;
+}
+
+.apstream-player-info {
+  padding: 8px 4px;
+}
+
+.apstream-player-info h3 {
+  margin: 0 0 3px;
+  font-size: 16px;
+}
+
+.apstream-player-info p {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  .apstream-now-playing {
+    max-width: 100%;
+    margin: 14px auto 20px;
+  }
+
+  .apstream-big-player {
+    width: 94%;
+    max-width: 430px;
+    border-radius: 10px;
+  }
+
+  .apstream-big-video {
+    max-height: 260px;
+  }
+}
+
+
+/* ===== AP-STREAM HEADER MENU ===== */
+.ap-main-nav {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  white-space: nowrap !important;
+  padding: 8px 4px !important;
+  box-sizing: border-box !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ap-main-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.ap-main-nav a,
+.ap-main-nav button {
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 700px) {
+  .ap-main-nav {
+    gap: 6px !important;
+    padding: 6px 2px !important;
+  }
+
+  .ap-main-nav a,
+  .ap-main-nav button {
+    font-size: 13px;
+    padding: 7px 10px;
+  }
+}
+
+
+/* ===== FINAL HEADER HORIZONTAL SCROLL FIX ===== */
+header {
+  width: 100% !important;
+  max-width: 100vw !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+header .ap-main-nav {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: scroll !important;
+  overflow-y: hidden !important;
+  white-space: nowrap !important;
+  gap: 8px !important;
+  padding: 8px 6px !important;
+  box-sizing: border-box !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-x !important;
+}
+
+header .ap-main-nav::-webkit-scrollbar {
+  display: none !important;
+}
+
+header .ap-main-nav > a,
+header .ap-main-nav > button {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: max-content !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 700px) {
+  header .ap-main-nav {
+    gap: 6px !important;
+    padding: 7px 4px !important;
+  }
+}
+
+/* ===== AP-STREAM FINAL HEADER — NO SCROLL ===== */
+header {
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+header .ap-main-nav {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  white-space: normal !important;
+  gap: 6px !important;
+  padding: 8px 4px !important;
+  box-sizing: border-box !important;
+  touch-action: auto !important;
+}
+
+header .ap-main-nav > a,
+header .ap-main-nav > button {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  padding: 7px 9px !important;
+  font-size: 13px !important;
+}
+
+/* HOME: no Stories */
+.ap-stories,
+.stories,
+#stories {
+  display: none !important;
+}
+
+/* ===== AP-STREAM MEDIA LAYOUT ===== */
+
+/* Shorts: horizontal shelf */
+.shorts-feed,
+.shorts-shelf {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  gap: 14px !important;
+  width: 100% !important;
+  padding: 10px 4px 16px !important;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.shorts-feed::-webkit-scrollbar,
+.shorts-shelf::-webkit-scrollbar {
+  display: none;
+}
+
+/* Videos: vertical YouTube-style feed */
+.videos-vertical-feed {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px !important;
+  width: 100% !important;
+}
+
+.video-card {
+  width: 100% !important;
+  display: block !important;
+}
+
+.video-placeholder {
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 42px !important;
+  border-radius: 12px !important;
+  background: #eee !important;
+}
+
+
+/* AP-STREAM Shorts — compact Stories-style cards */
+.shorts-only-section .shorts-shelf {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 4px 14px;
+  scroll-snap-type: x proximity;
+}
+
+.shorts-only-section .short-tile {
+  flex: 0 0 125px;
+  width: 125px;
+  min-width: 125px;
+  height: 190px;
+  scroll-snap-align: start;
+}
+
+/* AP-STREAM Videos — larger rectangular cards underneath Shorts */
+.videos-vertical-feed {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+.videos-vertical-feed .video-card {
+  width: 100%;
+  min-height: 220px;
+  border-radius: 10px;
+}
+
+
+/* ===== AP-STREAM YouTube-style Shorts & Videos ===== */
+
+.shorts-only-section .shorts-shelf {
+  display: flex !important;
+  gap: 14px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 8px 4px 16px !important;
+}
+
+.shorts-only-section .short-tile {
+  flex: 0 0 145px !important;
+  width: 145px !important;
+  height: 210px !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.videos-vertical-feed {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+}
+
+.videos-vertical-feed .video-card {
+  width: 100% !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.videos-vertical-feed .video-placeholder {
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 42px !important;
+}
+
+/* ===== AP-STREAM YouTube-style Shorts & Videos ===== */
+
+.shorts-only-section .shorts-shelf {
+  display: flex !important;
+  gap: 14px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 8px 4px 16px !important;
+}
+
+.shorts-only-section .short-tile {
+  flex: 0 0 145px !important;
+  width: 145px !important;
+  height: 210px !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.videos-vertical-feed {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+}
+
+.videos-vertical-feed .video-card {
+  width: 100% !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.videos-vertical-feed .video-placeholder {
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 42px !important;
+}
+
+/* ===== AP-STREAM SHORTS — CLEAN STORIES STYLE ===== */
+
+.shorts-feed {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 8px 4px 16px !important;
+  scroll-snap-type: x mandatory !important;
+}
+
+.shorts-feed .short-card {
+  position: relative !important;
+  flex: 0 0 125px !important;
+  width: 125px !important;
+  height: 190px !important;
+  min-height: 190px !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  scroll-snap-align: start !important;
+  cursor: pointer !important;
+}
+
+.shorts-feed .short-video-placeholder {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.shorts-feed .short-video-placeholder video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.shorts-feed .short-info {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  padding: 28px 8px 8px !important;
+  margin: 0 !important;
+  z-index: 2 !important;
+}
+
+.shorts-feed .short-info h3 {
+  margin: 0 !important;
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+}
+
+.shorts-feed .short-info p {
+  margin: 3px 0 0 !important;
+  font-size: 10px !important;
+}
+
+.shorts-feed .short-actions {
+  display: flex !important;
+  gap: 4px !important;
+  margin-top: 5px !important;
+}
+
+.shorts-feed .short-actions button {
+  font-size: 9px !important;
+  padding: 3px 5px !important;
+}
+
+
+/* ===== AP-STREAM MOBILE SCREEN FIX ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden !important;
+}
+
+img {
+  max-width: 100% !important;
+  height: auto;
+  display: block;
+}
+
+video, iframe {
+  max-width: 100% !important;
+}
+
+section, main, header, footer, div {
+  max-width: 100%;
+}
+
+.short-card {
+  max-width: none !important;
+}
+
+/* Keep Shorts scrolling sideways without expanding the page */
+.shorts-feed {
+  width: 100% !important;
+  max-width: 100vw !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+}
+
+/* Normal content images stay inside the phone screen */
+section img,
+main img,
+.content img,
+.featured img,
+.artist img,
+.news img {
+  max-width: 100% !important;
+  width: auto;
+  height: auto;
+}
+
+
+/* AP-STREAM Videos — keep thumbnails inside the screen */
+.videos-vertical-feed,
+.video-card {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.video-card img,
+.video-card video,
+.video-card .video-placeholder {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: 70vh;
+  box-sizing: border-box;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .video-card img,
+  .video-card video,
+  .video-card .video-placeholder {
+    max-height: 55vh;
+  }
+}
+
+/* AP-STREAM: Videos must stay inside the phone screen */
+.videos-vertical-section {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+
+.videos-vertical-section .media-heading,
+.videos-vertical-section .video-upload-panel,
+.videos-vertical-section .videos-vertical-feed {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.videos-vertical-section .video-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.videos-vertical-section .video-card video,
+.videos-vertical-section .video-card img,
+.videos-vertical-section .video-placeholder {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  box-sizing: border-box !important;
+  object-fit: contain !important;
+}
+
+@media (max-width: 600px) {
+  .videos-vertical-section {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .videos-vertical-section .video-card video,
+  .videos-vertical-section .video-card img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+
+/* AP-STREAM VIDEOS — full-width phone player */
+.videos-vertical-section .video-card {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.videos-vertical-section .video-card video {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  display: block;
+  object-fit: cover;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .videos-vertical-section {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .videos-vertical-section .video-card {
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+
+  .videos-vertical-section .video-card video {
+    width: 100vw;
+    max-width: 100vw;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+}
+
+
+/* AP-STREAM NORMAL VIDEO PLAYER */
+.videos-vertical-section .apstream-normal-video {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  object-fit: contain !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 600px) {
+  .videos-vertical-section .apstream-normal-video {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+  }
+}
+
+/* AP-STREAM YouTube-style Videos */
+.videos-youtube-feed {
+  width: 100%;
+  max-width: 980px;
+  margin: 24px auto 0;
+}
+
+.youtube-video-card {
+  width: 100%;
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+
+.youtube-player {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #111;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.youtube-player video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  background: #111;
+}
+
+.youtube-player-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #dff7e8, #ffe4ee);
+  text-align: center;
+}
+
+.youtube-player-placeholder span {
+  font-size: 48px;
+}
+
+.youtube-player-placeholder strong {
+  font-size: 20px;
+}
+
+.youtube-player-placeholder small {
+  opacity: .7;
+}
+
+.youtube-video-info {
+  padding: 14px 4px;
+}
+
+.youtube-video-info h3 {
+  margin: 0 0 14px;
+  font-size: 21px;
+}
+
+.creator-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.creator-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  background: #dff7e8;
+}
+
+.creator-row div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.creator-row small {
+  opacity: .65;
+}
+
+.creator-row button {
+  border: 0;
+  border-radius: 20px;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+
+.video-meta {
+  margin: 10px 0;
+  opacity: .65;
+}
+
+.video-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.video-actions button {
+  border: 0;
+  border-radius: 20px;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+
+.video-description {
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.55);
+}
+
+.video-comments {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0,0,0,.08);
+}
+
+.video-comments p {
+  opacity: .65;
+}
+
+@media (max-width: 700px) {
+  .videos-youtube-feed {
+    margin-top: 16px;
+  }
+
+  .youtube-player,
+  .youtube-player-placeholder {
+    border-radius: 10px;
+  }
+
+  .youtube-video-info h3 {
+    font-size: 18px;
+  }
+}
+
+
+/* FIX: media should fill its player area */
+.youtube-player,
+.youtube-player-placeholder {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  display: block;
+}
+
+.youtube-player video,
+.apstream-normal-video {
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  margin: 0;
+  padding: 0;
+}
+
+.youtube-player-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Shorts: make the actual video occupy the full short card */
+.short-card video,
+.shorts-feed video,
+.short-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  margin: 0;
+  padding: 0;
+}
+
+.short-card {
+  overflow: hidden;
+}
+
+
+/* ===== AP-STREAM COMPACT VIDEO FEED ===== */
+
+#videos .videos-youtube-feed {
+  max-width: 980px;
+  margin: 12px auto 0;
+}
+
+#videos .youtube-video-card {
+  margin: 0 0 12px 0 !important;
+  padding: 0 !important;
+}
+
+#videos .youtube-video-info {
+  padding: 6px 2px !important;
+}
+
+#videos .youtube-video-info h3 {
+  margin: 4px 0 !important;
+  font-size: 16px !important;
+}
+
+#videos .creator-row {
+  margin: 3px 0 !important;
+}
+
+#videos .creator-avatar {
+  width: 30px !important;
+  height: 30px !important;
+  font-size: 11px !important;
+}
+
+#videos .video-actions {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  margin: 4px 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  overflow-x: auto !important;
+}
+
+#videos .video-actions button,
+#videos .creator-row button {
+  width: auto !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  flex: 0 0 auto !important;
+  padding: 3px 5px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+#videos .video-meta {
+  margin: 3px 0 !important;
+  font-size: 12px !important;
+}
+
+#videos .video-description {
+  margin: 4px 0 !important;
+  padding: 5px !important;
+  font-size: 12px !important;
+}
+
+#videos .video-comments {
+  margin-top: 5px !important;
+  padding-top: 5px !important;
+  font-size: 12px !important;
+}
+
+#videos .youtube-player {
+  margin-bottom: 0 !important;
+}
+
+@media (max-width: 600px) {
+  #videos .youtube-video-card {
+    margin-bottom: 8px !important;
+  }
+
+  #videos .video-actions {
+    gap: 7px !important;
+  }
+
+  #videos .video-actions button {
+    font-size: 11px !important;
+    padding: 2px 3px !important;
+  }
+}
+
+
+/* FINAL: clean, compact YouTube-style video actions */
+#videos .video-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin: 4px 0 !important;
+  padding: 0 !important;
+  overflow-x: auto !important;
+}
+
+#videos .video-actions button {
+  all: unset !important;
+  display: inline-block !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 2px 0 !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+}
+
+#videos .creator-row {
+  margin: 3px 0 !important;
+}
+
+#videos .creator-row button {
+  all: unset !important;
+  font-size: 11px !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+}
+
+#videos .youtube-video-card {
+  margin-bottom: 7px !important;
+}
+
+#videos .youtube-video-info {
+  padding: 3px 0 !important;
+}
+
+#videos .youtube-video-info h3 {
+  margin: 3px 0 !important;
+  font-size: 15px !important;
+}
+

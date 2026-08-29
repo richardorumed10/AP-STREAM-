@@ -1,0 +1,358 @@
+import { useEffect, useRef, useState } from "react";
+import { io } from "socket.io-client";
+
+const SOCKET_URL = "http://127.0.0.1:5000";
+
+export default function LiveBroadcast() {
+  const [mode, setMode] = useState("tv");
+  const [role, setRole] = useState("host");
+  const [liveId, setLiveId] = useState("");
+  const [status, setStatus] = useState("Ready");
+  const [viewerCount, setViewerCount] = useState(0);
+
+  const socketRef = useRef(null);
+  const localVideoRef = useRef(null);
+  const remoteVideoRef = useRef(null);
+  const streamRef = useRef(null);
+  const peersRef = useRef({});
+
+  useEffect(() => {
+    const socket = io(SOCKET_URL);
+    socketRef.current = socket;
+
+    socket.on("live:created", ({ liveId: createdId }) => {
+      setLiveId(createdId);
+      setStatus("🔴 LIVE");
+    });
+
+    socket.on("live:viewer-joined", async ({ viewerId }) => {
+      if (!streamRef.current) return;
+
+      const pc = createPeer(viewerId);
+
+      streamRef.current.getTracks().forEach((track) => {
+        pc.addTrack(track, streamRef.current);
+      });
+
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+
+      socket.emit("live:signal", {
+        targetId: viewerId,
+        data: {
+          type: "offer",
+          offer,
+        },
+      });
+
+      setViewerCount((count) => count + 1);
+    });
+
+    socket.on("live:signal", async ({ senderId, data }) => {
+      if (role === "host") return;
+
+      if (data.type === "offer") {
+        const pc = createPeer(senderId);
+
+        await pc.setRemoteDescription(
+          new RTCSessionDescription(data.offer)
+        );
+
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
+
+        socket.emit("live:signal", {
+          targetId: senderId,
+          data: {
+            type: "answer",
+            answer,
+          },
+        });
+      }
+
+      if (data.type === "answer") {
+        const pc = peersRef.current[senderId];
+        if (pc) {
+          await pc.setRemoteDescription(
+            new RTCSessionDescription(data.answer)
+          );
+        }
+      }
+
+      if (data.type === "candidate") {
+        const pc = peersRef.current[senderId];
+        if (pc && data.candidate) {
+          try {
+            await pc.addIceCandidate(
+              new RTCIceCandidate(data.candidate)
+            );
+          } catch (error) {
+            console.error("ICE candidate error:", error);
+          }
+        }
+      }
+    });
+
+    socket.on("live:joined", ({ viewerCount: count }) => {
+      setViewerCount(count || 0);
+      setStatus("👀 Watching");
+    });
+
+    socket.on("live:error", ({ message }) => {
+      setStatus("⚠️ " + message);
+    });
+
+    socket.on("live:ended", () => {
+      setStatus("Live ended");
+      stopLocalStream();
+      if (remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = null;
+      }
+    });
+
+    return () => {
+      Object.values(peersRef.current).forEach((pc) => pc.close());
+      socket.disconnect();
+      stopLocalStream();
+    };
+  }, [role]);
+
+  function createPeer(targetId) {
+    if (peersRef.current[targetId]) {
+      return peersRef.current[targetId];
+    }
+
+    const pc = new RTCPeerConnection({
+      iceServers: [
+        { urls: "stun:stun.l.google.com:19302" },
+      ],
+    });
+
+    pc.onicecandidate = (event) => {
+      if (event.candidate) {
+        socketRef.current.emit("live:signal", {
+          targetId,
+          data: {
+            type: "candidate",
+            candidate: event.candidate,
+          },
+        });
+      }
+    };
+
+    pc.ontrack = (event) => {
+      if (remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = event.streams[0];
+      }
+    };
+
+    peersRef.current[targetId] = pc;
+    return pc;
+  }
+
+  async function startBroadcast() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: mode === "tv",
+        audio: true,
+      });
+
+      streamRef.current = stream;
+
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = stream;
+      }
+
+      const newLiveId =
+        "apstream-" +
+        mode +
+        "-" +
+        Date.now();
+
+      socketRef.current.emit("live:create", {
+        liveId: newLiveId,
+      });
+
+      setLiveId(newLiveId);
+      setRole("host");
+      setStatus("Starting...");
+    } catch (error) {
+      console.error(error);
+      setStatus("⚠️ Camera/microphone permission required");
+    }
+  }
+
+  function joinBroadcast() {
+    if (!liveId.trim()) return;
+
+    setRole("viewer");
+    setStatus("Connecting...");
+
+    socketRef.current.emit("live:join", {
+      liveId: liveId.trim(),
+    });
+  }
+
+  function stopLocalStream() {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+  }
+
+  function endBroadcast() {
+    if (liveId) {
+      socketRef.current.emit("live:end", { liveId });
+    }
+
+    Object.values(peersRef.current).forEach((pc) => pc.close());
+    peersRef.current = {};
+
+    stopLocalStream();
+
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = null;
+    }
+
+    setStatus("Broadcast ended");
+    setViewerCount(0);
+  }
+
+  return (
+    <section
+      id="live-broadcast"
+      style={{
+        padding: "24px 16px",
+        margin: "20px 0",
+        borderRadius: "18px",
+        background: "linear-gradient(135deg, #e9fff3, #ffeaf4)",
+      }}
+    >
+      <div style={{ textAlign: "center" }}>
+        <h2>🔴 AP-STREAM LIVE</h2>
+        <p>Broadcast TV or Radio directly through AP-STREAM.</p>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "10px",
+          flexWrap: "wrap",
+          marginBottom: "18px",
+        }}
+      >
+        <button onClick={() => setMode("tv")}>
+          📺 TV Broadcast
+        </button>
+
+        <button onClick={() => setMode("radio")}>
+          📻 Radio Broadcast
+        </button>
+      </div>
+
+      {role === "host" && (
+        <div>
+          <video
+            ref={localVideoRef}
+            autoPlay
+            muted
+            playsInline
+            style={{
+              width: "100%",
+              maxHeight: "420px",
+              background: "#111",
+              borderRadius: "14px",
+              display: mode === "tv" ? "block" : "none",
+            }}
+          />
+
+          {mode === "radio" && (
+            <div
+              style={{
+                padding: "50px 20px",
+                textAlign: "center",
+                fontSize: "50px",
+                background: "rgba(255,255,255,.65)",
+                borderRadius: "14px",
+              }}
+            >
+              📻
+              <div style={{ fontSize: "20px" }}>
+                AP-STREAM RADIO
+              </div>
+            </div>
+          )}
+
+          <div style={{ marginTop: "15px" }}>
+            <button onClick={startBroadcast}>
+              🔴 Go Live
+            </button>
+
+            <button
+              onClick={endBroadcast}
+              style={{ marginLeft: "10px" }}
+            >
+              ⏹️ End Live
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div
+        style={{
+          marginTop: "20px",
+          padding: "15px",
+          background: "rgba(255,255,255,.65)",
+          borderRadius: "14px",
+        }}
+      >
+        <strong>{status}</strong>
+
+        {liveId && (
+          <p>
+            Live ID: <strong>{liveId}</strong>
+          </p>
+        )}
+
+        <p>👥 Viewers/Listeners: {viewerCount}</p>
+      </div>
+
+      <div style={{ marginTop: "20px" }}>
+        <h3>👀 Watch / Listen to a Live Channel</h3>
+
+        <input
+          value={liveId}
+          onChange={(e) => setLiveId(e.target.value)}
+          placeholder="Enter Live ID"
+          style={{
+            width: "100%",
+            padding: "12px",
+            boxSizing: "border-box",
+          }}
+        />
+
+        <button
+          onClick={joinBroadcast}
+          style={{ marginTop: "10px" }}
+        >
+          ▶️ Join Live
+        </button>
+
+        <video
+          ref={remoteVideoRef}
+          autoPlay
+          playsInline
+          controls
+          style={{
+            width: "100%",
+            marginTop: "15px",
+            maxHeight: "420px",
+            background: "#111",
+            borderRadius: "14px",
+          }}
+        />
+      </div>
+    </section>
+  );
+}

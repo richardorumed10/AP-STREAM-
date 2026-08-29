@@ -498,6 +498,12 @@ export default function AIStudio() {
           <strong>Faceless Video</strong>
           <small>Build videos without appearing on camera.</small>
         </div>
+
+        <div>
+          <span>🎨</span>
+          <strong>Kids Cartoons</strong>
+          <small>Create fun, educational and child-friendly cartoon stories.</small>
+        </div>
       </div>
     </section>
   );

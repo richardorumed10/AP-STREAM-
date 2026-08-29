@@ -17,8 +17,6 @@ import AIAssistant from "./components/AIAssistant";
 import AIStudio from "./components/AIStudio";
 import RecordingStudio from "./components/RecordingStudio";
 import AIAssistantManager from "./components/AIAssistantManager";
-import TVRadioHub from "./components/TVRadioHub";
-import LiveBroadcast from "./components/LiveBroadcast";
 
 
 
@@ -822,8 +820,6 @@ function App() {
           <button type="button" onClick={() => setMusicOpen((open) => !open)}>🎵 Music</button>
           <a href="#artists">🎤 Artists</a>
           <a href="#creators">⭐ Creators</a>
-          <a href="#tv">📺 TV</a>
-          <a href="#radio">📻 Radio</a>
           <a href="#news">📰 News</a>
           <button type="button" onClick={() => setActiveStudio("ai")}>🤖 AI</button>
           <button type="button" onClick={() => setActiveStudio("recording")}>🎙️ Studio</button>
@@ -1082,350 +1078,29 @@ function App() {
           </div>
         </section>
 
-        <section id="videos" className="media-section shorts-only-section">
-  <div className="media-heading">
-    <h2>📱 Shorts / Reels</h2>
-    <p className="section-subtitle">Quick moments from AP-STREAM creators</p>
-  </div>
-
-  <div className="shorts-shelf">
-    {shorts.length > 0 ? (
-      shorts.map((short, index) => (
-        <button
-          type="button"
-          className="short-tile"
-          key={short.id}
-          onClick={() => {
-            setActiveShort(index);
-            setShortViewerOpen(true);
-          }}
-        >
-          <div className="short-tile-video">
-            <video
-              src={short.video}
-              muted
-              playsInline
-              preload="metadata"
-            />
-            <span className="short-play">▶</span>
+        <section id="videos" className="media-section videos-vertical-section">
+          <div className="media-heading">
+            <h2>🎬 Videos</h2>
+            <p className="section-subtitle">Watch videos from AP-STREAM creators.</p>
           </div>
-
-          <div className="short-tile-info">
-            <strong>{short.title}</strong>
-            <span>{short.creator}</span>
-          </div>
-        </button>
-      ))
-    ) : (
-      <article className="short-empty">
-        <div className="short-placeholder">▶</div>
-        <h3>No Shorts yet</h3>
-        <p>Upload the first Reel to AP-STREAM.</p>
-      </article>
-    )}
-  </div>
-
-  {shortViewerOpen && shorts[activeShort] && (
-    <div
-      className="short-viewer"
-      role="dialog"
-      aria-modal="true"
-      onClick={(event) => {
-        if (event.target === event.currentTarget) {
-          setShortViewerOpen(false);
-        }
-      }}
-    >
-      <button
-        type="button"
-        className="short-viewer-close"
-        onClick={() => setShortViewerOpen(false)}
-        aria-label="Close"
-      >
-        ✕
-      </button>
-
-      <div className="short-viewer-content">
-        <video
-          key={shorts[activeShort].id}
-          className="short-viewer-video"
-          src={shorts[activeShort].video}
-          controls
-          autoPlay
-          playsInline
-        />
-
-        <div className="short-viewer-info">
-          <h3>{shorts[activeShort].title}</h3>
-          <p>{shorts[activeShort].creator}</p>
-        </div>
-      </div>
-    </div>
-  )}
-</section>
-
-<section id="community">
-          <h2>🌍 Community</h2>
-          <p className="section-subtitle">
-            Connect with artists, creators and fans.
-          </p>
-
-          <div id="create" className="create-post">
-            <textarea
-              value={newPost}
-              onChange={(event) => setNewPost(event.target.value)}
-              placeholder="Share something with the AP-STREAM community..."
-              rows="3"
-            />
-            <button onClick={createPost}>Post</button>
-          </div>
-
-          <div className="feed">
-            {posts.map((post) => (
-              <div className="post" key={post.id}>
-                <div className="post-header">
-                  <div className="post-user">
-                    {post.avatar ? (
-                      <img
-                        className="post-avatar"
-                        src={post.avatar}
-                        alt={post.artist}
-                      />
-                    ) : (
-                      <div className="post-avatar post-avatar-fallback">👤</div>
-                    )}
-                    <div>
-                      <strong>{post.artist}</strong>
-                      <small>{post.time}</small>
-                    </div>
-                  </div>
-                </div>
-
-                <p>{post.text}</p>
-
-                <div className="post-actions">
-                  <button onClick={() => toggleLike(post.id)}>
-                    {post.liked ? "❤️ Liked" : "♡ Like"}
-                    {post.likes > 0 && ` ${post.likes}`}
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      document.getElementById(`comment-${post.id}`)?.focus()
-                    }
-                  >
-                    💬 Comment
-                  </button>
-
-                  <button onClick={() => sharePostWithCount(post.id, post.text)}>
-                    ↗ Share{post.shared > 0 && ` ${post.shared}`}
-                  </button>
-                  <button onClick={() => repostPost(post.id)}>
-                    {post.reposted ? "🔁 Reposted" : "🔁 Repost"}
-                  </button>
-                  <button onClick={() => toggleSave(post.id)}>
-                    {post.saved ? "🔖 Saved" : "🔖 Save"}
-                  </button>
-                </div>
-
-                {post.comments.length > 0 && (
-                  <div className="comments">
-                    {post.comments.map((comment, index) => (
-                      <p key={index}>
-                        💬 <strong>AP User:</strong> {comment}
-                      </p>
-                    ))}
-                  </div>
-                )}
-
-                <div className="comment-box">
-                  <input
-                    id={`comment-${post.id}`}
-                    value={commentText[post.id] || ""}
-                    onChange={(event) =>
-                      setCommentText((current) => ({
-                        ...current,
-                        [post.id]: event.target.value,
-                      }))
-                    }
-                    placeholder="Write a comment..."
-                  />
-                  <button onClick={() => addComment(post.id)}>Send</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-<section id="music">
-          <h2>🔥 Trending Music</h2>
-          <p className="section-subtitle">Fresh sounds</p>
-
-          <div className="cards">
-            {musicTracks.map((track) => (
-              <div className="card" key={track.id}>
-                <div className="music-icon">{track.icon}</div>
-
-                {currentAudio === track.id && audioElement && !audioElement.paused && (
-                  <div className="neon-equalizer" aria-label="Music playing">
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                  </div>
-                )}
-                <h3>{track.title}</h3>
-                <p>{track.artist}</p>
-
-                <button onClick={() => playMusic(track)}>
-                  {currentAudio === track.id && audioElement && !audioElement.paused
-                    ? "⏸ Pause"
-                    : "▶ Play"}
-                </button>
-              </div>
-            ))}
+          <div className="videos-vertical-feed">
+            <article className="video-card">
+              <div className="video-placeholder">▶</div>
+              <h3>AP-STREAM Videos</h3>
+              <p>Creator videos will appear here.</p>
+            </article>
           </div>
         </section>
 
 
-
-        
-
-
-
-
-
-        
-
-        
-
-
-
-
-
-        <section id="search" className="news-section">
-          <h2>📰 AP-STREAM News</h2>
-
-          <p className="section-subtitle">
-            Uganda, Africa and world news
-          </p>
-
-          <div className="news-categories">
-            <button onClick={() => setNewsCategory("all")}>📰 All</button>
-            <button onClick={() => setNewsCategory("breaking")}>🚨 Breaking</button>
-            <button onClick={() => setNewsCategory("uganda")}>🇺🇬 Uganda</button>
-            <button onClick={() => setNewsCategory("africa")}>🌍 Africa</button>
-            <button onClick={() => setNewsCategory("world")}>🌎 World</button>
-            <button onClick={() => setNewsCategory("technology")}>💻 Technology</button>
-            <button onClick={() => setNewsCategory("entertainment")}>🎵 Entertainment</button>
-            <button onClick={() => setNewsCategory("football")}>⚽ Football</button>
-          </div>
-
-          {newsCategory === "football" && (
-            <section className="football-news-panel">
-              <div className="football-news-header">
-                <div>
-                  <span className="eyebrow">AP-STREAM SPORTS</span>
-                  <h3>⚽ Football</h3>
-                  <p>Football news, scores, fixtures and results.</p>
-                </div>
-              </div>
-
-              <div className="football-links">
-                <button>🔴 Live Scores</button>
-                <button>📅 Fixtures</button>
-                <button>🏆 Results</button>
-                <button>📊 League Tables</button>
-                <button>📰 Football News</button>
-                <button>🔔 Match Updates</button>
-              </div>
-
-              <div className="football-channels">
-                <strong>📺 Football Channels</strong>
-                <div>
-                  <a href="https://supersport.com/" target="_blank" rel="noreferrer">
-                    SuperSport
-                  </a>
-                  <a href="https://www.dstv.com/en-ug" target="_blank" rel="noreferrer">
-                    DStv
-                  </a>
-                </div>
-              </div>
-            </section>
-          )}
-
-          <div className="news-search">
-            <input
-              type="search"
-              value={newsSearch}
-              onChange={(event) => setNewsSearch(event.target.value)}
-              placeholder="🔎 Search news..."
-            />
-            <button onClick={() => setNewsSearch(newsSearch.trim())}>
-              Search
-            </button>
-          </div>
-
-          <div className="news-grid">
-            {filteredNews.length > 0 ? (
-              filteredNews.map((item) => (
-                <article
-                  key={item.id}
-                  className={`news-card ${
-                    item.category === "breaking" ? "breaking" : ""
-                  }`}
-                >
-                  <span className="news-label">{item.label}</span>
-
-                  <h3>{item.title}</h3>
-
-                  <p>{item.text}</p>
-
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="button"
-                  >
-                    Read Article ↗
-                  </a>
-                </article>
-              ))
-            ) : (
-              <div className="news-empty">
-                <h3>🔎 No news found</h3>
-                <p>Try another search or choose a different category.</p>
-              </div>
-            )}
-          </div>
-
-          <div className="news-footer">
-            <p>
-              🔗 AP-STREAM News links readers to original publishers
-              for full articles.
+        <section id="profile" className="profile-section">
+          <div className="profile-header">
+            <p className="eyebrow">AP-STREAM PROFILE</p>
+            <h2>👤 Profile</h2>
+            <p className="section-subtitle">
+              Manage your AP-STREAM account and connect with the community.
             </p>
           </div>
-        </section>
-
-
-        
-
-
-
-        <section className="about">
-          <h2>🌍 More than music.</h2>
-          <p>
-            AP-STREAM is being built for music, video, artists,
-            creators, community and communication.
-          </p>
-
-          <a href="#login" className="button">
-            Join AP-STREAM
-          </a>
-        </section>
 
         <section id="login" className="login-section">
           <div className="login-card">
@@ -1522,6 +1197,21 @@ function App() {
             </p>
           </div>
         </section>
+        </section>
+
+        <section className="about">
+          <h2>🌍 More than music.</h2>
+          <p>
+            AP-STREAM is being built for music, video, artists,
+            creators, community and communication.
+          </p>
+
+          <a href="#login" className="button">
+            Join AP-STREAM
+          </a>
+        </section>
+
+
 
       </main>
 
@@ -1665,15 +1355,13 @@ function App() {
         </div>
       )}
 
-      <TVRadioHub />
 
-      <LiveBroadcast />
 
       <AIAssistant />
       <AIAssistantManager />
 
       <footer>
-        © 2026 AP-STREAM • Music • Video • TV • Radio • Community • Calls
+        © 2026 AP-STREAM • Music • Video • Community • Calls
       </footer>
     </div>
   );

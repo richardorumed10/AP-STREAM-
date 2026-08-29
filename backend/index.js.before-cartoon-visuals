@@ -151,66 +151,6 @@ app.get('/api/songs', async (req, res) => {
 
 
 
-
-app.post("/api/ai/kids-cartoon-visual", async (req, res) => {
-  try {
-    const {
-      character = "a friendly cartoon character",
-      scene = "a bright, fun cartoon scene",
-      language = "English"
-    } = req.body || {};
-
-    if (!process.env.OPENAI_API_KEY) {
-      return res.status(503).json({
-        success: false,
-        error: "AI service is not configured."
-      });
-    }
-
-    const response = await openai.responses.create({
-      model: "gpt-5.6-luna",
-      input: `
-Create an original, child-friendly visual production prompt for a cartoon.
-
-Character:
-${character}
-
-Scene:
-${scene}
-
-Language:
-${language}
-
-Return:
-1. Character appearance
-2. Environment/background
-3. Character action
-4. Camera framing
-5. Lighting/mood
-6. Complete image-generation prompt
-
-Use a colorful, friendly animated-cartoon style.
-Keep it suitable for children.
-Do not use copyrighted characters or existing franchises.
-Avoid frightening horror, graphic violence, sexual content, hateful content,
-or dangerous instructions.
-      `
-    });
-
-    res.json({
-      success: true,
-      result: response.output_text
-    });
-  } catch (error) {
-    console.error("Kids cartoon visual error:", error);
-
-    res.status(500).json({
-      success: false,
-      error: error.message || "Could not create visual prompt."
-    });
-  }
-});
-
 app.post("/api/ai/kids-cartoon-scenes", async (req, res) => {
   try {
     const {
@@ -218,8 +158,7 @@ app.post("/api/ai/kids-cartoon-scenes", async (req, res) => {
       story = "a fun adventure",
       language = "English",
       type = "Adventure",
-      duration = "3 minutes",
-      characters = []
+      duration = "3 minutes"
     } = req.body || {};
 
     if (!process.env.OPENAI_API_KEY) {
@@ -239,12 +178,6 @@ Story: ${story}
 Language: ${language}
 Type: ${type}
 Duration: ${duration}
-
-Use the following saved characters throughout the episode when appropriate.
-Keep each character's name, role, personality, and visual appearance consistent.
-
-Saved characters:
-${JSON.stringify(characters, null, 2)}
 
 Create exactly 5 scenes.
 
@@ -729,9 +662,6 @@ Square album-cover composition.`
 });
 
 app.use('/api/artists', require('./routes/artist'));
-app.use('/api/shorts', require('./routes/shorts'));
-app.use('/uploads/shorts', require('express').static(require('path').join(__dirname, 'uploads', 'shorts')));
-
 httpServer.listen(PORT, "0.0.0.0", () => {
   console.log(`AP Stream backend running on port ${PORT}`);
 });

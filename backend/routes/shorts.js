@@ -1,0 +1,107 @@
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+const db = require("../db");
+
+const router = express.Router();
+const uploadDir = path.join(__dirname, "..", "uploads", "shorts");
+
+fs.mkdirSync(uploadDir, { recursive: true });
+
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, uploadDir),
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    cb(null, `${Date.now()}-${Math.random().toString(36).slice(2, 10)}${ext}`);
+  },
+});
+
+const upload = multer({
+  storage,
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype.startsWith("video/")) cb(null, true);
+    else cb(new Error("Only video files are allowed."));
+  },
+});
+
+router.post("/upload", upload.single("video"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: "No video uploaded." });
+    }
+
+    const title = String(req.body.title || req.file.originalname)
+      .replace(/\.[^/.]+$/, "")
+      .trim()
+      .slice(0, 200) || "AP-STREAM Short";
+
+    const creator = String(req.body.creator || "@you")
+      .trim()
+      .slice(0, 100) || "@you";
+
+    const result = await db.query(
+      `INSERT INTO shorts
+       (title, creator, filename, original_name, mime_type, file_size)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING id, title, creator, filename, original_name,
+                 mime_type, file_size, created_at`,
+      [
+        title,
+        creator,
+        req.file.filename,
+        req.file.originalname,
+        req.file.mimetype,
+        req.file.size,
+      ]
+    );
+
+    const short = result.rows[0];
+
+    res.status(201).json({
+      success: true,
+      short: {
+        ...short,
+        videoUrl: `/uploads/shorts/${short.filename}`,
+      },
+    });
+  } catch (error) {
+    console.error("Short upload error:", error);
+
+    if (req.file) {
+      try { fs.unlinkSync(req.file.path); } catch {}
+    }
+
+    res.status(500).json({
+      success: false,
+      error: error.message || "Could not upload Short.",
+    });
+  }
+});
+
+router.get("/", async (_req, res) => {
+  try {
+    const result = await db.query(
+      `SELECT id, title, creator, filename, original_name,
+              mime_type, file_size, created_at
+       FROM shorts
+       ORDER BY created_at DESC`
+    );
+
+    res.json({
+      success: true,
+      shorts: result.rows.map((short) => ({
+        ...short,
+        videoUrl: `/uploads/shorts/${short.filename}`,
+      })),
+    });
+  } catch (error) {
+    console.error("Shorts list error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message || "Could not load Shorts.",
+    });
+  }
+});
+
+module.exports = router;

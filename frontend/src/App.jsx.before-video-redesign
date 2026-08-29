@@ -114,7 +114,6 @@ const newsItems = [
 function App() {
   const [shortViewerOpen, setShortViewerOpen] = useState(false);
   const [activeStudio, setActiveStudio] = useState(null);
-  const [musicOpen, setMusicOpen] = useState(false);
   const [currentAudio, setCurrentAudio] = useState(null);
   const [audioElement, setAudioElement] = useState(null);
   const [musicProgress, setMusicProgress] = useState(0);
@@ -807,29 +806,49 @@ function App() {
     <div className="app">
       <header>
         <div className="logo ap-brand">
-          <img src="/apstream-logo.png" alt="AP-STREAM" className="ap-logo" />
-          <span className="ap-brand-name">AP-STREAM</span>
-          {authUser && (
-            <span className="account-indicator">
-              🟢 {authUser.username}
-            </span>
-          )}
-        </div>
-
+              <img src="/apstream-logo.png" alt="AP-STREAM" className="ap-logo" />
+              <span className="ap-brand-name">AP-STREAM</span>
+              {authUser && (
+                <span className="account-indicator">
+                  🟢 {authUser.username}
+                </span>
+              )}
+            </div>
         <nav className="ap-main-nav">
-          <a href="#home" onClick={() => setActiveStudio(null)}>🏠 Home</a>
-          <a href="#social">👥 Social</a>
-          <button type="button" onClick={() => setMusicOpen((open) => !open)}>🎵 Music</button>
-          <a href="#artists">🎤 Artists</a>
-          <a href="#creators">⭐ Creators</a>
-          <a href="#tv">📺 TV</a>
-          <a href="#radio">📻 Radio</a>
-          <a href="#news">📰 News</a>
-          <button type="button" onClick={() => setActiveStudio("ai")}>🤖 AI</button>
-          <button type="button" onClick={() => setActiveStudio("recording")}>🎙️ Studio</button>
-          <a href="#boda">🛵 Boda</a>
-          <a href="#admin">🛠️ Admin</a>
+          <button
+            type="button"
+            onClick={() => setActiveStudio("ai")}
+          >
+            🤖 AI Studio
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveStudio("recording")}
+          >
+            🎙️ Recording Studio
+          </button>
+
+          <a
+            href="#home"
+            onClick={() => setActiveStudio(null)}
+          >
+            🏠 Home
+          </a>
           <a href="#search">🔎 Search</a>
+          <button
+            type="button"
+            onClick={() => {
+              const el = document.querySelector(".create-post textarea");
+              if (el) {
+                el.scrollIntoView({ behavior: "smooth", block: "center" });
+                setTimeout(() => el.focus(), 400);
+              }
+            }}
+          >
+            ➕ Create
+          </button>
+          <a href="#messages">💬 Messages</a>
           <a href="#profile">👤 Profile</a>
         </nav>
       </header>
@@ -1082,89 +1101,132 @@ function App() {
           </div>
         </section>
 
-        <section id="videos" className="media-section shorts-only-section">
-  <div className="media-heading">
-    <h2>📱 Shorts / Reels</h2>
-    <p className="section-subtitle">Quick moments from AP-STREAM creators</p>
-  </div>
-
-  <div className="shorts-shelf">
-    {shorts.length > 0 ? (
-      shorts.map((short, index) => (
-        <button
-          type="button"
-          className="short-tile"
-          key={short.id}
-          onClick={() => {
-            setActiveShort(index);
-            setShortViewerOpen(true);
-          }}
-        >
-          <div className="short-tile-video">
-            <video
-              src={short.video}
-              muted
-              playsInline
-              preload="metadata"
-            />
-            <span className="short-play">▶</span>
+        <section id="videos" className="media-section">
+          <div className="media-heading">
+            <h2>📱 Shorts / Reels</h2>
+            <p className="section-subtitle">Quick moments from AP-STREAM creators</p>
           </div>
 
-          <div className="short-tile-info">
-            <strong>{short.title}</strong>
-            <span>{short.creator}</span>
+          <div className="shorts-shelf">
+            {shorts.length > 0 ? (
+              shorts.map((short, index) => (
+                <button
+                  type="button"
+                  className="short-tile"
+                  key={short.id}
+                  onClick={() => {
+                    setActiveShort(index);
+                    setShortViewerOpen(true);
+                  }}
+                >
+                  <div className="short-tile-video">
+                    <video
+                      src={short.video}
+                      muted
+                      playsInline
+                      preload="metadata"
+                    />
+                    <span className="short-play">▶</span>
+                  </div>
+                  <div className="short-tile-info">
+                    <strong>{short.title}</strong>
+                    <span>{short.creator}</span>
+                  </div>
+                </button>
+              ))
+            ) : (
+              <article className="short-card short-empty">
+                <div className="short-placeholder">▶</div>
+                <h3>No Shorts yet</h3>
+                <p>Upload the first Reel to AP-STREAM.</p>
+              </article>
+            )}
           </div>
-        </button>
-      ))
-    ) : (
-      <article className="short-empty">
-        <div className="short-placeholder">▶</div>
-        <h3>No Shorts yet</h3>
-        <p>Upload the first Reel to AP-STREAM.</p>
-      </article>
-    )}
-  </div>
 
-  {shortViewerOpen && shorts[activeShort] && (
-    <div
-      className="short-viewer"
-      role="dialog"
-      aria-modal="true"
-      onClick={(event) => {
-        if (event.target === event.currentTarget) {
-          setShortViewerOpen(false);
-        }
-      }}
-    >
-      <button
-        type="button"
-        className="short-viewer-close"
-        onClick={() => setShortViewerOpen(false)}
-        aria-label="Close"
-      >
-        ✕
-      </button>
+          {shortViewerOpen && shorts[activeShort] && (
+            <div
+              className="short-viewer"
+              role="dialog"
+              aria-modal="true"
+              onClick={(event) => {
+                if (event.target === event.currentTarget) {
+                  setShortViewerOpen(false);
+                }
+              }}
+            >
+              <button
+                type="button"
+                className="short-viewer-close"
+                onClick={() => setShortViewerOpen(false)}
+                aria-label="Close"
+              >
+                ✕
+              </button>
 
-      <div className="short-viewer-content">
-        <video
-          key={shorts[activeShort].id}
-          className="short-viewer-video"
-          src={shorts[activeShort].video}
-          controls
-          autoPlay
-          playsInline
-        />
+              <button
+                type="button"
+                className="short-viewer-nav short-viewer-prev"
+                disabled={activeShort === 0}
+                onClick={() =>
+                  setActiveShort((current) => Math.max(0, current - 1))
+                }
+              >
+                ‹
+              </button>
 
-        <div className="short-viewer-info">
-          <h3>{shorts[activeShort].title}</h3>
-          <p>{shorts[activeShort].creator}</p>
-        </div>
-      </div>
-    </div>
-  )}
-</section>
+              <div className="short-viewer-content">
+                <video
+                  key={shorts[activeShort].id}
+                  className="short-viewer-video"
+                  src={shorts[activeShort].video}
+                  controls
+                  autoPlay
+                  playsInline
+                />
 
-<section id="community">
+                <div className="short-viewer-info">
+                  <h3>{shorts[activeShort].title}</h3>
+                  <p>{shorts[activeShort].creator}</p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="short-viewer-nav short-viewer-next"
+                disabled={activeShort === shorts.length - 1}
+                onClick={() =>
+                  setActiveShort((current) =>
+                    Math.min(shorts.length - 1, current + 1)
+                  )
+                }
+              >
+                ›
+              </button>
+            </div>
+          )}
+
+          <div className="media-heading videos-heading">
+            <h2>🎥 Videos</h2>
+            <p className="section-subtitle">Watch longer videos from AP-STREAM creators</p>
+          </div>
+
+          <div className="featured-video">
+            <div className="video-placeholder">
+              <span>▶</span>
+              <strong>Featured video coming soon</strong>
+              <small>Upload a video to start watching on AP-STREAM.</small>
+            </div>
+
+            <div className="video-controls-preview">
+              <button type="button">⏮ Back</button>
+              <button type="button">▶ Play</button>
+              <button type="button">Next ⏭</button>
+              <button type="button">⬇ Download</button>
+            </div>
+          </div>
+        </section>
+
+                <section id="community">
           <h2>🌍 Community</h2>
           <p className="section-subtitle">
             Connect with artists, creators and fans.

@@ -19,6 +19,7 @@ import RecordingStudio from "./components/RecordingStudio";
 import AIAssistantManager from "./components/AIAssistantManager";
 
 
+
 const musicTracks = [
   { id: 1, title: "Midnight Waves", artist: "AP Artist", file: "/music/midnight-waves.mp3", icon: "♫" },
   { id: 2, title: "African Pulse", artist: "African Pulse", file: "/music/african-pulse.mp3", icon: "♪" },
@@ -109,13 +110,39 @@ const newsItems = [
 
 
 function App() {
+  const [shortViewerOpen, setShortViewerOpen] = useState(false);
   const [activeStudio, setActiveStudio] = useState(null);
+  const [activeSection, setActiveSection] = useState("home");
+  const [uploadedVideos, setUploadedVideos] = useState([]);
+  const [videoTitle, setVideoTitle] = useState("");
+  const [musicOpen, setMusicOpen] = useState(false);
   const [currentAudio, setCurrentAudio] = useState(null);
   const [audioElement, setAudioElement] = useState(null);
   const [musicProgress, setMusicProgress] = useState(0);
   const [musicDuration, setMusicDuration] = useState(0);
   const [musicVolume, setMusicVolume] = useState(1);
   const [posts, setPosts] = useState(initialPosts);
+  const [shorts, setShorts] = useState([
+    {
+      id: 1,
+      title: "Welcome to AP-STREAM Shorts",
+      creator: "@apstream",
+      video: "",
+      likes: 0,
+      comments: 0,
+    },
+    {
+      id: 2,
+      title: "Create. Share. Discover.",
+      creator: "@creators",
+      video: "",
+      likes: 0,
+      comments: 0,
+    },
+  ]);
+  const [activeShort, setActiveShort] = useState(0);
+  const [likedShorts, setLikedShorts] = useState({});
+
   const [newPost, setNewPost] = useState("");
   const [commentText, setCommentText] = useState({});
   const [notifications, setNotifications] = useState([
@@ -748,54 +775,60 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    async function loadShorts() {
+      try {
+        const response = await fetch("/api/shorts");
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || "Could not load Shorts.");
+        }
+
+        const savedShorts = data.shorts.map((short) => ({
+          id: short.id,
+          title: short.title,
+          creator: short.creator,
+          video: short.videoUrl,
+          likes: 0,
+          comments: 0,
+        }));
+
+        setShorts(savedShorts);
+        setActiveShort(0);
+      } catch (error) {
+        console.error("Could not load Shorts:", error);
+      }
+    }
+
+    loadShorts();
+  }, []);
+
   return (
     <div className="app">
       <header>
         <div className="logo ap-brand">
-              <img src="/apstream-logo.png" alt="AP-STREAM" className="ap-logo" />
-              <span className="ap-brand-name">AP-STREAM</span>
-              {authUser && (
-                <span className="account-indicator">
-                  🟢 {authUser.username}
-                </span>
-              )}
-            </div>
+          <img src="/apstream-logo.png" alt="AP-STREAM" className="ap-logo" />
+          <span className="ap-brand-name">AP-STREAM</span>
+          {authUser && (
+            <span className="account-indicator">
+              🟢 {authUser.username}
+            </span>
+          )}
+        </div>
+
         <nav className="ap-main-nav">
-          <button
-            type="button"
-            onClick={() => setActiveStudio("ai")}
-          >
-            🤖 AI Studio
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveStudio("recording")}
-          >
-            🎙️ Recording Studio
-          </button>
-
-          <a
-            href="#home"
-            onClick={() => setActiveStudio(null)}
-          >
-            🏠 Home
-          </a>
+          <button type="button" onClick={() => { setActiveSection("home"); setActiveStudio(null); }}>🏠 Home</button>
+          <button type="button" onClick={() => setActiveSection("social")}>👥 Social</button>
+          <button type="button" onClick={() => setMusicOpen((open) => !open)}>🎵 Music</button>
+          <a href="#artists">🎤 Artists</a>
+          <a href="#creators">⭐ Creators</a>
+          <a href="#news">📰 News</a>
+          <button type="button" onClick={() => setActiveStudio("ai")}>🤖 AI</button>
+          <button type="button" onClick={() => setActiveStudio("recording")}>🎙️ Studio</button>
+          <a href="#boda">🛵 Boda</a>
+          <a href="#admin">🛠️ Admin</a>
           <a href="#search">🔎 Search</a>
-          <button
-            type="button"
-            onClick={() => {
-              const el = document.querySelector(".create-post textarea");
-              if (el) {
-                el.scrollIntoView({ behavior: "smooth", block: "center" });
-                setTimeout(() => el.focus(), 400);
-              }
-            }}
-          >
-            ➕ Create
-          </button>
-          <a href="#messages">💬 Messages</a>
-          <a href="#profile">👤 Profile</a>
         </nav>
       </header>
 
@@ -814,6 +847,7 @@ function App() {
           </section>
         )}
 
+        {activeSection === "social" && (
         <section id="social" className="social-hub">
           <div className="social-hub-header">
             <p className="eyebrow">AP STREAM SOCIAL</p>
@@ -821,8 +855,8 @@ function App() {
           </div>
 
           <div className="social-menu">
-            <a href="#profile">👤 Profile</a>
-            <a href="#community">👥 Friends</a>
+            <a href="#shorts">📱 Shorts / Reels</a>
+              <a href="#community">👥 Friends</a>
             <a href="#community">🤝 Connections</a>
             <a href="#community">🎨 Artists</a>
             <a href="#community">⭐ Creators</a>
@@ -833,6 +867,7 @@ function App() {
             <a href="#community">🌍 Community</a>
           </div>
         </section>
+        )}
 
         {/* CALLS */}
         {false && (
@@ -870,413 +905,332 @@ function App() {
         </section>
         )}
 
-        <section id="videos" className="media-section">
-          <div className="media-heading">
-            <h2>📱 Shorts / Reels</h2>
-            <p className="section-subtitle">Quick moments from AP-STREAM creators</p>
+        {/* SHORTS / REELS */}
+        <section id="shorts" className="shorts-section">
+          <div className="shorts-heading">
+            <h2>📱 AP-STREAM Shorts / Reels</h2>
+            <p>Quick videos from AP-STREAM creators.</p>
           </div>
 
-          <div className="shorts-grid">
-            <article className="short-card short-empty">
-              <div className="short-placeholder">▶</div>
-              <h3>Shorts coming soon</h3>
-              <p>Creators will share quick videos here.</p>
-            </article>
+          <div className="shorts-feed">
+            {shorts.map((short, index) => (
+              <article
+                className={`short-card ${activeShort === index ? "active" : ""}`}
+                key={short.id}
+                onClick={() => setActiveShort(index)}
+              >
+                <div className="short-video-placeholder">
+                  {short.video ? (
+                    <video
+                      src={short.video}
+                      controls
+                      playsInline
+                      webkit-playsinline="true"
+                      loop
+                      preload="metadata"
+                      controlsList="nodownload"
+                      onClick={(event) => event.stopPropagation()}
+                      onPointerDown={(event) => event.stopPropagation()}
+                      onTouchStart={(event) => event.stopPropagation()}
+                      onDoubleClick={(event) => {
+                        event.stopPropagation();
+                        const video = event.currentTarget;
 
-            <article className="short-card short-empty">
-              <div className="short-placeholder">▶</div>
-              <h3>Shorts coming soon</h3>
-              <p>Discover new moments from the community.</p>
-            </article>
+                        if (document.fullscreenElement) {
+                          document.exitFullscreen?.();
+                        } else if (video.requestFullscreen) {
+                          video.requestFullscreen();
+                        } else if (video.webkitEnterFullscreen) {
+                          video.webkitEnterFullscreen();
+                        }
+                      }}
+                      onError={(event) => {
+                        console.error(
+                          "AP-STREAM Short playback error:",
+                          event.currentTarget.error,
+                          "URL:",
+                          event.currentTarget.currentSrc
+                        );
+                      }}
+                    />
+                  ) : (
+                    <>
+                      <span>▶️</span>
+                      <strong>Short video</strong>
+                      <small>Upload a video to start watching.</small>
+                    </>
+                  )}
+                </div>
 
-            <article className="short-card short-empty">
-              <div className="short-placeholder">▶</div>
-              <h3>Shorts coming soon</h3>
-              <p>Follow creators and discover fresh content.</p>
-            </article>
-          </div>
+                <div className="short-info">
+                  <h3>{short.title}</h3>
+                  <p>{short.creator}</p>
 
-          <div className="media-heading videos-heading">
-            <h2>🎥 Videos</h2>
-            <p className="section-subtitle">Watch longer videos from AP-STREAM creators</p>
-          </div>
+                  <div className="short-actions">
+                    <button
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setLikedShorts((current) => ({
+                          ...current,
+                          [short.id]: !current[short.id],
+                        }));
+                      }}
+                    >
+                      {likedShorts[short.id] ? "❤️ Liked" : "🤍 Like"}
+                    </button>
 
-          <div className="featured-video">
-            <div className="video-placeholder">
-              <span>▶</span>
-              <strong>Featured video coming soon</strong>
-              <small>Upload a video to start watching on AP-STREAM.</small>
-            </div>
+                    <button
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      💬 {short.comments}
+                    </button>
 
-            <div className="video-controls-preview">
-              <button type="button">⏮ Back</button>
-              <button type="button">▶ Play</button>
-              <button type="button">Next ⏭</button>
-              <button type="button">⬇ Download</button>
-            </div>
-          </div>
-        </section>
+                    <button
+                      onClick={async (event) => {
+                        event.stopPropagation();
 
-                <section id="community">
-          <h2>🌍 Community</h2>
-          <p className="section-subtitle">
-            Connect with artists, creators and fans.
-          </p>
+                        if (navigator.share) {
+                          await navigator.share({
+                            title: short.title,
+                            text: `Watch ${short.title} on AP-STREAM`,
+                          });
+                        } else {
+                          await navigator.clipboard?.writeText(
+                            `${short.title} — ${short.creator}`
+                          );
+                        }
+                      }}
+                    >
+                      🔗 Share
+                    </button>
 
-          <div id="create" className="create-post">
-            <textarea
-              value={newPost}
-              onChange={(event) => setNewPost(event.target.value)}
-              placeholder="Share something with the AP-STREAM community..."
-              rows="3"
-            />
-            <button onClick={createPost}>Post</button>
-          </div>
+                    <button
+                      type="button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        const card = event.currentTarget.closest(".short-card");
+                        const video = card?.querySelector("video");
 
-          <div className="feed">
-            {posts.map((post) => (
-              <div className="post" key={post.id}>
-                <div className="post-header">
-                  <div className="post-user">
-                    {post.avatar ? (
-                      <img
-                        className="post-avatar"
-                        src={post.avatar}
-                        alt={post.artist}
-                      />
-                    ) : (
-                      <div className="post-avatar post-avatar-fallback">👤</div>
-                    )}
-                    <div>
-                      <strong>{post.artist}</strong>
-                      <small>{post.time}</small>
-                    </div>
+                        if (video) {
+                          if (document.fullscreenElement) {
+                            document.exitFullscreen?.();
+                          } else if (video.requestFullscreen) {
+                            video.requestFullscreen();
+                          } else if (video.webkitEnterFullscreen) {
+                            video.webkitEnterFullscreen();
+                          }
+                        }
+                      }}
+                    >
+                      ⛶ Fullscreen
+                    </button>
                   </div>
                 </div>
-
-                <p>{post.text}</p>
-
-                <div className="post-actions">
-                  <button onClick={() => toggleLike(post.id)}>
-                    {post.liked ? "❤️ Liked" : "♡ Like"}
-                    {post.likes > 0 && ` ${post.likes}`}
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      document.getElementById(`comment-${post.id}`)?.focus()
-                    }
-                  >
-                    💬 Comment
-                  </button>
-
-                  <button onClick={() => sharePostWithCount(post.id, post.text)}>
-                    ↗ Share{post.shared > 0 && ` ${post.shared}`}
-                  </button>
-                  <button onClick={() => repostPost(post.id)}>
-                    {post.reposted ? "🔁 Reposted" : "🔁 Repost"}
-                  </button>
-                  <button onClick={() => toggleSave(post.id)}>
-                    {post.saved ? "🔖 Saved" : "🔖 Save"}
-                  </button>
-                </div>
-
-                {post.comments.length > 0 && (
-                  <div className="comments">
-                    {post.comments.map((comment, index) => (
-                      <p key={index}>
-                        💬 <strong>AP User:</strong> {comment}
-                      </p>
-                    ))}
-                  </div>
-                )}
-
-                <div className="comment-box">
-                  <input
-                    id={`comment-${post.id}`}
-                    value={commentText[post.id] || ""}
-                    onChange={(event) =>
-                      setCommentText((current) => ({
-                        ...current,
-                        [post.id]: event.target.value,
-                      }))
-                    }
-                    placeholder="Write a comment..."
-                  />
-                  <button onClick={() => addComment(post.id)}>Send</button>
-                </div>
-              </div>
+              </article>
             ))}
           </div>
-        </section>
 
-<section id="music">
-          <h2>🔥 Trending Music</h2>
-          <p className="section-subtitle">Fresh sounds</p>
-
-          <div className="cards">
-            {musicTracks.map((track) => (
-              <div className="card" key={track.id}>
-                <div className="music-icon">{track.icon}</div>
-
-                {currentAudio === track.id && audioElement && !audioElement.paused && (
-                  <div className="neon-equalizer" aria-label="Music playing">
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                  </div>
-                )}
-                <h3>{track.title}</h3>
-                <p>{track.artist}</p>
-
-                <button onClick={() => playMusic(track)}>
-                  {currentAudio === track.id && audioElement && !audioElement.paused
-                    ? "⏸ Pause"
-                    : "▶ Play"}
-                </button>
-              </div>
-            ))}
-          </div>
-        </section>
-
-
-
-        
-
-
-
-
-
-        
-
-        
-
-
-
-
-
-        <section id="search" className="news-section">
-          <h2>📰 AP-STREAM News</h2>
-
-          <p className="section-subtitle">
-            Uganda, Africa and world news
-          </p>
-
-          <div className="news-categories">
-            <button onClick={() => setNewsCategory("all")}>📰 All</button>
-            <button onClick={() => setNewsCategory("breaking")}>🚨 Breaking</button>
-            <button onClick={() => setNewsCategory("uganda")}>🇺🇬 Uganda</button>
-            <button onClick={() => setNewsCategory("africa")}>🌍 Africa</button>
-            <button onClick={() => setNewsCategory("world")}>🌎 World</button>
-            <button onClick={() => setNewsCategory("technology")}>💻 Technology</button>
-            <button onClick={() => setNewsCategory("entertainment")}>🎵 Entertainment</button>
-            <button onClick={() => setNewsCategory("football")}>⚽ Football</button>
-          </div>
-
-          {newsCategory === "football" && (
-            <section className="football-news-panel">
-              <div className="football-news-header">
-                <div>
-                  <span className="eyebrow">AP-STREAM SPORTS</span>
-                  <h3>⚽ Football</h3>
-                  <p>Football news, scores, fixtures and results.</p>
-                </div>
-              </div>
-
-              <div className="football-links">
-                <button>🔴 Live Scores</button>
-                <button>📅 Fixtures</button>
-                <button>🏆 Results</button>
-                <button>📊 League Tables</button>
-                <button>📰 Football News</button>
-                <button>🔔 Match Updates</button>
-              </div>
-
-              <div className="football-channels">
-                <strong>📺 Football Channels</strong>
-                <div>
-                  <a href="https://supersport.com/" target="_blank" rel="noreferrer">
-                    SuperSport
-                  </a>
-                  <a href="https://www.dstv.com/en-ug" target="_blank" rel="noreferrer">
-                    DStv
-                  </a>
-                </div>
-              </div>
-            </section>
-          )}
-
-          <div className="news-search">
-            <input
-              type="search"
-              value={newsSearch}
-              onChange={(event) => setNewsSearch(event.target.value)}
-              placeholder="🔎 Search news..."
-            />
-            <button onClick={() => setNewsSearch(newsSearch.trim())}>
-              Search
-            </button>
-          </div>
-
-          <div className="news-grid">
-            {filteredNews.length > 0 ? (
-              filteredNews.map((item) => (
-                <article
-                  key={item.id}
-                  className={`news-card ${
-                    item.category === "breaking" ? "breaking" : ""
-                  }`}
-                >
-                  <span className="news-label">{item.label}</span>
-
-                  <h3>{item.title}</h3>
-
-                  <p>{item.text}</p>
-
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="button"
-                  >
-                    Read Article ↗
-                  </a>
-                </article>
-              ))
-            ) : (
-              <div className="news-empty">
-                <h3>🔎 No news found</h3>
-                <p>Try another search or choose a different category.</p>
-              </div>
-            )}
-          </div>
-
-          <div className="news-footer">
-            <p>
-              🔗 AP-STREAM News links readers to original publishers
-              for full articles.
-            </p>
-          </div>
-        </section>
-
-
-        
-
-
-
-        <section className="about">
-          <h2>🌍 More than music.</h2>
-          <p>
-            AP-STREAM is being built for music, video, artists,
-            creators, community and communication.
-          </p>
-
-          <a href="#login" className="button">
-            Join AP-STREAM
-          </a>
-        </section>
-
-        <section id="login" className="login-section">
-          <div className="login-card">
-            <div className="login-icon">🔐</div>
-
-            <p className="eyebrow">AP-STREAM ACCOUNT</p>
-            <h2>Welcome to AP-STREAM</h2>
-            <p className="section-subtitle">
-              Sign in or create an account to connect with artists, creators
-              and the AP-STREAM community.
-            </p>
-
-            <div className="auth-tabs">
-              <button
-                className={!authMode || authMode === "login" ? "active" : ""}
-                onClick={() => {
-                  setAuthMode("login");
-                  setAuthError("");
-                  setAuthMessage("");
-                }}
-              >
-                Login
-              </button>
-
-              <button
-                className={authMode === "register" ? "active" : ""}
-                onClick={() => {
-                  setAuthMode("register");
-                  setAuthError("");
-                  setAuthMessage("");
-                }}
-              >
-                Create Account
-              </button>
-            </div>
-
-            {authMode === "register" && (
-              <input
-                type="text"
-                value={authName}
-                onChange={(event) => setAuthName(event.target.value)}
-                placeholder="Your name"
-                autoComplete="name"
-              />
-            )}
-
-            <input
-              type="email"
-              value={authEmail}
-              onChange={(event) => setAuthEmail(event.target.value)}
-              placeholder="Email address"
-              autoComplete="email"
-            />
-
-            <input
-              type="password"
-              value={authPassword}
-              onChange={(event) => setAuthPassword(event.target.value)}
-              placeholder="Password"
-              autoComplete={
-                authMode === "register" ? "new-password" : "current-password"
+          <div className="shorts-navigation">
+            <button
+              disabled={activeShort === 0}
+              onClick={() =>
+                setActiveShort((current) => Math.max(0, current - 1))
               }
-            />
+            >
+              ⬆️ Previous
+            </button>
+
+            <span>
+              Short {activeShort + 1} / {shorts.length}
+            </span>
 
             <button
-              className="auth-submit"
-              onClick={handleAuth}
-              disabled={authLoading}
+              disabled={activeShort === shorts.length - 1}
+              onClick={() =>
+                setActiveShort((current) =>
+                  Math.min(shorts.length - 1, current + 1)
+                )
+              }
             >
-              {authLoading
-                ? "Please wait..."
-                : authMode === "register"
-                  ? "🚀 Create Account"
-                  : "🔐 Login"}
+              ⬇️ Next
+            </button>
+          </div>
+
+          <div className="shorts-create">
+            <button
+              type="button"
+              onClick={() =>
+                document.getElementById("apstream-short-upload")?.click()
+              }
+            >
+              ➕ Create a Short
             </button>
 
-            {authError && <p className="auth-error">{authError}</p>}
-            {authMessage && <p className="auth-success">{authMessage}</p>}
+            <label className="short-upload-button">
+              📤 Upload Reel
+              <input
+                id="apstream-short-upload"
+                type="file"
+                accept="video/*"
+                hidden
+                onChange={async (event) => {
+                  const file = event.target.files?.[0];
+                  if (!file) return;
 
-            {authUser && (
-              <div className="logged-in-box">
-                <span>🟢</span>
-                <div>
-                  <strong>Welcome, {authUser.username}</strong>
-                  <p>{authUser.username || authUser.name || authUser.email}</p>
-                </div>
+                  try {
+                    const formData = new FormData();
+                    formData.append("video", file);
+                    formData.append(
+                      "title",
+                      file.name.replace(/\.[^/.]+$/, "")
+                    );
+                    formData.append("creator", "@you");
 
-                <button onClick={logout}>Logout</button>
-              </div>
-            )}
+                    const response = await fetch("/api/shorts/upload", {
+                      method: "POST",
+                      body: formData,
+                    });
 
-            <p className="login-note">
-              🔒 Your account will use the AP-STREAM authentication system.
+                    const data = await response.json();
+
+                    if (!response.ok || !data.success) {
+                      throw new Error(
+                        data.error || "Video upload failed."
+                      );
+                    }
+
+                    const uploaded = data.short;
+
+                    setShorts((current) => [
+                      ...current,
+                      {
+                        id: uploaded.id,
+                        title: uploaded.title,
+                        creator: uploaded.creator,
+                        video: uploaded.videoUrl,
+                        likes: 0,
+                        comments: 0,
+                      },
+                    ]);
+
+                    setActiveShort(shorts.length);
+
+                    alert("✅ Short uploaded successfully!");
+                  } catch (error) {
+                    console.error("Short upload error:", error);
+                    alert(`❌ ${error.message}`);
+                  } finally {
+                    event.target.value = "";
+                  }
+                }}
+              />
+            </label>
+          </div>
+        </section>
+
+        <section id="videos" className="media-section videos-vertical-section">
+          <div className="media-heading">
+            <h2>🎬 AP-STREAM Videos</h2>
+            <p className="section-subtitle">
+              Watch creators, discover new videos, and share what you enjoy.
             </p>
+          </div>
+
+          <div className="video-upload-panel">
+            <input
+              type="text"
+              placeholder="Video title"
+              value={videoTitle}
+              onChange={(event) => setVideoTitle(event.target.value)}
+            />
+
+            <label className="upload-video-button">
+              ⬆️ Upload Video
+              <input
+                type="file"
+                accept="video/*"
+                hidden
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (!file) return;
+
+                  const video = {
+                    id: `${Date.now()}-${file.name}`,
+                    title: videoTitle.trim() || file.name,
+                    url: URL.createObjectURL(file),
+                    name: file.name,
+                    creator: "AP-STREAM Creator"
+                  };
+
+                  setUploadedVideos((current) => [video, ...current]);
+                  setVideoTitle("");
+                  event.target.value = "";
+                }}
+              />
+            </label>
+          </div>
+
+          <div className="videos-youtube-feed">
+            {uploadedVideos.length === 0 ? (
+              <div className="videos-empty-state">
+                <p>No videos yet.</p>
+              </div>
+            ) : (
+              uploadedVideos.map((video) => (
+                <article className="youtube-video-card" key={video.id}>
+                  <div className="youtube-player">
+                    <video
+                      className="apstream-normal-video"
+                      src={video.url}
+                      controls
+                      playsInline
+                      preload="metadata"
+                    />
+                  </div>
+
+                  <div className="youtube-video-info">
+                    <h3>{video.title}</h3>
+
+                    <div className="creator-row">
+                      <div className="creator-avatar">AP</div>
+
+                      <div>
+                        <strong>{video.creator || "AP-STREAM Creator"}</strong>
+                        <small>AP-STREAM creator</small>
+                      </div>
+
+                      <button type="button">➕ Follow</button>
+                      <button type="button">🔔 Subscribe</button>
+                    </div>
+
+                    <p className="video-meta">
+                      0 views • Just uploaded
+                    </p>
+
+                    <div className="video-actions">
+                      <button type="button">👍 Like</button>
+                      <button type="button">👎 Dislike</button>
+                      <button type="button">↗️ Share</button>
+                    </div>
+
+                    <div className="video-description">
+                      Welcome to AP-STREAM. Discover music, creators and videos
+                      from Africa and beyond.
+                    </div>
+
+                    <div className="video-comments">
+                      <strong>💬 Comments</strong>
+                      <p>Comments will appear here.</p>
+                    </div>
+                  </div>
+                </article>
+              ))
+            )}
           </div>
         </section>
 
       </main>
+
 
       {currentAudio && audioElement && (
         <div className="music-player">
@@ -1417,6 +1371,8 @@ function App() {
           </div>
         </div>
       )}
+
+
 
       <AIAssistant />
       <AIAssistantManager />

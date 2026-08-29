@@ -1,0 +1,111 @@
+            <p>
+              AP-STREAM requests up to 1080p video when your device supports it.
+            </p>
+            <p>🎙️ Noise suppression • 📷 HD video • 🔄 Camera switching</p>
+          </div>
+        </section>
+        )}
+
+        {/* SHORTS / REELS */}
+        <section id="shorts" className="shorts-section">
+          <div className="shorts-heading">
+            <h2>📱 AP-STREAM Shorts / Reels</h2>
+            <p>Quick videos from AP-STREAM creators.</p>
+          </div>
+
+          <div className="shorts-feed">
+            {shorts.map((short, index) => (
+              <article
+                className={`short-card ${activeShort === index ? "active" : ""}`}
+                key={short.id}
+                onClick={() => setActiveShort(index)}
+              >
+                <div className="short-video-placeholder">
+                  {short.video ? (
+                    <video
+                      src={short.video}
+                      controls
+                      playsInline
+                      loop
+                    />
+                  ) : (
+                    <>
+                      <span>▶️</span>
+                      <strong>Short video</strong>
+                      <small>Upload a video to start watching.</small>
+                    </>
+                  )}
+                </div>
+
+                <div className="short-info">
+                  <h3>{short.title}</h3>
+                  <p>{short.creator}</p>
+
+                  <div className="short-actions">
+                    <button
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setLikedShorts((current) => ({
+                          ...current,
+                          [short.id]: !current[short.id],
+                        }));
+                      }}
+                    >
+                      {likedShorts[short.id] ? "❤️ Liked" : "🤍 Like"}
+                    </button>
+
+                    <button
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      💬 {short.comments}
+                    </button>
+
+                    <button
+                      onClick={async (event) => {
+                        event.stopPropagation();
+
+                        if (navigator.share) {
+                          await navigator.share({
+                            title: short.title,
+                            text: `Watch ${short.title} on AP-STREAM`,
+                          });
+                        } else {
+                          await navigator.clipboard?.writeText(
+                            `${short.title} — ${short.creator}`
+                          );
+                        }
+                      }}
+                    >
+                      🔗 Share
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="shorts-navigation">
+            <button
+              disabled={activeShort === 0}
+              onClick={() =>
+                setActiveShort((current) => Math.max(0, current - 1))
+              }
+            >
+              ⬆️ Previous
+            </button>
+
+            <span>
+              Short {activeShort + 1} / {shorts.length}
+            </span>
+
+            <button
+              disabled={activeShort === shorts.length - 1}
+              onClick={() =>
+                setActiveShort((current) =>
+                  Math.min(shorts.length - 1, current + 1)
+                )
+              }
+            >
+              ⬇️ Next
+            </button>
+          </div>

@@ -3,6 +3,12 @@ import { useEffect, useState } from "react";
 
 export default function AIStudio() {
   const [mode, setMode] = useState("faceless");
+  const [kidsCharacter, setKidsCharacter] = useState("");
+  const [kidsStory, setKidsStory] = useState("");
+  const [kidsLanguage, setKidsLanguage] = useState("English");
+  const [kidsType, setKidsType] = useState("Adventure");
+  const [kidsDuration, setKidsDuration] = useState("3 minutes");
+  const [kidsResult, setKidsResult] = useState("");
   const [language, setLanguage] = useState("English");
   const [topic, setTopic] = useState("");
   const [musicStyle, setMusicStyle] = useState("Afrobeat");
@@ -474,6 +480,127 @@ export default function AIStudio() {
         </div>
       )}
 
+      {mode === "kids-cartoons" && (
+        <div className="ai-kids-cartoon">
+          <h2>🎨 Kids Cartoons</h2>
+          <p>Create fun, educational and child-friendly cartoon episodes.</p>
+
+          <label>👧 Character</label>
+          <input
+            value={kidsCharacter}
+            onChange={(e) => setKidsCharacter(e.target.value)}
+            placeholder="Example: A clever little lion named Kito"
+          />
+
+          <label>📖 Story idea</label>
+          <textarea
+            value={kidsStory}
+            onChange={(e) => setKidsStory(e.target.value)}
+            placeholder="What should happen in the cartoon?"
+            rows="4"
+          />
+
+          <div className="kids-cartoon-row">
+            <div>
+              <label>🌍 Language</label>
+              <select
+                value={kidsLanguage}
+                onChange={(e) => setKidsLanguage(e.target.value)}
+              >
+                <option>English</option>
+                <option>Swahili</option>
+                <option>French</option>
+                <option>Luganda</option>
+              </select>
+            </div>
+
+            <div>
+              <label>🎭 Story type</label>
+              <select
+                value={kidsType}
+                onChange={(e) => setKidsType(e.target.value)}
+              >
+                <option>Adventure</option>
+                <option>Funny</option>
+                <option>Educational</option>
+                <option>Friendship</option>
+                <option>African Story</option>
+              </select>
+            </div>
+
+            <div>
+              <label>⏱️ Duration</label>
+              <select
+                value={kidsDuration}
+                onChange={(e) => setKidsDuration(e.target.value)}
+              >
+                <option>1 minute</option>
+                <option>3 minutes</option>
+                <option>5 minutes</option>
+                <option>10 minutes</option>
+              </select>
+            </div>
+          </div>
+
+          <button
+            onClick={async () => {
+              const character =
+                kidsCharacter.trim() || "a friendly cartoon character";
+              const story =
+                kidsStory.trim() ||
+                "a fun adventure where friends learn something new";
+
+              setKidsResult("✨ Creating your kids cartoon...");
+
+              try {
+                const response = await fetch("/api/ai/kids-cartoon", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    character,
+                    story,
+                    language: kidsLanguage,
+                    type: kidsType,
+                    duration: kidsDuration,
+                  }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                  throw new Error(
+                    data.error || "Could not generate the cartoon."
+                  );
+                }
+
+                setKidsResult(data.result || "Cartoon created successfully.");
+              } catch (error) {
+                setKidsResult(
+                  "⚠️ Cartoon generation failed: " +
+                    (error.message || "Please try again.")
+                );
+              }
+            }}
+          >
+            ✨ Create Kids Cartoon
+          </button>
+
+          {kidsResult && (
+            <div className="kids-cartoon-result">
+              <h3>🎬 Cartoon Preview</h3>
+              <pre>{kidsResult}</pre>
+              <button
+                onClick={() => navigator.clipboard?.writeText(kidsResult)}
+              >
+                📋 Copy Cartoon
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="ai-studio-features">
         <div>
           <span>📝</span>
@@ -498,6 +625,15 @@ export default function AIStudio() {
           <strong>Faceless Video</strong>
           <small>Build videos without appearing on camera.</small>
         </div>
+
+        <button
+          className="ai-feature-button"
+          onClick={() => setMode("kids-cartoons")}
+        >
+          <span>🎨</span>
+          <strong>Kids Cartoons</strong>
+          <small>Create fun, educational and child-friendly cartoon stories.</small>
+        </button>
       </div>
     </section>
   );
