@@ -703,3 +703,67 @@ footer a {
 }
 
 
+
+/* AP-STREAM SHORTS - COMPACT LAYOUT */
+
+.shorts-section {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.shorts-heading {
+  margin-bottom: 12px;
+}
+
+.shorts-heading h2 {
+  margin-bottom: 4px;
+}
+
+.shorts-heading p {
+  margin: 0;
+}
+
+.shorts-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.short-card {
+  margin: 0;
+  padding: 0;
+}
+
+.short-video-placeholder {
+  margin: 0;
+  max-height: 520px;
+}
+
+.short-info {
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.short-info h3 {
+  margin: 4px 0;
+}
+
+.short-info p {
+  margin: 2px 0 6px;
+}
+
+.short-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 6px 0 0;
+}
+
+.short-actions button {
+  margin: 0;
+}
+
+.video-section {
+  margin-top: 20px;
+}
+
