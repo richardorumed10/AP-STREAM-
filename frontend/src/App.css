@@ -767,3 +767,1816 @@ footer a {
   margin-top: 20px;
 }
 
+
+
+/* MOBILE SHORTS/VIDEOS FIX */
+@media (max-width:600px){
+.shorts-grid,.reels-grid{display:flex!important;flex-wrap:nowrap!important;gap:12px!important;overflow-x:auto!important;padding:8px 12px 14px!important}
+.short-card,.reel-card,.short-video-card{flex:0 0 84vw!important;width:84vw!important;max-width:360px!important;min-width:0!important;box-sizing:border-box;overflow:hidden;border-radius:16px}
+.short-card video,.reel-card video,.short-video-card video{width:100%!important;aspect-ratio:9/16;object-fit:cover;display:block}
+.shorts-actions,.reel-actions,.short-actions{display:flex!important;flex-wrap:wrap!important;gap:7px!important;align-items:center}
+.shorts-actions button,.reel-actions button,.short-actions button{margin:0!important;min-height:42px}
+.videos-grid,.video-grid{display:grid!important;grid-template-columns:1fr!important;gap:16px!important;padding:0 8px!important}
+.video-card{width:100%!important;box-sizing:border-box;overflow:hidden}
+.video-card video{width:100%!important;aspect-ratio:16/9;object-fit:cover}
+body{overflow-x:hidden}
+}
+
+/* AP-STREAM Google-style search */
+.apstream-google-search {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 28px 18px 60px;
+}
+
+.ap-search-hero {
+  text-align: center;
+  padding: 28px 10px 22px;
+}
+
+.ap-search-logo {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
+}
+
+.ap-search-logo span {
+  color: #168a55;
+}
+
+.ap-search-logo strong {
+  color: #e56b8a;
+}
+
+.ap-search-hero h2 {
+  margin: 0;
+  font-size: 25px;
+}
+
+.ap-search-hero p {
+  margin: 8px 0 20px;
+  color: #687078;
+}
+
+.ap-global-search-box {
+  width: min(680px, 100%);
+  margin: 0 auto;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  background: #fff;
+  border: 1px solid #d9dee3;
+  border-radius: 28px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+
+.ap-global-search-box:focus-within {
+  border-color: #168a55;
+  box-shadow: 0 3px 14px rgba(22,138,85,.16);
+}
+
+.ap-search-icon {
+  font-size: 18px;
+}
+
+.ap-global-search-box input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-size: 16px;
+  padding: 14px 0;
+}
+
+.ap-search-clear {
+  border: 0;
+  background: transparent;
+  font-size: 25px;
+  cursor: pointer;
+  color: #777;
+}
+
+.ap-search-types {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.ap-search-types button {
+  border: 1px solid #dfe3e6;
+  background: #fff;
+  border-radius: 20px;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+.ap-search-types button.active {
+  background: #eaf7f0;
+  border-color: #168a55;
+  color: #168a55;
+  font-weight: 700;
+}
+
+.ap-search-results {
+  margin-top: 18px;
+}
+
+.ap-search-results-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 4px 14px;
+  color: #687078;
+  font-size: 14px;
+}
+
+.ap-search-results-header strong {
+  color: #202428;
+}
+
+.ap-search-result {
+  display: flex;
+  gap: 14px;
+  padding: 16px 12px;
+  border-bottom: 1px solid #edf0f2;
+  border-radius: 12px;
+}
+
+.ap-search-result:hover {
+  background: #fafcfb;
+}
+
+.ap-search-result-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  background: #f1f7f4;
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.ap-search-result-body {
+  min-width: 0;
+}
+
+.ap-search-result-type {
+  font-size: 12px;
+  font-weight: 700;
+  color: #168a55;
+  text-transform: uppercase;
+}
+
+.ap-search-result h3 {
+  margin: 3px 0 5px;
+  font-size: 17px;
+}
+
+.ap-search-result p {
+  margin: 0;
+  color: #626a70;
+  line-height: 1.45;
+}
+
+.ap-search-result a {
+  display: inline-block;
+  margin-top: 7px;
+  color: #168a55;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.ap-search-empty,
+.ap-search-start {
+  text-align: center;
+  padding: 45px 15px;
+  color: #687078;
+}
+
+.ap-search-empty > div,
+.ap-search-start > div {
+  font-size: 38px;
+  margin-bottom: 8px;
+}
+
+.ap-search-empty h3,
+.ap-search-start h3 {
+  color: #202428;
+  margin: 0 0 6px;
+}
+
+@media (max-width: 600px) {
+  .apstream-google-search {
+    padding: 18px 10px 40px;
+  }
+
+  .ap-search-logo {
+    font-size: 26px;
+  }
+
+  .ap-search-hero h2 {
+    font-size: 21px;
+  }
+
+  .ap-search-result {
+    padding: 14px 6px;
+  }
+}
+
+
+/* =========================================================
+   AP-STREAM POWER SEARCH
+   ========================================================= */
+
+.power-search-hero {
+  padding: 34px 18px 24px;
+}
+
+.ap-search-subtitle {
+  margin: 6px auto 20px;
+  max-width: 650px;
+  opacity: .72;
+  font-size: 14px;
+}
+
+.power-search-box {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.ap-search-voice {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 6px;
+}
+
+.ap-search-quick-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 16px;
+}
+
+.ap-search-quick-links button,
+.trending-pills button,
+.search-related button {
+  border: 1px solid rgba(30,120,80,.18);
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 13px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.ap-search-quick-links button.active {
+  background: #16834f;
+  color: #fff;
+  border-color: #16834f;
+}
+
+.ap-search-discovery {
+  max-width: 900px;
+  margin: 10px auto 0;
+  padding: 0 16px 30px;
+}
+
+.search-discovery-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 12px;
+}
+
+.search-discovery-card {
+  min-height: 120px;
+  text-align: left;
+  border: 1px solid rgba(30,120,80,.12);
+  border-radius: 16px;
+  background: linear-gradient(145deg,#fff,#f6fff9);
+  padding: 17px;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(0,0,0,.05);
+}
+
+.search-discovery-card span {
+  display: block;
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+.search-discovery-card strong,
+.search-discovery-card small {
+  display: block;
+}
+
+.search-discovery-card small {
+  margin-top: 4px;
+  opacity: .62;
+}
+
+.search-trending {
+  margin-top: 26px;
+}
+
+.search-section-title {
+  margin-bottom: 12px;
+}
+
+.trending-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.power-results {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 16px 40px;
+}
+
+.power-results-header {
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  padding-bottom: 12px;
+}
+
+.power-result {
+  display: flex;
+  gap: 14px;
+  padding: 17px 4px;
+  border-bottom: 1px solid rgba(0,0,0,.07);
+}
+
+.power-result-image {
+  width: 92px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex: 0 0 92px;
+  background: #eef7f1;
+}
+
+.power-result h3 {
+  margin: 4px 0 5px;
+  font-size: 17px;
+}
+
+.power-result p {
+  margin: 0;
+  opacity: .7;
+  line-height: 1.45;
+  font-size: 13px;
+}
+
+.power-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.power-result-actions button {
+  border: 0;
+  background: #eaf8ef;
+  color: #167345;
+  border-radius: 999px;
+  padding: 6px 11px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.power-search-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 50px 10px;
+  opacity: .7;
+}
+
+.search-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(22,131,79,.2);
+  border-top-color: #16834f;
+  border-radius: 50%;
+  animation: apSearchSpin .8s linear infinite;
+}
+
+@keyframes apSearchSpin {
+  to { transform: rotate(360deg); }
+}
+
+.power-empty {
+  padding: 55px 15px;
+  text-align: center;
+}
+
+.power-empty > div {
+  font-size: 42px;
+}
+
+.search-related {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0,0,0,.07);
+}
+
+.search-related > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+@media (max-width: 700px) {
+  .search-discovery-grid {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .power-result-image {
+    width: 76px;
+    height: 62px;
+    flex-basis: 76px;
+  }
+
+  .power-result h3 {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 430px) {
+  .search-discovery-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .search-discovery-card {
+    min-height: 105px;
+    padding: 13px;
+  }
+
+  .ap-search-quick-links {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+  }
+}
+
+
+/* =========================================================
+   AP-STREAM SEARCH ENGINE PHASE 1
+   ========================================================= */
+
+.phase1-search-hero {
+  position: relative;
+}
+
+.phase1-search-box {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.phase1-voice-button {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px 8px;
+}
+
+.phase1-autocomplete {
+  width: min(720px, calc(100% - 30px));
+  margin: -8px auto 10px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,.08);
+  overflow: hidden;
+  position: relative;
+  z-index: 20;
+}
+
+.phase1-autocomplete button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 15px;
+  border: 0;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.phase1-autocomplete button:hover {
+  background: #f1faf5;
+}
+
+.phase1-filters {
+  max-width: 900px;
+  margin: 14px auto 0;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+}
+
+.phase1-filters button {
+  white-space: nowrap;
+}
+
+.phase1-search-home {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 15px;
+}
+
+.phase1-discovery-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+}
+
+.phase1-discovery-card {
+  text-align: left;
+  padding: 17px;
+  min-height: 115px;
+  border: 1px solid rgba(20,120,70,.12);
+  border-radius: 15px;
+  background: linear-gradient(145deg,#fff,#f5fff9);
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,.04);
+}
+
+.phase1-discovery-card span {
+  display: block;
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+.phase1-discovery-card strong,
+.phase1-discovery-card small {
+  display: block;
+}
+
+.phase1-discovery-card small {
+  margin-top: 5px;
+  opacity: .65;
+}
+
+.phase1-operators {
+  margin-top: 25px;
+  padding: 18px;
+  border: 1px solid rgba(20,120,70,.1);
+  border-radius: 15px;
+  background: #fff;
+}
+
+.phase1-operators p {
+  opacity: .65;
+  font-size: 13px;
+}
+
+.phase1-operators > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.phase1-operators button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid rgba(0,0,0,.08);
+  background: #f7faf8;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.phase1-operators code {
+  color: #167345;
+  font-weight: 700;
+}
+
+.phase1-results {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 15px 40px;
+}
+
+.phase1-direct-answer {
+  margin: 14px 0;
+  padding: 18px;
+  border-left: 4px solid #16834f;
+  border-radius: 10px;
+  background: #f1faf5;
+}
+
+.phase1-direct-answer span {
+  display: block;
+  font-size: 12px;
+  color: #16834f;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.phase1-direct-answer strong {
+  font-size: 20px;
+}
+
+.phase1-direct-answer p {
+  margin-bottom: 0;
+  opacity: .7;
+}
+
+.phase1-knowledge-panel {
+  margin: 15px 0;
+  padding: 18px;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 3px 15px rgba(0,0,0,.04);
+}
+
+.phase1-knowledge-title {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.phase1-knowledge-title > span {
+  font-size: 23px;
+}
+
+.phase1-knowledge-title strong,
+.phase1-knowledge-title small {
+  display: block;
+}
+
+.phase1-knowledge-title small {
+  opacity: .6;
+  margin-top: 2px;
+}
+
+.phase1-knowledge-panel h3 {
+  margin: 14px 0 5px;
+}
+
+.phase1-knowledge-panel p {
+  opacity: .7;
+  line-height: 1.5;
+}
+
+.phase1-knowledge-panel button {
+  border: 0;
+  background: #16834f;
+  color: white;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.phase1-result {
+  border-bottom: 1px solid rgba(0,0,0,.07);
+}
+
+.phase1-related {
+  margin-top: 25px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(0,0,0,.07);
+}
+
+.phase1-related > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.phase1-related button {
+  border: 0;
+  background: #f1f7f3;
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+@media (max-width: 650px) {
+  .phase1-discovery-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 430px) {
+  .phase1-discovery-grid {
+    gap: 8px;
+  }
+
+  .phase1-discovery-card {
+    min-height: 100px;
+    padding: 12px;
+  }
+
+  .phase1-filters {
+    justify-content: flex-start;
+  }
+}
+
+
+/* =========================================================
+   AP-STREAM SEARCH ENGINE PHASE 2
+   Personal discovery — stored locally on the device
+   ========================================================= */
+
+.phase2-personal {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.phase2-section {
+  margin: 0 0 22px;
+  padding: 17px;
+  background: #fff;
+  border: 1px solid rgba(20,120,70,.10);
+  border-radius: 15px;
+}
+
+.phase2-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 11px;
+}
+
+.phase2-heading button {
+  border: 0;
+  background: transparent;
+  color: #b33;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.phase2-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.phase2-pills button {
+  border: 1px solid rgba(0,0,0,.07);
+  background: #f5faf7;
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.phase2-pills button:hover {
+  background: #e9f7ef;
+}
+
+.phase2-local-discovery {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 22px 0;
+  padding: 18px;
+  border-radius: 15px;
+  background: linear-gradient(135deg,#effaf4,#fff5f8);
+  border: 1px solid rgba(20,120,70,.10);
+}
+
+.phase2-local-discovery > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.phase2-local-discovery > div > span {
+  font-size: 27px;
+}
+
+.phase2-local-discovery strong,
+.phase2-local-discovery small {
+  display: block;
+}
+
+.phase2-local-discovery small {
+  margin-top: 4px;
+  opacity: .65;
+}
+
+.phase2-local-discovery > button {
+  border: 0;
+  background: #16834f;
+  color: #fff;
+  border-radius: 9px;
+  padding: 9px 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.phase2-because {
+  margin-top: 22px;
+  padding: 17px;
+  border-radius: 14px;
+  background: #fafdfb;
+  border: 1px solid rgba(0,0,0,.07);
+}
+
+.phase2-because > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.phase2-because button {
+  border: 0;
+  background: #edf7f1;
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+@media (max-width: 500px) {
+  .phase2-local-discovery {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .phase2-local-discovery > button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   AP-STREAM MOBILE / YOUTUBE-STYLE REDESIGN
+   ========================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+  color: #111827;
+}
+
+.app {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+/* Clean top header */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 5000;
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 16px;
+  background: rgba(255,255,255,.97);
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 8px rgba(0,0,0,.05);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.ap-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.ap-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: 9px;
+}
+
+.ap-brand-name {
+  color: #168b59;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -.4px;
+  white-space: nowrap;
+}
+
+.account-indicator {
+  font-size: 12px;
+  color: #667085;
+  white-space: nowrap;
+}
+
+/* Header navigation */
+.ap-main-nav {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  overflow-x: auto;
+  flex: 1;
+  scrollbar-width: none;
+}
+
+.ap-main-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.ap-main-nav button {
+  flex: 0 0 auto;
+  border: 0;
+  background: transparent;
+  color: #344054;
+  padding: 9px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ap-main-nav button:hover {
+  background: #f1f8f4;
+  color: #168b59;
+}
+
+.ap-main-nav .header-call-button {
+  color: #168b59;
+  background: #eaf8f1;
+  font-weight: 800;
+}
+
+/* Main content */
+main {
+  width: min(100%, 1180px);
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 14px 100px;
+}
+
+/* Video feed */
+.videos-vertical-section {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.videos-vertical-section .media-heading {
+  padding: 18px 2px 10px;
+}
+
+.videos-vertical-section .media-heading h2 {
+  margin: 0;
+  color: #101828;
+  font-size: 22px;
+}
+
+.videos-youtube-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.youtube-video-card {
+  overflow: hidden;
+  background: #fff;
+  border: 0;
+  border-radius: 14px;
+  box-shadow: none;
+}
+
+.youtube-player {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.apstream-normal-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+.youtube-video-info {
+  padding: 10px 2px 0;
+}
+
+.youtube-video-info h3 {
+  margin: 0 0 9px;
+  color: #101828;
+  font-size: 17px;
+  line-height: 1.35;
+  font-weight: 750;
+}
+
+.creator-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.creator-avatar {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e8f7ef;
+  color: #168b59;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.creator-row strong {
+  display: block;
+  color: #344054;
+  font-size: 13px;
+}
+
+.creator-row small {
+  display: block;
+  margin-top: 2px;
+  color: #98a2b3;
+  font-size: 11px;
+}
+
+.creator-row button {
+  border: 0;
+  border-radius: 18px;
+  padding: 7px 10px;
+  background: #f2f4f7;
+  color: #344054;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.video-meta {
+  margin: 8px 0;
+  color: #667085;
+  font-size: 12px;
+}
+
+.video-actions {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.video-actions::-webkit-scrollbar {
+  display: none;
+}
+
+.video-actions button {
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 18px;
+  padding: 8px 13px;
+  background: #f2f4f7;
+  color: #344054;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.video-description {
+  margin-top: 10px;
+  padding: 11px 13px;
+  border-radius: 10px;
+  background: #f8faf9;
+  color: #475467;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.video-comments {
+  margin-top: 10px;
+  padding: 10px 0;
+  color: #667085;
+  font-size: 13px;
+}
+
+.video-comments p {
+  margin: 5px 0 0;
+}
+
+/* Calls section */
+.calls-section {
+  margin: 20px 0;
+  padding: 20px;
+  background: #f8faf9;
+  border: 1px solid #e4eee9;
+  border-radius: 16px;
+}
+
+.calls-section h2 {
+  margin: 0 0 6px;
+  color: #101828;
+}
+
+.section-subtitle {
+  color: #667085;
+}
+
+.call-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.call-button {
+  border: 0;
+  border-radius: 22px;
+  padding: 11px 16px;
+  background: #168b59;
+  color: white;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.video-call-button {
+  background: #0f766e;
+}
+
+/* Mobile */
+@media (max-width: 750px) {
+  header {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .ap-brand-name {
+    font-size: 17px;
+  }
+
+  .ap-logo {
+    width: 30px;
+    height: 30px;
+  }
+
+  .account-indicator {
+    display: none;
+  }
+
+  .ap-main-nav {
+    gap: 2px;
+  }
+
+  .ap-main-nav button {
+    padding: 8px 7px;
+    font-size: 12px;
+  }
+
+  main {
+    width: 100%;
+    padding: 0 8px 90px;
+  }
+
+  .videos-youtube-feed {
+    gap: 22px;
+  }
+
+  .youtube-player {
+    border-radius: 9px;
+  }
+
+  .youtube-video-info {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+
+  .youtube-video-info h3 {
+    font-size: 16px;
+  }
+
+  .creator-row button {
+    display: none;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 430px) {
+  .ap-brand-name {
+    display: none;
+  }
+
+  .ap-main-nav button {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .youtube-video-info h3 {
+    font-size: 15px;
+  }
+}
+
+
+/* =========================================================
+   AP-STREAM MOBILE BOTTOM NAVIGATION
+   ========================================================= */
+
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 750px) {
+  .mobile-bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 6000;
+    height: 66px;
+    padding: 5px 10px calc(5px + env(safe-area-inset-bottom));
+    background: rgba(255,255,255,.98);
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -2px 12px rgba(0,0,0,.08);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+
+  .mobile-bottom-nav button {
+    border: 0;
+    background: transparent;
+    color: #667085;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    border-radius: 10px;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .mobile-bottom-nav button:active,
+  .mobile-bottom-nav button:hover {
+    background: #f1f8f4;
+    color: #168b59;
+  }
+
+  .mobile-bottom-nav span {
+    font-size: 21px;
+    line-height: 1;
+    font-weight: 700;
+  }
+
+  .mobile-bottom-nav small {
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  body {
+    padding-bottom: 0;
+  }
+
+  footer {
+    padding-bottom: 85px;
+  }
+}
+
+@media (min-width: 751px) {
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+}
+
+
+/* =========================================================
+   AP-STREAM APP-FIRST MOBILE SHELL
+   Keeps existing functionality; changes presentation only.
+   ========================================================= */
+
+@media (max-width: 750px) {
+
+  /* Keep the main app compact */
+  body {
+    overflow-x: hidden;
+  }
+
+  main {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 8px 8px 88px;
+  }
+
+  /* Reduce oversized section spacing */
+  section {
+    margin-bottom: 14px;
+  }
+
+  /* Shorts becomes the primary mobile surface */
+  .shorts-section {
+    margin: 0;
+    padding: 0;
+  }
+
+  .shorts-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 4px 4px 8px;
+  }
+
+  .shorts-heading h2 {
+    margin: 0;
+    font-size: 18px;
+  }
+
+  .shorts-feed {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Compact Shorts cards */
+  .short-card,
+  .short-item {
+    width: 100%;
+    margin: 0;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .short-info {
+    padding: 8px 10px;
+  }
+
+  .short-info h3 {
+    margin: 0 0 3px;
+    font-size: 15px;
+  }
+
+  .short-info p {
+    margin: 0 0 7px;
+    font-size: 12px;
+  }
+
+  .short-actions {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .short-actions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .short-actions button {
+    flex: 0 0 auto;
+    min-height: 34px;
+    padding: 6px 10px;
+    border-radius: 18px;
+    font-size: 12px;
+  }
+
+  /* Uploaded videos stay 16:9 */
+  .youtube-video-card {
+    width: 100%;
+    margin: 0 0 12px;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .youtube-player {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+
+  .youtube-player video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .youtube-video-info {
+    padding: 9px 10px;
+  }
+
+  .youtube-video-info h3 {
+    font-size: 15px;
+    margin: 0 0 7px;
+  }
+
+  .creator-row {
+    gap: 7px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .creator-row button {
+    flex: 0 0 auto;
+    font-size: 11px;
+    padding: 6px 9px;
+  }
+
+  .video-actions {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .video-actions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .video-actions button {
+    flex: 0 0 auto;
+    font-size: 12px;
+  }
+
+  .video-description,
+  .video-comments {
+    font-size: 12px;
+  }
+
+  /* Bottom navigation becomes the main app navigation */
+  nav {
+    max-width: 100%;
+  }
+
+  /* Don't let the music player cover the bottom navigation */
+  .music-player,
+  .player {
+    bottom: 68px;
+  }
+
+  /* Compact floating/create controls */
+  .shorts-create {
+    max-width: calc(100% - 20px);
+    margin: 8px auto;
+  }
+}
+
+
+/* =========================================================
+   AP-STREAM — VIDEO + SHORTS ONLY HOME
+   Other services remain available but are not permanent UI.
+   ========================================================= */
+
+@media (max-width: 750px) {
+
+  /* Hide non-media sections from the main screen */
+  main > .feature-view,
+  main > .studio-view,
+  main > .ap-apps-store,
+  main > .social-hub,
+  main > .calls-section {
+    display: none !important;
+  }
+
+  /* Shorts stays visible */
+  main > .shorts-section {
+    display: block !important;
+  }
+
+  /* Keep the video area visible */
+  main > .videos-section,
+  main > .video-section,
+  main > .youtube-section {
+    display: block !important;
+  }
+
+  /* Simple media headings */
+  .shorts-heading h2 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  /* Remove oversized desktop-style spacing */
+  main section {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* Keep video cards clean */
+  .youtube-video-card {
+    box-shadow: none;
+  }
+
+  /* Don't permanently show extra feature panels */
+  .feature-grid,
+  .feature-cards,
+  .social-menu,
+  .call-options,
+  .ap-apps-grid {
+    display: none;
+  }
+}
+
+/* Desktop/tablet: same content rule */
+main > .feature-view,
+main > .studio-view,
+main > .ap-apps-store,
+main > .social-hub,
+main > .calls-section {
+  display: none;
+}
+
+main > .shorts-section {
+  display: block;
+}
+
+main > .videos-section,
+main > .video-section,
+main > .youtube-section {
+  display: block;
+}
+
+/* AP-STREAM: ONLY SHORTS + VIDEOS */
+
+main > .feature-view,
+main > .studio-view,
+main > .ap-apps-store,
+main > .social-hub,
+main > .calls-section,
+main > .ap-maps-section {
+  display: none !important;
+}
+
+main > .shorts-section {
+  display: block !important;
+}
+
+main > .videos-vertical-section {
+  display: block !important;
+}
+
+@media (max-width: 750px) {
+  main {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 8px 8px 80px;
+  }
+
+  main > .shorts-section {
+    margin: 0 0 14px;
+    padding: 0;
+  }
+
+  main > .videos-vertical-section {
+    margin: 0;
+    padding: 0;
+  }
+
+  .shorts-heading {
+    margin: 4px 4px 8px;
+  }
+
+  .shorts-heading h2 {
+    margin: 0;
+    font-size: 18px;
+  }
+
+  .videos-vertical-section .media-heading {
+    margin: 8px 4px;
+  }
+
+  .videos-vertical-section .media-heading h2 {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .videos-vertical-section .section-subtitle,
+  .videos-vertical-section .video-upload-panel {
+    display: none !important;
+  }
+
+  .videos-youtube-feed {
+    width: 100%;
+  }
+
+  .youtube-video-card {
+    width: 100%;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .youtube-player {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+
+  .youtube-player video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .youtube-video-info {
+    padding: 8px 10px;
+  }
+
+  .video-actions {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+  }
+
+  .video-actions button {
+    flex: 0 0 auto;
+  }
+}
+
+
+/* =========================================================
+   AP-STREAM — SIMPLE MEDIA HOME
+   HOME = SHORTS + VIDEOS ONLY
+   Other features remain in the application but are not
+   permanently displayed on the home screen.
+   ========================================================= */
+
+.apstream-media-home {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.apstream-home-shorts,
+.apstream-home-videos {
+  width: 100%;
+  margin: 0;
+  padding: 8px 0;
+}
+
+.apstream-media-home .media-heading {
+  margin: 4px 10px 8px;
+}
+
+.apstream-media-home .media-heading h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* Keep the real Shorts and Videos feeds directly visible.
+   Hide duplicate old headings only. */
+#shorts .media-heading,
+#videos .media-heading {
+  margin-top: 4px;
+}
+
+#shorts,
+#videos {
+  width: 100%;
+}
+
+/* Hide permanent feature/navigation clutter */
+body .feature-nav,
+body .main-nav,
+body .desktop-nav,
+body .nav-links {
+  display: none !important;
+}
+
+/* Hide old feature grids/cards from the home surface */
+.ap-apps-store,
+.social-hub,
+.calls-section,
+.ap-maps-section {
+  display: none !important;
+}
+
+/* Compact header */
+header {
+  min-height: 52px !important;
+}
+
+header nav {
+  display: none !important;
+}
+
+/* Bottom navigation: only Home / Shorts / Me */
+.apstream-bottom-nav button:nth-child(3),
+.apstream-bottom-nav .my-files,
+.bottom-nav .my-files,
+.bottom-nav button:nth-child(3) {
+  display: none !important;
+}
+
+/* Remove permanent AI manager/assistant from the home surface */
+main > .ai-assistant-manager,
+main > .ai-assistant,
+.ai-manager-floating {
+  display: none !important;
+}
+
+/* Videos stay 16:9 */
+.videos-vertical-section .youtube-video-card,
+.videos-youtube-feed .youtube-video-card {
+  width: 100%;
+}
+
+.videos-youtube-feed video,
+.youtube-player,
+.apstream-normal-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+/* Shorts remain compact/mobile-first */
+.shorts-feed {
+  width: 100%;
+}
+
+
+/* AP-STREAM HOME: feature navigation stays in code,
+   but is not permanently visible. */
+.apstream-background-nav {
+  display: none !important;
+}
+
+
+/* AP-STREAM LOCKED MOBILE HEADER */
+.header-more-button {
+  position: relative;
+}
+
+.apstream-more-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 8px;
+  z-index: 10000;
+  width: min(310px, calc(100vw - 20px));
+  max-height: 75vh;
+  overflow-y: auto;
+  padding: 12px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(80, 150, 100, 0.22);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+}
+
+.more-menu-group {
+  padding: 6px 0 10px;
+  border-bottom: 1px solid #edf2ed;
+}
+
+.more-menu-group:last-child {
+  border-bottom: 0;
+}
+
+.more-menu-group strong {
+  display: block;
+  padding: 6px 10px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: #4b8b58;
+}
+
+.more-menu-group button {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #222;
+  text-align: left;
+  font-size: 14px;
+}
+
+.more-menu-group button:active,
+.more-menu-group button:hover {
+  background: #eef9f0;
+}
+
+@media (max-width: 750px) {
+  .apstream-more-menu {
+    right: 4px;
+    width: min(300px, calc(100vw - 16px));
+  }
+}

@@ -1,0 +1,1537 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AP-STREAM Developer Console</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f6faf7;color:#17201b}
+header{background:#16834b;color:#fff;padding:22px}
+header h1{margin:0 0 6px}
+header p{margin:0;opacity:.9}
+main{max-width:1100px;margin:auto;padding:18px}
+.card{background:#fff;border:1px solid #dce8e0;border-radius:16px;padding:18px;margin-bottom:16px}
+input,select,button{font:inherit;padding:11px;border-radius:9px;border:1px solid #ccd8d0}
+input{width:100%;margin:6px 0 10px}
+button{background:#16834b;color:#fff;border:0;cursor:pointer;font-weight:bold}
+button:hover{opacity:.9}
+.endpoint{padding:13px 0;border-bottom:1px solid #edf1ee}
+.endpoint:last-child{border:0}
+.method{background:#e8f6ee;color:#08783f;padding:5px 8px;border-radius:6px;font-weight:bold;margin-right:8px}
+pre{background:#101815;color:#e9fff2;padding:14px;border-radius:10px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+.status{padding:10px;border-radius:9px;background:#eef8f1;margin-top:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.small{font-size:13px;color:#66736b}
+.badge{display:inline-block;background:#fff0f6;color:#c52c68;padding:6px 10px;border-radius:20px;margin:3px}
+</style>
+</head>
+<body>
+
+<section id="apstream-cloud" style="margin:24px 0;padding:20px;border-radius:16px;background:#f0fff7;border:1px solid #b8e8cc;">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+    <div>
+      <h2 style="margin:0;">☁️ AP-STREAM Cloud</h2>
+      <p style="margin:6px 0;color:#55705f;">Live Cloud Control Plane</p>
+    </div>
+    <strong id="cloud-status" style="padding:7px 12px;border-radius:20px;background:#d8f5df;color:#16733b;">
+      CHECKING...
+    </strong>
+  </div>
+
+  <div id="cloud-workloads" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:18px;"></div>
+
+  <div id="cloud-host" style="margin-top:16px;padding:12px;background:#fff;border-radius:12px;">
+    Loading host information...
+  </div>
+</section>
+
+<script>
+let apStreamCloudRefreshTimer = null;
+
+function startAPStreamCloudAutoRefresh() {
+  if (apStreamCloudRefreshTimer) {
+    clearInterval(apStreamCloudRefreshTimer);
+  }
+
+  apStreamCloudRefreshTimer = setInterval(() => {
+    refreshAPStreamCloud();
+  }, 15000);
+}
+
+function renderCloudAlerts(data) {
+  const target = document.getElementById("cloud-alerts-data");
+  if (!target) return;
+
+  const checks = Array.isArray(data?.checks) ? data.checks : [];
+
+  if (!checks.length) {
+    target.innerHTML = '<div style="color:#777;">No cloud health checks available.</div>';
+    return;
+  }
+
+  const alerts = checks.filter(check => check.status !== "online");
+
+  if (!alerts.length) {
+    target.innerHTML = `
+      <div style="color:#16733b;font-weight:700;">🟢 All monitored services are online</div>
+      <div style="margin-top:4px;font-size:12px;color:#666;">
+        ${checks.length} service${checks.length === 1 ? "" : "s"} checked successfully.
+      </div>
+    `;
+    return;
+  }
+
+  target.innerHTML = `
+    <div style="font-weight:700;color:#a15c00;">
+      ${alerts.length} service${alerts.length === 1 ? "" : "s"} require attention
+    </div>
+    <div style="margin-top:7px;">
+      ${alerts.map(check => {
+        const offline = check.status === "offline";
+        const icon = offline ? "🔴" : "🟠";
+        return `
+          <div style="padding:7px 0;border-top:1px solid #eee;">
+            ${icon} <strong>${check.name || "Unknown service"}</strong>
+            — ${check.status || "unknown"}
+            ${check.httpStatus ? ` · HTTP ${check.httpStatus}` : ""}
+            ${check.latencyMs != null ? ` · ${check.latencyMs} ms` : ""}
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+async function loadCloudJobs() {
+  const target = document.getElementById("cloud-jobs-data");
+  if (!target) return;
+
+  try {
+    const response = await fetch("/api/cloud/jobs");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const data = await response.json();
+    const counts = data.counts || {};
+    const jobs = Array.isArray(data.jobs) ? data.jobs : [];
+
+    target.innerHTML = `
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span>📋 Total: <strong>${data.total ?? 0}</strong></span>
+        <span>⏳ Queued: <strong>${counts.queued ?? 0}</strong></span>
+        <span>⚡ Running: <strong>${counts.running ?? 0}</strong></span>
+        <span>✅ Completed: <strong>${counts.completed ?? 0}</strong></span>
+        <span>❌ Failed: <strong>${counts.failed ?? 0}</strong></span>
+      </div>
+
+      <div style="margin-top:10px;">
+        ${
+          jobs.length
+            ? jobs.slice(0, 10).map(job => {
+                const metadata = job.metadata || {};
+                const created = job.createdAt
+                  ? new Date(job.createdAt).toLocaleString()
+                  : "—";
+
+                return `
+                  <div style="padding:10px 0;border-top:1px solid #eee;">
+                    <div>
+                      <strong>${job.name || "AP-STREAM Job"}</strong>
+                      <span style="margin-left:6px;font-size:12px;padding:3px 7px;border-radius:8px;background:#eef8f1;">
+                        ${job.status || "unknown"}
+                      </span>
+                    </div>
+
+                    <div style="margin-top:4px;font-size:12px;color:#666;">
+                      ID: ${job.id || "—"}
+                      · Type: ${job.type || "general"}
+                      · Created: ${created}
+                    </div>
+
+                    <div style="margin-top:4px;font-size:12px;color:#555;">
+                      ${
+                        metadata.songId != null
+                          ? `🎵 Song ID: ${metadata.songId}`
+                          : metadata.videoId != null
+                            ? `🎬 Video ID: ${metadata.videoId}`
+                            : metadata.shortId != null
+                              ? `📱 Short ID: ${metadata.shortId}`
+                              : metadata.tool
+                                ? `🧠 Tool: ${metadata.tool}`
+                                : "Workload ID: —"
+                      }
+                      ${
+                        metadata.language
+                          ? ` · Language: ${metadata.language}`
+                          : ""
+                      }
+                      ${
+                        metadata.musicStyle
+                          ? ` · Style: ${metadata.musicStyle}`
+                          : ""
+                      }
+                      ${
+                        metadata.duration
+                          ? ` · Duration: ${metadata.duration}`
+                          : ""
+                      }
+                      ${
+                        metadata.fileSizeBytes != null
+                          ? ` · File: ${(Number(metadata.fileSizeBytes) / 1024).toFixed(1)} KB`
+                          : ""
+                      }
+                    </div>
+                  </div>
+                `;
+              }).join("")
+            : '<div style="margin-top:6px;color:#777;">No cloud jobs recorded yet.</div>'
+        }
+      </div>
+
+      <div style="margin-top:8px;font-size:12px;color:#16733b;">
+        ● ${String(data.status || "unknown").toUpperCase()}
+      </div>
+    `;
+  } catch (error) {
+    target.textContent = "Cloud Jobs unavailable: " + error.message;
+  }
+}
+
+async function loadCloudMetrics() {
+  const target = document.getElementById("cloud-metrics-data");
+  if (!target) return;
+
+  try {
+    const [computeRes, storageRes, mediaRes, networkRes, cloudRes] =
+      await Promise.all([
+        fetch("/api/cloud/compute"),
+        fetch("/api/cloud/storage"),
+        fetch("/api/cloud/media-storage"),
+        fetch("/api/cloud/network-health"),
+        fetch("/api/cloud/status")
+      ]);
+
+    if (![computeRes, storageRes, mediaRes, networkRes, cloudRes].every(r => r.ok)) {
+      throw new Error("One or more metrics endpoints returned an error");
+    }
+
+    const [compute, storage, media, network, cloud] =
+      await Promise.all([
+        computeRes.json(),
+        storageRes.json(),
+        mediaRes.json(),
+        networkRes.json(),
+        cloudRes.json()
+      ]);
+
+    const r = compute.runtime || {};
+    const st = storage.storage || {};
+    const totals = media.totals || {};
+    const ns = network.summary || {};
+    const host = cloud.host || {};
+
+    const load = Array.isArray(r.loadAverage)
+      ? r.loadAverage.map(x => Number(x).toFixed(2)).join(" / ")
+      : "—";
+
+    target.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;">
+        <div style="padding:9px;border-radius:9px;background:#fff;border:1px solid #e5e5e5;">
+          ⚡ <strong>CPU</strong><br>
+          ${r.cpuCores ?? "—"} cores
+        </div>
+        <div style="padding:9px;border-radius:9px;background:#fff;border:1px solid #e5e5e5;">
+          📈 <strong>Load</strong><br>
+          ${load}
+        </div>
+        <div style="padding:9px;border-radius:9px;background:#fff;border:1px solid #e5e5e5;">
+          🧠 <strong>Memory</strong><br>
+          ${r.memoryUsedMB ?? "—"} MB
+        </div>
+        <div style="padding:9px;border-radius:9px;background:#fff;border:1px solid #e5e5e5;">
+          💾 <strong>Storage</strong><br>
+          ${Number(st.mediaMB || 0).toFixed(2)} MB
+        </div>
+        <div style="padding:9px;border-radius:9px;background:#fff;border:1px solid #e5e5e5;">
+          🎬 <strong>Media</strong><br>
+          ${totals.files ?? 0} files
+        </div>
+        <div style="padding:9px;border-radius:9px;background:#fff;border:1px solid #e5e5e5;">
+          📡 <strong>Latency</strong><br>
+          ${ns.averageLatencyMs ?? "—"} ms
+        </div>
+        <div style="padding:9px;border-radius:9px;background:#fff;border:1px solid #e5e5e5;">
+          🟢 <strong>Services</strong><br>
+          ${ns.online ?? 0}/${ns.total ?? 0} online
+        </div>
+        <div style="padding:9px;border-radius:9px;background:#fff;border:1px solid #e5e5e5;">
+          ⏱️ <strong>Host Uptime</strong><br>
+          ${host.uptimeSeconds ?? "—"} sec
+        </div>
+      </div>
+    `;
+  } catch (error) {
+    target.textContent = "Cloud Metrics unavailable: " + error.message;
+  }
+}
+
+async function refreshAPStreamCloud() {
+  const button = document.getElementById("cloud-refresh-btn");
+  const status = document.getElementById("cloud-refresh-status");
+
+  if (button) {
+    button.disabled = true;
+    button.style.opacity = "0.65";
+    button.textContent = "⟳ Refreshing...";
+  }
+
+  if (status) {
+    status.textContent = "Updating cloud telemetry...";
+  }
+
+  try {
+    const results = await Promise.all([
+      loadAPStreamCloud(),
+      loadMediaStorageTelemetry(),
+      loadAICloudTelemetry(),
+      loadSecurityCloudTelemetry(),
+      loadCloudStorageTelemetry(),
+      loadCloudNetworkCore(),loadAPStreamNetworkTopology(),
+      fetch("/api/cloud/network-health").then(response => {
+        if (!response.ok) throw new Error("Network Health HTTP " + response.status);
+        return response.json();
+      })
+    ]);
+
+    renderCloudAlerts(results[5]);
+    await loadCloudMetrics();
+    await loadCloudJobs();
+
+    if (status) {
+      status.textContent = "✓ Cloud telemetry updated";
+    }
+  } catch (error) {
+    if (status) {
+      status.textContent = "Refresh completed with an error";
+    }
+    console.error("AP-STREAM Cloud refresh error:", error);
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.style.opacity = "1";
+      button.textContent = "🔄 Refresh Cloud";
+    }
+  }
+}
+
+async function loadAPStreamCloud() {
+  const status = document.getElementById("cloud-status");
+  const workloads = document.getElementById("cloud-workloads");
+  const host = document.getElementById("cloud-host");
+
+  try {
+    const response = await fetch("/api/cloud/status");
+    if (!response.ok) throw new Error("Cloud API returned " + response.status);
+
+    const data = await response.json();
+
+    status.textContent = "● " + String(data.status || "UNKNOWN").toUpperCase();
+
+    const items = {
+      Compute: data.workloads?.compute,
+      AI: data.workloads?.ai,
+      Media: data.workloads?.media,
+      Storage: data.workloads?.storage
+    };
+
+    workloads.innerHTML = Object.entries(items).map(([name, value]) => `
+      <div style="padding:14px;background:#fff;border-radius:12px;text-align:center;">
+        <strong>${name}</strong>
+        <div style="margin-top:6px;color:#16733b;">
+          ${String(value || "unknown").toUpperCase()}
+        </div>
+      </div>
+    `).join("");
+
+    const cores = Number(data.host?.cpuCores || 0);
+
+    host.innerHTML = `
+      <strong>Cloud Host</strong><br>
+      Platform: ${data.host?.platform || "unknown"}<br>
+      Architecture: ${data.host?.architecture || "unknown"}<br>
+      CPU Cores: ${cores > 0 ? cores : "detecting"}<br>
+      Memory: ${data.runtime?.nodeMemoryUsedMB ?? "—"} MB<br>
+      Process Uptime: ${data.runtime?.processUptimeSeconds ?? "—"} seconds
+    `;
+  } catch (error) {
+    status.textContent = "● OFFLINE";
+    workloads.innerHTML = "";
+    host.textContent = "Cloud service unavailable: " + error.message;
+  }
+}
+
+loadAPStreamCloud();
+setInterval(loadAPStreamCloud, 10000);
+</script>
+
+
+<section id="cloud-control-center" style="margin:24px 0;padding:20px;border-radius:16px;background:#fff7fb;border:1px solid #f0c7d8;">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+    <div>
+      <h2 style="margin:0;">⚙️ Cloud Control Center</h2>
+      <p style="margin:6px 0;color:#6b5a63;">AP-STREAM infrastructure services</p>
+    </div>
+    <button onclick="loadAPStreamCloud()" style="border:0;border-radius:10px;padding:9px 14px;cursor:pointer;">
+      ↻ Refresh Cloud
+    </button>
+  </div>
+
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0;">
+  <button id="cloud-refresh-btn"
+    onclick="refreshAPStreamCloud()"
+    style="border:0;border-radius:10px;padding:9px 14px;background:#16733b;color:#fff;font-weight:700;cursor:pointer;">
+    🔄 Refresh Cloud
+  </button>
+  <span id="cloud-refresh-status" style="font-size:12px;color:#666;">Live telemetry</span>
+</div>
+
+<div id="cloud-service-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:18px;"></div>
+
+  <div style="margin-top:18px;padding:14px;border-radius:12px;background:#f7f7f7;">
+    <strong>Cloud Architecture</strong>
+    <div id="cloud-architecture" style="margin-top:8px;font-size:14px;line-height:1.8;">
+      Loading...
+    </div>
+  </div>
+</section>
+
+<script>
+function renderCloudControl(data) {
+  const grid = document.getElementById("cloud-service-grid");
+  const architecture = document.getElementById("cloud-architecture");
+
+  if (!grid || !architecture) return;
+
+  const services = [
+    ["⚡", "Compute", data.compute?.status || data.workloads?.compute],
+    ["🧠", "AI", data.workloads?.ai],
+    ["🎬", "Media", data.workloads?.media],
+    ["💾", "Storage", data.workloads?.storage],
+    ["🌐", "Network", "ready"],
+    ["🎛️", "Control Plane", data.status]
+  ];
+
+  grid.innerHTML = services.map(([icon, name, state]) => `
+    <div style="padding:16px;border-radius:13px;background:#fff;border:1px solid #eee;">
+      <div style="font-size:22px;">${icon}</div>
+      <strong>${name}</strong>
+      <div style="margin-top:7px;font-size:13px;color:#16733b;">
+        ● ${String(state || "unknown").toUpperCase()}
+      </div>
+    </div>
+  `).join("");
+
+  const a = data.architecture || {};
+
+  const c = data.compute || {};
+  const r = c.runtime || {};
+  const w = c.workloads || {};
+
+  architecture.innerHTML = `
+    <div style="display:grid;gap:10px;">
+      <div><strong>Compute:</strong> ${a.compute || "—"}</div>
+      <div><strong>AI:</strong> ${a.ai || "—"}</div>
+      <div><strong>Media:</strong> ${a.media || "—"}</div>
+      <div><strong>Storage:</strong> ${a.storage || "—"}</div>
+      <div><strong>Networking:</strong> ${a.networking || "—"}</div>
+      <div><strong>Control Plane:</strong> ${a.controlPlane || "—"}</div>
+
+      <div style="margin-top:8px;padding:12px;border-radius:10px;background:#f5fff8;border:1px solid #d7f0df;">
+        <strong>⚡ Live Compute Telemetry</strong><br>
+        Status: ${c.status || "—"}<br>
+        CPU Cores: ${r.cpuCores ?? "—"}<br>
+        Memory: ${r.memoryUsedMB ?? "—"} MB RSS<br>
+        Heap: ${r.memoryHeapUsedMB ?? "—"} MB<br>
+        Node Uptime: ${r.nodeUptimeSeconds ?? "—"} sec<br>
+        Load Average: ${Array.isArray(r.loadAverage) ? r.loadAverage.map(x => Number(x).toFixed(2)).join(" / ") : "—"}<br>
+        API: ${w.api || "—"}<br>
+        Cloud Control Plane: ${w.cloudControlPlane || "—"}
+      </div>
+    </div>
+  `;
+}
+
+
+
+
+
+
+async function loadNetworkHealthTelemetry() {
+  const target = document.getElementById("cloud-network-health-data");
+  if (!target) return;
+
+  try {
+    const response = await fetch("/api/cloud/network-health");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const data = await response.json();
+    const summary = data.summary || {};
+    const checks = data.checks || [];
+
+    target.innerHTML = `
+      <div>Status: <strong>${data.status || "—"}</strong></div>
+      <div>Services: <strong>${summary.online ?? 0}/${summary.total ?? 0}</strong> online · ${summary.offline ?? 0} offline</div>
+      <div>Average Latency: <strong>${summary.averageLatencyMs ?? "—"} ms</strong></div>
+      <div style="margin-top:6px;">
+        ${checks.map(check => `
+          <div>${check.name}: <strong>${check.status}</strong> · ${check.latencyMs ?? "—"} ms</div>
+        `).join("")}
+      </div>
+      <div style="margin-top:4px;font-size:12px;color:#16733b;">
+        ● ${String(data.status || "unknown").toUpperCase()}
+      </div>
+    `;
+  } catch (error) {
+    target.textContent = "Network Health unavailable: " + error.message;
+  }
+}
+
+async function loadCloudNetworkCore() {
+  const target = document.getElementById("cloud-network-core-data");
+  if (!target) return;
+
+  try {
+    const response = await fetch("/api/cloud/network-router");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const data = await response.json();
+    const router = data.router || {};
+    const connectivity = data.connectivity || {};
+    const routing = router.routing || {};
+    const interfaces = router.interfaces || {};
+    const upstreams = router.upstreams || [];
+    const routes = routing.routes || [];
+
+    target.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;">
+
+        <div style="padding:10px;background:#fff;border-radius:10px;">
+          <strong>Network</strong><br>
+          ${data.network || "AP-STREAM Global Network Lab"}
+        </div>
+
+        <div style="padding:10px;background:#fff;border-radius:10px;">
+          <strong>Router</strong><br>
+          ${router.name || router.id || "unknown"}<br>
+          <span style="color:#16733b;">
+            ● ${String(router.status || "unknown").toUpperCase()}
+          </span>
+        </div>
+
+        <div style="padding:10px;background:#fff;border-radius:10px;">
+          <strong>Mode</strong><br>
+          ${router.mode || connectivity.mode || "unknown"}
+        </div>
+
+        <div style="padding:10px;background:#fff;border-radius:10px;">
+          <strong>Internet Access</strong><br>
+          <span style="color:${connectivity.internet_access ? "#16733b" : "#a15c00"};">
+            ${connectivity.internet_access ? "ENABLED" : "VIRTUAL LAB"}
+          </span>
+        </div>
+
+      </div>
+
+      <div style="margin-top:8px;padding:10px;background:#fff;border-radius:10px;">
+        <strong>Router Interfaces</strong><br>
+        WAN: ${interfaces.wan?.address || "not assigned"}<br>
+        LAN: ${interfaces.lan?.address || "not assigned"}<br>
+        Loopback: ${interfaces.loopback?.address || "not assigned"}
+      </div>
+
+      <div style="margin-top:8px;padding:10px;background:#fff;border-radius:10px;">
+        <strong>Routing</strong><br>
+        Protocol: ${routing.protocol || "unknown"}<br>
+        Forwarding: ${routing.forwarding ? "enabled" : "disabled"}<br>
+        Default route: ${routing.default_route || "none"}
+      </div>
+
+      <div style="margin-top:8px;padding:10px;background:#fff;border-radius:10px;">
+        <strong>Routes</strong>
+        <div style="margin-top:6px;">
+          ${routes.length
+            ? routes.map(route => `
+              <div style="padding:5px 0;border-bottom:1px solid #edf2ef;">
+                ${route.destination || "unknown"}
+                → ${route.next_hop || "unknown"}
+                (${route.interface || "unknown"})
+              </div>
+            `).join("")
+            : "No routes configured"}
+        </div>
+      </div>
+
+      <div style="margin-top:8px;padding:10px;background:#fff;border-radius:10px;">
+        <strong>Upstream Transit</strong>
+        <div style="margin-top:6px;">
+          ${upstreams.length
+            ? upstreams.map(upstream => `
+              <div>
+                ${upstream.name || upstream.id || "unknown"}
+                — ${upstream.asn || "ASN unknown"}
+                — ${upstream.prefix || "no prefix"}
+                — ${upstream.status || "unknown"}
+              </div>
+            `).join("")
+            : "No upstreams configured"}
+        </div>
+      </div>
+
+      <div style="margin-top:8px;font-size:12px;color:#16733b;">
+        Network Core: ${router.id || "unknown"} ·
+        Upstreams: ${connectivity.upstream_count ?? upstreams.length} ·
+        Forwarding: ${connectivity.forwarding ? "ON" : "OFF"}
+      </div>
+    `;
+  } catch (error) {
+    target.textContent = "Network Core unavailable: " + error.message;
+  }
+}
+
+async function loadAPStreamNetworkTopology(){const target=document.getElementById("apstream-network-topology-data");if(!target)return;try{const response=await fetch("/api/cloud/network-router");if(!response.ok)throw new Error("HTTP "+response.status);const data=await response.json();const router=data.router||{};const interfaces=router.interfaces||{};const upstreams=router.upstreams||[];const box=(title,subtitle,status)=>`<div style="min-width:150px;padding:12px;border:1px solid #cfe3d7;border-radius:12px;background:#f8fffa;text-align:center;"><strong>${title}</strong><div style="font-size:12px;margin-top:5px;color:#555;">${subtitle}</div><div style="font-size:11px;margin-top:6px;color:#16733b;">● ${String(status||"unknown").toUpperCase()}</div></div>`;const transit=upstreams.length?upstreams.map(u=>box("🌍 Transit",`${u.name||u.id||"Upstream"}<br>${u.asn||"ASN unknown"}`,u.status)).join(""):box("🌍 Transit","No upstream configured","none");target.innerHTML=`<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;">${box("☁️ AP-STREAM Cloud",data.network||"Global Network Lab",data.connectivity?.mode)}<div style="font-size:20px;">→</div>${box("🛰️ Network Core",router.id||"APSTREAM-NETCORE",router.status)}<div style="font-size:20px;">→</div>${box("📡 Core Router",router.name||router.id||"Router",router.status)}</div><div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin-top:12px;">${box("🏠 AP-STREAM LAN",interfaces.lan?.address||"LAN not assigned",interfaces.lan?.status)}<div style="font-size:20px;">↕</div>${transit}</div><div style="margin-top:12px;padding:9px;border-radius:9px;background:#f7fbff;font-size:12px;text-align:center;">Connectivity: <strong>${data.connectivity?.internet_access?"Internet enabled":"Virtual lab"}</strong> · Forwarding: <strong>${data.connectivity?.forwarding?"ON":"OFF"}</strong> · Upstreams: <strong>${data.connectivity?.upstream_count??upstreams.length}</strong></div>`}catch(error){target.textContent="Topology unavailable: "+error.message;}}\n\nasync function loadCloudStorageTelemetry() {
+  const target = document.getElementById("cloud-storage-data");
+  if (!target) return;
+
+  try {
+    const response = await fetch("/api/cloud/storage");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const data = await response.json();
+    const storage = data.storage || {};
+    const filesystem = data.filesystem || {};
+
+    target.innerHTML = `
+      <div>Media Storage: <strong>${Number(storage.mediaMB || 0).toFixed(2)} MB</strong></div>
+      <div>Bytes Used: <strong>${Number(storage.mediaBytes || 0).toLocaleString()}</strong></div>
+      <div>Filesystem: <strong>${filesystem.available || "—"}</strong></div>
+      <div>Mode: <strong>${filesystem.mode || "—"}</strong></div>
+      <div style="margin-top:4px;font-size:12px;color:#16733b;">
+        ● ${String(data.status || "unknown").toUpperCase()}
+      </div>
+    `;
+  } catch (error) {
+    target.textContent = "Cloud Storage unavailable: " + error.message;
+  }
+}
+
+async function loadSecurityCloudTelemetry() {
+  const target = document.getElementById("cloud-security-status-data");
+  if (!target) return;
+
+  try {
+    const response = await fetch("/api/cloud/security-status");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const data = await response.json();
+    const a = data.accessControl || {};
+    const sec = data.security || {};
+
+    target.innerHTML = `
+      <div>Developer API: <strong>${a.developerAPI || "—"}</strong></div>
+      <div>API Key System: <strong>${a.apiKeySystem || "—"}</strong></div>
+      <div>Gateway Authentication: <strong>${a.gatewayAuthentication || "—"}</strong></div>
+      <div style="margin-top:6px;">
+        Developer Admin Secret: ${sec.developerAdminSecretConfigured ? "configured" : "not configured"}<br>
+        AI Secret: ${sec.aiSecretConfigured ? "configured" : "not configured"}<br>
+        External Gateway: ${sec.externalGatewayConfigured ? "configured" : "not configured"}
+      </div>
+      <div style="margin-top:4px;font-size:12px;color:#16733b;">
+        ● ${String(data.status || "unknown").toUpperCase()}
+      </div>
+    `;
+  } catch (error) {
+    target.textContent = "Security status unavailable: " + error.message;
+  }
+}
+
+async function loadAICloudTelemetry() {
+  const target = document.getElementById("cloud-ai-status-data");
+  if (!target) return;
+
+  try {
+    const response = await fetch("/api/cloud/ai-status");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const data = await response.json();
+    const g = data.gateway || {};
+    const l = data.localRuntime || {};
+    const w = data.workloads || {};
+    const sec = data.security || {};
+
+    target.innerHTML = `
+      <div>Identity: <strong>${data.identity || "AP-STREAM AI"}</strong></div>
+      <div>Gateway: <strong>${g.status || "—"}</strong> · External: ${g.externalGatewayConfigured ? "configured" : "not configured"}</div>
+      <div>Local AI Runtime: <strong>${l.configured ? "configured" : "not configured"}</strong></div>
+      <div style="margin-top:6px;">
+        General: ${w.generalAI || "—"} ·
+        Tool: ${w.toolAI || "—"} ·
+        Song: ${w.songAI || "—"} ·
+        Creative: ${w.creativeAI || "—"}
+      </div>
+      <div style="margin-top:6px;">
+        AI Secret: ${sec.secretConfigured ? "configured" : "not configured"}
+      </div>
+      <div style="margin-top:4px;font-size:12px;color:#16733b;">
+        ● ${String(data.status || "unknown").toUpperCase()}
+      </div>
+    `;
+  } catch (error) {
+    target.textContent = "AP-STREAM AI unavailable: " + error.message;
+  }
+}
+
+async function loadMediaStorageTelemetry() {
+  const target = document.getElementById("cloud-media-storage-data");
+  if (!target) return;
+
+  try {
+    const response = await fetch("/api/cloud/media-storage");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const data = await response.json();
+    const m = data.media || {};
+    const t = data.totals || {};
+
+    target.innerHTML = `
+      <div>Music: <strong>${m.music?.files ?? 0}</strong> files / ${m.music ? (m.music.bytes / 1024 / 1024).toFixed(2) : "0.00"} MB</div>
+      <div>Shorts: <strong>${m.shorts?.files ?? 0}</strong> files / ${m.shorts ? (m.shorts.bytes / 1024 / 1024).toFixed(2) : "0.00"} MB</div>
+      <div>Videos: <strong>${m.videos?.files ?? 0}</strong> files / ${m.videos ? (m.videos.bytes / 1024 / 1024).toFixed(2) : "0.00"} MB</div>
+      <div style="margin-top:6px;"><strong>Total:</strong> ${t.files ?? 0} files / ${Number(t.megabytes ?? 0).toFixed(2)} MB</div>
+      <div style="margin-top:4px;font-size:12px;color:#16733b;">● ${String(data.status || "unknown").toUpperCase()}</div>
+    `;
+  } catch (error) {
+    target.textContent = "Media & Storage unavailable: " + error.message;
+  }
+}
+
+
+async function loadNetworkMonitorTelemetry() {
+  const target = document.getElementById("cloud-network-monitor-data");
+  if (!target) return;
+
+  try {
+    const response = await fetch("/api/cloud/network-monitor");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const data = await response.json();
+    const n = data.network || {};
+    const m = data.monitoring || {};
+    const s = data.services || {};
+
+    target.innerHTML = `
+      <div>API: <strong>${n.api || "—"}</strong> · Port ${n.httpPort || "—"}</div>
+      <div>Interfaces: <strong>${n.interfaces ?? "—"}</strong></div>
+      <div>Memory: <strong>${m.memoryUsedMB ?? "—"} MB</strong> · Heap ${m.heapUsedMB ?? "—"} MB</div>
+      <div>Process Uptime: <strong>${m.processUptimeSeconds ?? "—"} sec</strong></div>
+      <div>Load Average: ${Array.isArray(m.loadAverage) ? m.loadAverage.map(x => Number(x).toFixed(2)).join(" / ") : "—"}</div>
+      <div style="margin-top:6px;">Cloud: ${s.cloudControlPlane || "—"} · Compute: ${s.compute || "—"} · Media/Storage: ${s.mediaStorage || "—"}</div>
+      <div style="margin-top:4px;font-size:12px;color:#16733b;">● ${String(data.status || "unknown").toUpperCase()}</div>
+    `;
+  } catch (error) {
+    target.textContent = "Network & Monitoring unavailable: " + error.message;
+  }
+}
+
+const originalLoadAPStreamCloud = loadAPStreamCloud;
+
+loadAPStreamCloud = async function() {
+  await originalLoadAPStreamCloud();
+  await loadMediaStorageTelemetry();
+  await loadAICloudTelemetry();
+  await loadSecurityCloudTelemetry();
+  await loadCloudStorageTelemetry();
+  await loadCloudNetworkCore();
+  await loadNetworkHealthTelemetry();
+  await loadNetworkMonitorTelemetry();
+
+  try {
+    const response = await fetch("/api/cloud/status");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const data = await response.json();
+    renderCloudControl(data);
+  } catch (error) {
+    const grid = document.getElementById("cloud-service-grid");
+    if (grid) {
+      grid.innerHTML = `
+        <div style="padding:16px;border-radius:12px;background:#fff;">
+          Cloud Control unavailable: ${error.message}
+        </div>
+      `;
+    }
+  }
+};
+</script>
+
+<header>
+<h1>AP-STREAM Developer Console</h1>
+<p>Build with the AP-STREAM Developer API.</p>
+</header>
+
+<main>
+
+<div class="card">
+<h2>🔑 API Key</h2>
+<p class="small">Enter a developer API key to test protected endpoints. Keep real keys private.</p>
+<input id="key" type="password" placeholder="aps_...">
+</div>
+
+<div class="card">
+<h2>🧪 Live API Tester</h2>
+
+<select id="endpoint">
+<option value="/api/v1/search?q=music">Search</option>
+<option value="/api/v1/music">Music</option>
+<option value="/api/v1/artists">Artists</option>
+<option value="/api/v1/shorts">Shorts</option>
+<option value="/api/v1/videos">Videos</option>
+<option value="/api/v1/tv">TV</option>
+<option value="/api/v1/radio">Radio</option>
+<option value="/api/v1/health">Health</option>
+</select>
+
+<br><br>
+<button onclick="testApi()">▶ Test API</button>
+
+<div id="status" class="status">Ready.</div>
+<pre id="output">{}</pre>
+</div>
+
+<div class="card">
+<h2>🔎 Search Tester</h2>
+<input id="query" placeholder="Search AP-STREAM..." value="music">
+<button onclick="searchApi()">Search</button>
+<pre id="searchOutput">{}</pre>
+</div>
+
+<div class="card">
+<h2>📡 API Endpoints</h2>
+<div class="grid">
+<div class="endpoint"><span class="method">GET</span>/api/v1/search?q=...</div>
+
+      <div id="cloud-media-storage-card" style="margin-top:8px;padding:12px;border-radius:10px;background:#fff8fb;border:1px solid #f0d7e2;">
+        <strong>🎬 Live Media & Storage</strong>
+        <div id="cloud-media-storage-data" style="margin-top:8px;">Loading...</div>
+      </div>
+
+      <div id="cloud-jobs-card" style="margin-top:8px;padding:12px;border-radius:10px;background:#f8f7ff;border:1px solid #ddd8f0;">
+  <strong>⚙️ AP-STREAM Cloud Jobs</strong>
+  <div id="cloud-jobs-data" style="margin-top:8px;">Loading jobs...</div>
+</div>
+
+<div id="cloud-metrics-card" style="margin-top:8px;padding:12px;border-radius:10px;background:#f7fff9;border:1px solid #d7eadc;">
+  <strong>📊 AP-STREAM Cloud Metrics</strong>
+  <div id="cloud-metrics-data" style="margin-top:8px;">Loading metrics...</div>
+</div>
+
+<div id="cloud-alerts-card" style="margin-top:8px;padding:12px;border-radius:10px;background:#fffdf5;border:1px solid #eadfba;">
+  <strong>🚨 AP-STREAM Cloud Alerts</strong>
+  <div id="cloud-alerts-data" style="margin-top:8px;">Checking cloud services...</div>
+</div>
+
+<div id="cloud-network-health-card" style="margin-top:8px;padding:12px;border-radius:10px;background:#f7fbff;border:1px solid #d8e6f2;">
+        <strong>📡 AP-STREAM Network Health</strong>
+        <div id="cloud-network-health-data" style="margin-top:8px;">Loading...</div>
+      </div>
+
+      <div id="cloud-storage-card" style="margin-top:8px;padding:12px;border-radius:10px;background:#f7fbff;border:1px solid #d8e6f2;">
+        <strong>💾 AP-STREAM Cloud Storage</strong>
+        <div id="cloud-storage-data" style="margin-top:8px;">Loading...</div>
+      </div>
+
+      <div id="cloud-security-status-card" style="margin-top:8px;padding:12px;border-radius:10px;background:#fff8f8;border:1px solid #f0d7d7;">
+        <strong>🛡️ AP-STREAM Security & Access Control</strong>
+        <div id="cloud-security-status-data" style="margin-top:8px;">Loading...</div>
+      </div>
+
+      <div id="cloud-ai-status-card" style="margin-top:8px;padding:12px;border-radius:10px;background:#f5fff8;border:1px solid #d7f0df;">
+        <strong>🧠 AP-STREAM AI</strong>
+        <div id="cloud-ai-status-data" style="margin-top:8px;">Loading...</div>
+      </div>
+
+      <div id="cloud-network-monitor-card" style="margin-top:8px;padding:12px;border-radius:10px;background:#f7fbff;border:1px solid #d8e6f2;">
+        <strong>🌐 Network & Monitoring</strong>
+        <div id="cloud-network-monitor-data" style="margin-top:8px;">Loading...</div>
+      </div>
+      <div id="cloud-network-core-card" style="margin-top:8px;padding:12px;border-radius:10px;background:#f4fff8;border:1px solid #cfe9d8;">
+        <strong>🛰️ AP-STREAM Network Core</strong>
+        <div id="cloud-network-core-data" style="margin-top:8px;">Loading...</div><div id="apstream-network-topology" style="margin-top:12px;padding:12px;border-radius:12px;background:#fff;border:1px solid #d8e6df;"><strong>🗺️ Live Network Topology</strong><div id="apstream-network-topology-data" style="margin-top:12px;">Loading topology...</div></div>
+      </div>
+<div class="endpoint"><span class="method">GET</span>/api/v1/music</div>
+<div class="endpoint"><span class="method">GET</span>/api/v1/artists</div>
+<div class="endpoint"><span class="method">GET</span>/api/v1/shorts</div>
+<div class="endpoint"><span class="method">GET</span>/api/v1/videos</div>
+<div class="endpoint"><span class="method">GET</span>/api/v1/tv</div>
+<div class="endpoint"><span class="method">GET</span>/api/v1/radio</div>
+</div>
+</div>
+
+<div class="card">
+<h2>❤️ API Health</h2>
+<button onclick="health()">Check Status</button>
+<pre id="healthOutput">{}</pre>
+</div>
+
+<div class="card">
+<h2>🔐 Security</h2>
+<p>API keys authenticate developer requests. Never publish your key in frontend source code or public repositories.</p>
+<span class="badge">API Keys</span>
+<span class="badge">Authentication</span>
+<span class="badge">Search</span>
+<span class="badge">Rate Limiting Ready</span>
+</div>
+
+</main>
+
+<script>
+const apiBase=location.origin;
+
+function getKey(){
+  return document.getElementById("key").value.trim();
+}
+
+async function request(path){
+  const headers={};
+  const key=getKey();
+  if(key) headers["X-API-Key"]=key;
+
+  const response=await fetch(apiBase+path,{headers});
+  const text=await response.text();
+
+  let data;
+  try{data=JSON.parse(text)}
+  catch{data={raw:text}}
+
+  return {status:response.status,data};
+}
+
+async function testApi(){
+  const path=document.getElementById("endpoint").value;
+  const status=document.getElementById("status");
+  const output=document.getElementById("output");
+
+  status.textContent="Loading...";
+  try{
+    const result=await request(path);
+    status.textContent="HTTP "+result.status;
+    output.textContent=JSON.stringify(result.data,null,2);
+  }catch(error){
+    status.textContent="Request failed";
+    output.textContent=String(error);
+  }
+}
+
+async function searchApi(){
+  const q=document.getElementById("query").value.trim();
+  const output=document.getElementById("searchOutput");
+
+  if(!q){
+    output.textContent='{"error":"Enter a search term"}';
+    return;
+  }
+
+  try{
+    const result=await request("/api/v1/search?q="+encodeURIComponent(q));
+    output.textContent=JSON.stringify(result.data,null,2);
+  }catch(error){
+    output.textContent=String(error);
+  }
+}
+
+async function health(){
+  const output=document.getElementById("healthOutput");
+  try{
+    const result=await fetch(apiBase+"/api/v1/health");
+    output.textContent=JSON.stringify(await result.json(),null,2);
+  }catch(error){
+    output.textContent=String(error);
+  }
+}
+</script>
+
+<script>
+(() => {
+  const API_BASE = "/api/v1";
+
+  const endpoints = [
+    { name: "API Health", path: "/health", method: "GET", auth: false },
+    { name: "Search", path: "/search?q=music", method: "GET", auth: true },
+    { name: "Music", path: "/music", method: "GET", auth: true },
+    { name: "Artists", path: "/artists", method: "GET", auth: true },
+    { name: "Shorts", path: "/shorts", method: "GET", auth: true },
+    { name: "Videos", path: "/videos", method: "GET", auth: true },
+    { name: "TV", path: "/tv", method: "GET", auth: true },
+    { name: "Radio", path: "/radio", method: "GET", auth: true }
+  ];
+
+  function getKey() {
+    const candidates = [
+      "#apiKey",
+      "#api-key",
+      "#developerApiKey",
+      "#developer-api-key",
+      'input[name="apiKey"]',
+      'input[name="api-key"]',
+      'input[placeholder*="API" i]',
+      'input[placeholder*="key" i]'
+    ];
+
+    for (const selector of candidates) {
+      const el = document.querySelector(selector);
+      if (el && el.value.trim()) return el.value.trim();
+    }
+
+    const inputs = [...document.querySelectorAll("input")];
+    const keyInput = inputs.find(i =>
+      /api.?key|developer.?key/i.test(
+        `${i.id} ${i.name} ${i.placeholder}`
+      )
+    );
+
+    return keyInput ? keyInput.value.trim() : "";
+  }
+
+  function findOrCreateResponseArea() {
+    let box = document.querySelector("#live-api-response");
+
+    if (!box) {
+      box = document.createElement("pre");
+      box.id = "live-api-response";
+
+      box.style.cssText = `
+        margin:20px 0;
+        padding:16px;
+        min-height:180px;
+        max-height:600px;
+        overflow:auto;
+        background:#0d1117;
+        color:#d7f9df;
+        border:1px solid #2f9e62;
+        border-radius:12px;
+        font-family:monospace;
+        font-size:13px;
+        line-height:1.5;
+        white-space:pre-wrap;
+        word-break:break-word;
+      `;
+
+      const anchor =
+        document.querySelector(".api-endpoints") ||
+        document.querySelector("#api-endpoints") ||
+        document.querySelector("main") ||
+        document.body;
+
+      anchor.appendChild(box);
+    }
+
+    return box;
+  }
+
+  function showResponse(data, status, url, elapsed) {
+    const box = findOrCreateResponseArea();
+
+    let formatted;
+
+    try {
+      formatted = JSON.stringify(data, null, 2);
+    } catch {
+      formatted = String(data);
+    }
+
+    box.textContent =
+      `HTTP ${status}\n` +
+      `${elapsed} ms\n` +
+      `${url}\n\n` +
+      formatted;
+  }
+
+  async function testEndpoint(endpoint, customPath = null) {
+    const box = findOrCreateResponseArea();
+    const path = customPath || endpoint.path;
+    const url = API_BASE + path;
+
+    box.textContent = `Testing ${endpoint.name}...\n\n${url}`;
+
+    const headers = {
+      "Accept": "application/json"
+    };
+
+    const key = getKey();
+
+    if (endpoint.auth && key) {
+      headers["X-API-Key"] = key;
+    }
+
+    const started = performance.now();
+
+    try {
+      const response = await fetch(url, {
+        method: endpoint.method,
+        headers,
+        cache: "no-store"
+      });
+
+      const elapsed = Math.round(performance.now() - started);
+
+      const text = await response.text();
+
+      let data;
+
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = text;
+      }
+
+      showResponse(data, response.status, url, elapsed);
+
+      return {
+        ok: response.ok,
+        status: response.status,
+        data
+      };
+
+    } catch (error) {
+      const elapsed = Math.round(performance.now() - started);
+
+      showResponse(
+        {
+          success: false,
+          error: error.message,
+          hint: "Check that the AP-STREAM backend is running and the Vite proxy points to port 5000."
+        },
+        0,
+        url,
+        elapsed
+      );
+
+      return {
+        ok: false,
+        status: 0
+      };
+    }
+  }
+
+  function createEndpointTester() {
+    if (document.querySelector("#real-api-tester")) return;
+
+    const section = document.createElement("section");
+    section.id = "real-api-tester";
+
+    section.style.cssText = `
+      margin:24px 0;
+      padding:20px;
+      background:rgba(255,255,255,.96);
+      border:1px solid #d9e9df;
+      border-radius:16px;
+      box-shadow:0 4px 18px rgba(0,0,0,.06);
+    `;
+
+    section.innerHTML = `
+      <h2 style="margin:0 0 8px;color:#168447">
+        🧪 Live API Endpoint Tester
+      </h2>
+
+      <p style="margin:0 0 16px;color:#555">
+        Test every AP-STREAM Developer API endpoint and view the real server response.
+      </p>
+
+      <div id="endpoint-buttons"
+        style="
+          display:grid;
+          grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+          gap:10px;
+          margin-bottom:18px;
+        ">
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        <input
+          id="search-tester-input"
+          value="music"
+          placeholder="Search query"
+          style="
+            flex:1;
+            min-width:180px;
+            padding:11px 13px;
+            border:1px solid #cfded5;
+            border-radius:10px;
+            font-size:14px;
+          "
+        />
+
+        <button
+          id="run-search-tester"
+          style="
+            padding:11px 18px;
+            border:0;
+            border-radius:10px;
+            background:#168447;
+            color:white;
+            font-weight:700;
+            cursor:pointer;
+          "
+        >
+          🔎 Test Search
+        </button>
+      </div>
+
+      <div style="font-size:13px;color:#777;margin-bottom:8px">
+        Response
+      </div>
+
+      <pre id="live-api-response" style="
+        margin:0;
+        padding:16px;
+        min-height:180px;
+        max-height:600px;
+        overflow:auto;
+        background:#0d1117;
+        color:#d7f9df;
+        border:1px solid #2f9e62;
+        border-radius:12px;
+        font-family:monospace;
+        font-size:13px;
+        line-height:1.5;
+        white-space:pre-wrap;
+        word-break:break-word;
+      ">Ready.</pre>
+    `;
+
+    const target =
+      document.querySelector("main") ||
+      document.body;
+
+    target.appendChild(section);
+
+    const buttons = section.querySelector("#endpoint-buttons");
+
+    endpoints.forEach(endpoint => {
+      const button = document.createElement("button");
+
+      button.textContent =
+        endpoint.auth
+          ? `▶ ${endpoint.name}`
+          : `❤️ ${endpoint.name}`;
+
+      button.style.cssText = `
+        padding:12px 10px;
+        border:1px solid #b9dcca;
+        border-radius:10px;
+        background:#effaf3;
+        color:#126b3a;
+        font-weight:700;
+        cursor:pointer;
+      `;
+
+      button.onclick = () => testEndpoint(endpoint);
+
+      buttons.appendChild(button);
+    });
+
+    section.querySelector("#run-search-tester").onclick = () => {
+      const q =
+        section.querySelector("#search-tester-input").value.trim() ||
+        "music";
+
+      testEndpoint(
+        { name: "Search", method: "GET", auth: true },
+        `/search?q=${encodeURIComponent(q)}`
+      );
+    };
+  }
+
+  function patchExistingButtons() {
+    const textMap = [
+      ["Check Status", endpoints[0]],
+      ["Music", endpoints[2]],
+      ["Artists", endpoints[3]],
+      ["Shorts", endpoints[4]],
+      ["Videos", endpoints[5]],
+      ["TV", endpoints[6]],
+      ["Radio", endpoints[7]]
+    ];
+
+    document.querySelectorAll("button").forEach(button => {
+      const text = button.textContent.trim();
+
+      const match = textMap.find(([label]) =>
+        text.toLowerCase().includes(label.toLowerCase())
+      );
+
+      if (match && !button.dataset.liveApiPatched) {
+        button.dataset.liveApiPatched = "true";
+
+        button.addEventListener("click", event => {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          testEndpoint(match[1]);
+        }, true);
+      }
+    });
+  }
+
+  function start() {
+    createEndpointTester();
+    patchExistingButtons();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start);
+  } else {
+    start();
+  }
+
+  window.APStreamDeveloperAPI = {
+    testEndpoint,
+    endpoints
+  };
+})();
+</script>
+
+
+<!-- APSTREAM_TEST_ALL_PATCH_V1 -->
+<script>
+(function () {
+  const API_BASE = "/api/v1";
+
+  const endpoints = [
+    { name: "Music", path: "/music" },
+    { name: "Artists", path: "/artists" },
+    { name: "Shorts", path: "/shorts" },
+    { name: "Videos", path: "/videos" },
+    { name: "TV", path: "/tv" },
+    { name: "Radio", path: "/radio" }
+  ];
+
+  function findApiKeyInput() {
+    const selectors = [
+      "#apiKey",
+      "#api-key",
+      "#developerApiKey",
+      "#developer-api-key",
+      'input[name="apiKey"]',
+      'input[name="api-key"]'
+    ];
+
+    for (const selector of selectors) {
+      const el = document.querySelector(selector);
+      if (el) return el;
+    }
+
+    const inputs = [...document.querySelectorAll("input")];
+
+    return inputs.find(el => {
+      const text = [
+        el.id || "",
+        el.name || "",
+        el.placeholder || "",
+        el.getAttribute("aria-label") || ""
+      ].join(" ").toLowerCase();
+
+      return text.includes("api key") ||
+             text.includes("api-key") ||
+             text.includes("developer key");
+    });
+  }
+
+  function getApiKey() {
+    const input = findApiKeyInput();
+    return input ? String(input.value || "").trim() : "";
+  }
+
+  function ensureKeyInput() {
+    let input = findApiKeyInput();
+    if (input) return input;
+
+    const box = document.createElement("div");
+    box.style.cssText =
+      "margin:16px 0;padding:14px;border:1px solid #d7e8dc;" +
+      "border-radius:12px;background:#f7fff9;";
+
+    box.innerHTML =
+      '<label style="display:block;font-weight:700;margin-bottom:8px;">' +
+      '🔑 Developer API Key' +
+      '</label>' +
+      '<input id="apstream-test-api-key" type="password" ' +
+      'autocomplete="off" spellcheck="false" ' +
+      'placeholder="Paste your developer API key" ' +
+      'style="width:100%;box-sizing:border-box;padding:11px;border:1px solid #cfd8d2;border-radius:8px;">' +
+      '<small style="display:block;margin-top:7px;color:#66736b;">' +
+      'The key is used only for the API request and is not stored by this page.' +
+      '</small>';
+
+    document.body.insertBefore(box, document.body.firstChild);
+
+    return box.querySelector("input");
+  }
+
+  function ensureTestAllUI() {
+    if (document.getElementById("apstream-test-all")) return;
+
+    const section = document.createElement("section");
+    section.id = "apstream-test-all-section";
+    section.style.cssText =
+      "margin:24px 0;padding:18px;border:1px solid #cfe5d5;" +
+      "border-radius:14px;background:#fff;";
+
+    section.innerHTML =
+      '<h2 style="margin:0 0 8px;">🧪 Test All API Endpoints</h2>' +
+      '<p style="margin:0 0 14px;color:#66736b;">' +
+      'Run Music, Artists, Shorts, Videos, TV and Radio and display their real API responses.' +
+      '</p>' +
+      '<button id="apstream-test-all" type="button" ' +
+      'style="padding:11px 18px;border:0;border-radius:9px;cursor:pointer;font-weight:700;">' +
+      '▶ Test All Endpoints</button>' +
+      '<div id="apstream-all-status" style="margin:12px 0;font-weight:600;">Ready.</div>' +
+      '<div id="apstream-all-results"></div>';
+
+    const existingTester =
+      document.querySelector("#live-api-response")?.closest("section") ||
+      document.querySelector(".api-tester") ||
+      document.querySelector("main") ||
+      document.body;
+
+    if (existingTester && existingTester.parentNode) {
+      existingTester.parentNode.insertBefore(section, existingTester.nextSibling);
+    } else {
+      document.body.appendChild(section);
+    }
+
+    document.getElementById("apstream-test-all").addEventListener("click", testAll);
+  }
+
+  function createResultCard(name) {
+    const card = document.createElement("div");
+
+    card.style.cssText =
+      "margin:12px 0;padding:14px;border:1px solid #dce8df;" +
+      "border-radius:12px;background:#f9fcfa;";
+
+    card.innerHTML =
+      '<div style="font-weight:800;margin-bottom:8px;">' +
+      name +
+      '</div>' +
+      '<pre style="margin:0;white-space:pre-wrap;overflow:auto;font-size:13px;">' +
+      'Testing...' +
+      '</pre>';
+
+    document.getElementById("apstream-all-results").appendChild(card);
+
+    return card.querySelector("pre");
+  }
+
+  async function testEndpointReal(endpoint, key) {
+    const started = performance.now();
+    const url = API_BASE + endpoint.path;
+
+    const headers = {
+      "Accept": "application/json",
+      "X-API-Key": key
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers
+      });
+
+      const text = await response.text();
+      const elapsed = Math.round(performance.now() - started);
+
+      let body;
+
+      try {
+        body = JSON.stringify(JSON.parse(text), null, 2);
+      } catch {
+        body = text;
+      }
+
+      return {
+        ok: response.ok,
+        status: response.status,
+        elapsed,
+        url,
+        body
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        status: "NETWORK ERROR",
+        elapsed: Math.round(performance.now() - started),
+        url,
+        body: String(error)
+      };
+    }
+  }
+
+  async function testAll() {
+    const button = document.getElementById("apstream-test-all");
+    const status = document.getElementById("apstream-all-status");
+    const results = document.getElementById("apstream-all-results");
+
+    const key = getApiKey();
+
+    if (!key) {
+      ensureKeyInput();
+      status.textContent = "⚠️ Enter your developer API key first.";
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "⏳ Testing...";
+    results.innerHTML = "";
+    status.textContent = "Testing 6 protected endpoints...";
+
+    let passed = 0;
+
+    for (const endpoint of endpoints) {
+      const output = createResultCard(endpoint.name);
+      const result = await testEndpointReal(endpoint, key);
+
+      if (result.ok) passed++;
+
+      output.textContent =
+        "HTTP: " + result.status + "\n" +
+        "Time: " + result.elapsed + " ms\n" +
+        "URL: " + result.url + "\n\n" +
+        result.body;
+    }
+
+    status.textContent =
+      "✅ Finished: " + passed + "/" + endpoints.length + " endpoints successful.";
+
+    button.disabled = false;
+    button.textContent = "▶ Test All Endpoints";
+  }
+
+  ensureKeyInput();
+  ensureTestAllUI();
+
+  window.APStreamTestAll = {
+    testAll,
+    endpoints
+  };
+})();
+</script>
+\n</body>
+</html>
+
+
+<script>
+  window.addEventListener("load", () => {
+    if (typeof startAPStreamCloudAutoRefresh === "function") {
+      startAPStreamCloudAutoRefresh();
+    }
+  });
+</script>

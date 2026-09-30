@@ -2979,3 +2979,1018 @@ main img,
   font-size: 15px !important;
 }
 
+
+/* AP-STREAM Shorts — unlimited horizontal feed */
+.shorts-feed {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  gap: 12px !important;
+}
+
+.shorts-feed .short-card {
+  flex: 0 0 180px !important;
+  width: 180px !important;
+  max-width: 180px !important;
+}
+
+
+
+/* AP-STREAM CALL SCREEN FIX */
+
+body.ap-call-active {
+  overflow: hidden !important;
+}
+
+.call-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  min-height: 100vh !important;
+  z-index: 99999 !important;
+  overflow: hidden !important;
+  background: #111 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-end !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.call-screen .call-video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+  background: #111 !important;
+}
+
+.call-screen .call-top {
+  position: absolute !important;
+  top: max(18px, env(safe-area-inset-top)) !important;
+  left: 16px !important;
+  right: 16px !important;
+  z-index: 10 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  color: white !important;
+  font-weight: 700 !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,.7) !important;
+}
+
+.call-screen .call-controls {
+  position: relative !important;
+  z-index: 20 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 14px 14px calc(18px + env(safe-area-inset-bottom)) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+  background: linear-gradient(
+    transparent,
+    rgba(0,0,0,.75)
+  ) !important;
+}
+
+.call-screen .call-controls button {
+  min-width: 64px !important;
+  min-height: 50px !important;
+  padding: 10px 13px !important;
+  border: 0 !important;
+  border-radius: 28px !important;
+  background: rgba(255,255,255,.18) !important;
+  color: white !important;
+  font-weight: 700 !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+.call-screen .call-controls .end-call {
+  background: #e53935 !important;
+  color: white !important;
+  min-width: 90px !important;
+}
+
+.call-screen .audio-call-screen {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  background: linear-gradient(160deg, #dff7e8, #ffdce8) !important;
+  color: #222 !important;
+}
+
+.call-screen .call-avatar {
+  width: 112px !important;
+  height: 112px !important;
+  border-radius: 50% !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 54px !important;
+  background: rgba(255,255,255,.75) !important;
+  box-shadow: 0 12px 35px rgba(0,0,0,.18) !important;
+  margin-bottom: 18px !important;
+}
+
+.go-live-screen .call-video {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+}
+
+.go-live-screen .call-controls {
+  margin: 0 !important;
+}
+
+@media (max-width: 600px) {
+  .call-screen .call-controls {
+    gap: 7px !important;
+  }
+
+  .call-screen .call-controls button {
+    min-height: 48px !important;
+    padding: 8px 10px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* AP-STREAM Developer Console */
+.developer-console {
+  min-height: 100vh;
+  padding: 22px;
+  background: linear-gradient(135deg, #f4fff8 0%, #fff5fa 100%);
+  color: #14231b;
+}
+
+.developer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.developer-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #dff7e9;
+  color: #16834a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.developer-header h1 {
+  margin: 7px 0 3px;
+  font-size: 28px;
+}
+
+.developer-header p {
+  margin: 0;
+  color: #64736a;
+}
+
+.api-status {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #dcebe2;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: #20a65a;
+}
+
+.developer-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 15px;
+}
+
+.developer-tabs button,
+.quick-endpoints button {
+  border: 1px solid #d9e8df;
+  background: white;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.developer-tabs button.active {
+  background: #198754;
+  color: white;
+  border-color: #198754;
+}
+
+.developer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.developer-card {
+  background: rgba(255,255,255,.94);
+  border: 1px solid #dcebe2;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 6px 22px rgba(27, 69, 45, .06);
+}
+
+.card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.card-title h2 {
+  margin: 0 0 3px;
+  font-size: 19px;
+}
+
+.card-title span {
+  color: #728078;
+  font-size: 13px;
+}
+
+.developer-card label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.developer-card input,
+.developer-card select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d6e5dc;
+  border-radius: 10px;
+  padding: 12px;
+  background: white;
+  font: inherit;
+  outline: none;
+}
+
+.endpoint-row {
+  display: grid;
+  grid-template-columns: 85px 1fr auto;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.endpoint-row button,
+.primary-button {
+  border: 0;
+  border-radius: 10px;
+  padding: 0 17px;
+  background: #198754;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.endpoint-row button:disabled {
+  opacity: .6;
+}
+
+.quick-endpoints {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.quick-endpoints button {
+  padding: 7px 11px;
+  font-size: 12px;
+}
+
+.request-status {
+  margin-top: 13px;
+  color: #64736a;
+  font-size: 13px;
+}
+
+.response-meta {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.response-meta span {
+  padding: 5px 8px;
+  border-radius: 7px;
+  background: #edf8f1;
+  color: #177847;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.response-box,
+.docs-card pre {
+  max-height: 430px;
+  overflow: auto;
+  margin: 0;
+  padding: 14px;
+  border-radius: 10px;
+  background: #101714;
+  color: #dff8e8;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.empty-response {
+  padding: 35px 15px;
+  text-align: center;
+  color: #7b8780;
+  background: #f7faf8;
+  border-radius: 10px;
+}
+
+.small-button {
+  border: 1px solid #cfe0d6;
+  background: white;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.new-key {
+  padding: 14px;
+  margin-bottom: 15px;
+  border-radius: 11px;
+  background: #effaf3;
+  border: 1px solid #cce8d6;
+}
+
+.key-display {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.key-display code {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  background: white;
+  overflow: auto;
+}
+
+.key-display button {
+  border: 0;
+  border-radius: 8px;
+  padding: 0 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.new-key small {
+  color: #607067;
+}
+
+.key-list {
+  display: grid;
+  gap: 8px;
+}
+
+.key-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 13px;
+  border: 1px solid #e0ebe5;
+  border-radius: 10px;
+}
+
+.key-item strong,
+.key-item span {
+  display: block;
+}
+
+.key-item span {
+  margin-top: 3px;
+  color: #198754;
+  font-size: 12px;
+}
+
+.danger-button {
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 11px;
+  background: #fff0f0;
+  color: #bd3030;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.docs-card {
+  max-width: 1000px;
+}
+
+.doc-section {
+  margin-top: 22px;
+}
+
+.doc-section h3 {
+  margin-bottom: 7px;
+}
+
+.doc-section p {
+  color: #64736a;
+}
+
+.doc-section > code {
+  display: block;
+  padding: 11px;
+  background: #f2f7f4;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.endpoint-doc {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.endpoint-doc strong {
+  padding: 5px 7px;
+  border-radius: 6px;
+  background: #dff7e9;
+  color: #16834a;
+  font-size: 12px;
+}
+
+@media (max-width: 760px) {
+  .developer-console {
+    padding: 12px;
+  }
+
+  .developer-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .developer-header h1 {
+    font-size: 24px;
+  }
+
+  .developer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .endpoint-row {
+    grid-template-columns: 75px 1fr;
+  }
+
+  .endpoint-row button {
+    grid-column: 1 / -1;
+    min-height: 43px;
+  }
+}
+
+/* =========================================================
+   AP-STREAM GLOBAL ECOSYSTEM — MOBILE FINAL OVERRIDES
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Prevent long words / URLs from breaking the layout */
+main,
+section,
+article,
+.card,
+.home-card,
+.feature-card,
+.search-discovery-card,
+.ap-search-result,
+.power-result {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Search controls */
+.ap-global-search-box,
+.power-search-box,
+.phase1-search-box {
+  width: 100%;
+  max-width: 100%;
+}
+
+.ap-search-types,
+.ap-search-quick-links,
+.trending-pills,
+.search-related,
+.phase1-filters {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ap-search-types button,
+.ap-search-quick-links button,
+.trending-pills button,
+.search-related button,
+.phase1-filters button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+/* Search results */
+.ap-search-result {
+  width: 100%;
+  max-width: 100%;
+}
+
+.ap-search-result-body {
+  min-width: 0;
+}
+
+.ap-search-result h3,
+.ap-search-result p {
+  overflow-wrap: anywhere;
+}
+
+/* Shorts */
+.shorts-grid,
+.reels-grid {
+  width: 100%;
+  max-width: 100%;
+}
+
+.short-card,
+.reel-card,
+.short-video-card {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.short-card video,
+.reel-card video,
+.short-video-card video {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+}
+
+/* Shorts actions */
+.short-actions,
+.shorts-actions,
+.reel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  width: 100%;
+}
+
+.short-actions button,
+.shorts-actions button,
+.reel-actions button {
+  flex: 0 1 auto;
+  white-space: nowrap;
+}
+
+/* Videos */
+.videos-grid,
+.video-grid {
+  width: 100%;
+  max-width: 100%;
+}
+
+.video-card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.video-card video,
+.featured-video video {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+/* Home ecosystem cards */
+.home-card,
+.feature-card,
+.section-card {
+  min-width: 0;
+}
+
+.home-card h3,
+.home-card p,
+.feature-card h3,
+.feature-card p {
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   PHONE LAYOUT
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  body {
+    font-size: 15px;
+  }
+
+  main {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  main > section {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Headings */
+  h1 {
+    font-size: 1.55rem;
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+
+  h3 {
+    line-height: 1.3;
+  }
+
+  /* Make button groups readable */
+  .hero-buttons,
+  .home-tabs,
+  .home-quick-actions,
+  .social-menu,
+  .player-actions,
+  .video-controls-preview {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .hero-buttons button,
+  .home-tabs button,
+  .home-quick-actions button,
+  .social-menu button,
+  .player-actions button,
+  .video-controls-preview button {
+    flex: 0 1 auto;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  /* Search discovery */
+  .search-discovery-grid,
+  .phase1-discovery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px;
+  }
+
+  .search-discovery-card,
+  .phase1-discovery-card {
+    min-width: 0;
+    padding: 10px;
+  }
+
+  /* Music */
+  #music .cards {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    padding-bottom: 8px;
+  }
+
+  #music .cards .card {
+    flex: 0 0 185px;
+    max-width: 185px;
+  }
+
+  /* Shorts — horizontal discovery row */
+  .shorts-grid,
+  .reels-grid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 10px !important;
+    padding: 6px 2px 12px !important;
+    scroll-snap-type: x mandatory;
+  }
+
+  .short-card,
+  .reel-card,
+  .short-video-card {
+    flex: 0 0 78vw !important;
+    width: 78vw !important;
+    max-width: 330px !important;
+    scroll-snap-align: start;
+  }
+
+  /* Videos — one clean column */
+  .videos-grid,
+  .video-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    padding: 0 !important;
+  }
+
+  .video-card {
+    width: 100% !important;
+  }
+
+  /* AI floating button stays out of the content */
+  .ai-floating-button {
+    right: 14px !important;
+    bottom: 74px !important;
+    z-index: 1000 !important;
+  }
+
+  .ai-assistant {
+    right: 10px !important;
+    left: 10px !important;
+    width: auto !important;
+    max-width: none !important;
+    z-index: 1001 !important;
+  }
+
+  /* Avoid giant empty/overlapping cards */
+  .home-card-grid {
+    gap: 10px;
+  }
+
+  .home-card {
+    overflow: hidden;
+  }
+
+  /* Navigation stays usable */
+  nav {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  nav button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+
+/* Small phones */
+@media (max-width: 430px) {
+
+  main {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .search-discovery-grid,
+  .phase1-discovery-grid {
+    gap: 7px;
+  }
+
+  .ap-search-result {
+    padding: 10px;
+  }
+
+  .ap-search-result-icon {
+    flex-basis: 36px;
+  }
+
+  .short-card,
+  .reel-card,
+  .short-video-card {
+    flex-basis: 82vw !important;
+    width: 82vw !important;
+  }
+
+  .home-card-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  button {
+    min-height: 38px;
+  }
+}
+
+
+
+/* =========================================================
+   AP-STREAM MOBILE UI FIX — 2026-09-26
+   Compact navigation + clean Calls/AI Manager positioning
+   ========================================================= */
+
+:root {
+  --ap-green: #198754;
+  --ap-pink: #e98aa9;
+}
+
+/* Prevent horizontal overflow */
+html, body, #root {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Compact top navigation */
+nav,
+header,
+.navbar,
+.main-nav,
+.top-nav,
+.navigation,
+.nav-container {
+  max-width: 100%;
+}
+
+nav button,
+header button,
+.navbar button,
+.main-nav button,
+.top-nav button,
+.navigation button {
+  min-height: 42px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  font-size: 16px;
+}
+
+/* Reduce excessive spacing between navigation rows */
+nav,
+.main-nav,
+.top-nav,
+.navigation {
+  gap: 8px !important;
+}
+
+/* Keep the home content close to the navigation */
+.ap-home,
+.home-page,
+.home-container {
+  padding-top: 12px !important;
+}
+
+/* Search section */
+.ap-home input,
+.home-page input,
+.home-container input {
+  max-width: 92%;
+  min-height: 48px;
+  border-radius: 28px;
+  box-sizing: border-box;
+}
+
+/* Calls section */
+.call-section,
+.calls-section,
+.apstream-calls,
+.calls-container {
+  width: min(96%, 760px);
+  margin: 18px auto !important;
+  box-sizing: border-box;
+}
+
+.call-section h2,
+.calls-section h2,
+.apstream-calls h2,
+.calls-container h2 {
+  margin-bottom: 8px !important;
+}
+
+.call-section button,
+.calls-section button,
+.apstream-calls button,
+.calls-container button {
+  min-height: 48px;
+  border-radius: 24px;
+  margin: 4px;
+}
+
+/* Floating AI Manager — never cover page content */
+.ai-manager-fab {
+  position: fixed !important;
+  right: 14px !important;
+  bottom: 72px !important;
+  z-index: 9999 !important;
+  min-height: 48px !important;
+  padding: 10px 16px !important;
+  border-radius: 28px !important;
+  white-space: nowrap;
+  box-shadow: 0 5px 18px rgba(0,0,0,.22);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  nav,
+  .main-nav,
+  .top-nav,
+  .navigation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px !important;
+    padding: 8px !important;
+  }
+
+  nav button,
+  header button,
+  .navbar button,
+  .main-nav button,
+  .top-nav button,
+  .navigation button {
+    min-height: 40px;
+    padding: 7px 11px;
+    font-size: 15px;
+  }
+
+  .ai-manager-fab {
+    right: 10px !important;
+    bottom: 68px !important;
+    font-size: 14px !important;
+    padding: 9px 13px !important;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+  nav button,
+  header button,
+  .navbar button,
+  .main-nav button,
+  .top-nav button,
+  .navigation button {
+    font-size: 14px;
+    padding: 6px 9px;
+  }
+
+  .ai-manager-fab {
+    font-size: 13px !important;
+    padding: 8px 11px !important;
+  }
+}

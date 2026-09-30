@@ -2,6 +2,76 @@ import { useEffect, useState } from "react";
 
 
 export default function AIStudio() {
+
+  const [generalMessages, setGeneralMessages] = useState([]);
+  const [generalInput, setGeneralInput] = useState("");
+  const [generalLoading, setGeneralLoading] = useState(false);
+
+  async function sendGeneralAI() {
+    const message = generalInput.trim();
+
+    if (!message || generalLoading) return;
+
+    const updatedMessages = [
+      ...generalMessages,
+      { role: "user", content: message }
+    ];
+
+    setGeneralMessages(updatedMessages);
+    setGeneralInput("");
+    setGeneralLoading(true);
+
+    try {
+      const response = await fetch("/api/ai/general", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message,
+          messages: updatedMessages
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data?.error ||
+          data?.message ||
+          `Request failed (${response.status})`
+        );
+      }
+
+      const reply =
+        data?.reply ||
+        data?.response ||
+        data?.message ||
+        data?.content ||
+        "I couldn't generate a response.";
+
+      setGeneralMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: reply }
+      ]);
+    } catch (error) {
+      console.error("General AI error:", error);
+
+      setGeneralMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "Sorry, General AI could not respond right now."
+        }
+      ]);
+    } finally {
+      setGeneralLoading(false);
+    }
+  }
+
+
+
+
   const [mode, setMode] = useState("faceless");
   const [kidsCharacter, setKidsCharacter] = useState("");
   const [kidsStory, setKidsStory] = useState("");
@@ -53,6 +123,12 @@ export default function AIStudio() {
     };
   }, []);
 
+  function clearGeneralAI() {
+    setGeneralMessages([]);
+    setGeneralInput("");
+    setAiError("");
+  }
+
   async function createProject() {
     if (!topic.trim()) {
       setAiError("Enter an idea first.");
@@ -60,11 +136,16 @@ export default function AIStudio() {
     }
 
     setGeneratingCreative(true);
-    setCreativeTool("faceless");
+    setCreativeTool(mode === "music" ? "music" : "story");
     setCreativeResult(null);
     setAiError("");
 
     try {
+      if (mode === "music") {
+        await generateSong();
+        return;
+      }
+
       const response = await fetch("/api/ai/creative", {
         method: "POST",
         headers: {
@@ -87,9 +168,13 @@ export default function AIStudio() {
 
       setCreativeResult(data.result);
       setCreated(true);
+
+      if (mode === "combined") {
+        await generateSong();
+      }
     } catch (error) {
-      console.error("Faceless AI error:", error);
-      setAiError(error.message || "Could not create faceless content.");
+      console.error("AP-STREAM AI project error:", error);
+      setAiError(error.message || "Could not create the AI project.");
     } finally {
       setGeneratingCreative(false);
     }
@@ -130,6 +215,46 @@ export default function AIStudio() {
       setAiError(error.message || "Could not generate lyrics.");
     } finally {
       setGeneratingLyrics(false);
+    }
+  }
+
+  async function generateTool(tool, defaultTopic) {
+    const creativeTopic =
+      topic.trim() || defaultTopic;
+
+    setGeneratingCreative(true);
+    setCreativeTool(tool);
+    setCreativeResult(null);
+    setAiError("");
+
+    try {
+      const response = await fetch("/api/ai/tool", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          tool,
+          topic: creativeTopic,
+          musicStyle,
+          duration,
+          language
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || data.status !== "OK") {
+        throw new Error(data.message || "AI generation failed.");
+      }
+
+      setCreativeResult(data.result);
+      setCreated(true);
+    } catch (error) {
+      console.error("AP-STREAM AI Tool error:", error);
+      setAiError(error.message || "Could not generate content.");
+    } finally {
+      setGeneratingCreative(false);
     }
   }
 
@@ -175,6 +300,186 @@ export default function AIStudio() {
 
   return (
     <section id="ai-studio" className="ai-studio-section">
+
+      <div className="apstream-general-ai">
+        <div className="general-ai-header">
+          <div>
+            <span className="ai-studio-label">🤖 AP-STREAM AI</span>
+            <h2>General AI</h2>
+            <p>Your intelligent assistant inside AP-STREAM.</p>
+          </div>
+
+          <button
+            type="button"
+            onClick={clearGeneralAI}
+            disabled={generalMessages.length === 0 && !generalInput}
+          >
+            🗑️ New Chat
+          </button>
+        </div>
+
+        <div className="general-ai-chat">
+          {generalMessages.length === 0 ? (
+            <div className="general-ai-empty">
+              <div className="general-ai-icon">🤖</div>
+              <h3>Welcome to AP-STREAM AI</h3>
+              <p>
+                Ask questions, develop ideas, learn, write, plan projects,
+                or work on music and video concepts.
+              </p>
+
+              <div className="general-ai-suggestions">
+                <button type="button" onClick={() => setGeneralInput("Give me a fresh idea for an AP-STREAM Short.")}>
+                  🎬 Shorts idea
+                </button>
+                <button type="button" onClick={() => setGeneralInput("Help me plan an original Afrobeat music project.")}>
+                  🎵 Music idea
+                </button>
+                <button type="button" onClick={() => setGeneralInput("Explain a difficult topic to me simply.")}>
+                  📚 Explain something
+                </button>
+                <button type="button" onClick={() => setGeneralInput("Help me plan a creative project.")}>
+                  💡 Project idea
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="general-ai-messages">
+              {generalMessages.map((item, index) => (
+                <div
+                  className={`general-ai-message ${item.role}`}
+                  key={`${item.role}-${index}`}
+                >
+                  <strong>
+                    {item.role === "user" ? "You" : "🤖 AP-STREAM AI"}
+                  </strong>
+                  <p>{item.content}</p>
+                </div>
+              ))}
+
+              {generalLoading && (
+                <div className="general-ai-message assistant">
+                  <strong>🤖 AP-STREAM AI</strong>
+                  <p>Thinking...</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {aiError && (
+          <div className="general-ai-error">
+            ⚠️ {aiError}
+          </div>
+        )}
+
+        <div className="general-ai-input">
+          <textarea
+            value={generalInput}
+            onChange={(event) => setGeneralInput(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                sendGeneralAI();
+              }
+            }}
+            placeholder="Ask AP-STREAM AI anything..."
+            rows="2"
+          />
+
+          <button
+            type="button"
+            onClick={sendGeneralAI}
+            disabled={!generalInput.trim() || generalLoading}
+          >
+            {generalLoading ? "⏳" : "➤"} Send
+          </button>
+        </div>
+      </div>
+
+
+
+      <div className="apstream-ai-toolbox">
+        <div className="apstream-ai-toolbox-header">
+          <span className="ai-studio-label">⚡ AP-STREAM AI</span>
+          <h2>AI TOOLBOX</h2>
+          <p>One creative workspace for creators, artists, learners and communities.</p>
+        </div>
+
+        <div className="apstream-ai-tools">
+          <button type="button" onClick={() => generateTool(
+            "writer",
+            "Create a polished original piece of content from my idea."
+          )}>
+            ✍️ AI Writer
+          </button>
+
+          <button type="button" onClick={() => generateTool(
+            "video",
+            "Create a complete video plan with hook, script, five scenes, visual direction and shot list."
+          )}>
+            🎬 Video Planner
+          </button>
+
+          <button type="button" onClick={() => generateTool(
+            "music",
+            "Help me develop an original song concept with theme, structure, chorus idea and production direction."
+          )}>
+            🎵 Music Assistant
+          </button>
+
+          <button type="button" onClick={() => generateTool(
+            "image",
+            "Create a detailed original thumbnail and artwork prompt for my content."
+          )}>
+            🎨 Image Prompts
+          </button>
+
+          <button type="button" onClick={() => generateTool(
+            "voice",
+            "Write a natural voice-over script for my video with an engaging opening and memorable ending."
+          )}>
+            🎙️ Voice Scripts
+          </button>
+
+          <button type="button" onClick={() => generateTool(
+            "social",
+            "Create social media captions, hooks and content ideas for AP-STREAM."
+          )}>
+            📱 Social Assistant
+          </button>
+
+          <button type="button" onClick={() => generateTool(
+            "study",
+            "Explain this topic simply, step by step, and give me examples to help me learn."
+          )}>
+            📚 Study Assistant
+          </button>
+
+          <button type="button" onClick={() => generateTool(
+            "business",
+            "Help me plan a creator or small business project, including goals, audience, content and next steps."
+          )}>
+            💼 Creator Business
+          </button>
+
+          <button type="button" onClick={() => generateTool(
+            "ebook",
+            "Write an original eBook based on my idea, including a title, subtitle, chapter outline and engaging chapters."
+          )}>
+            📖 eBook Writer
+          </button>
+
+          <button type="button" onClick={() => {
+            setMode("kids-cartoons");
+            setKidsStory("");
+            setShowKidsPreview(false);
+          }}>
+            🧒 Kids Cartoon Studio
+          </button>
+        </div>
+      </div>
+
       <div className="ai-studio-header">
         <span className="ai-studio-label">🤖 AP-STREAM AI</span>
         <h2>AI Studio</h2>
@@ -440,12 +745,7 @@ export default function AIStudio() {
             💡 AI Idea
           </button>
 
-          <button
-            onClick={() => generateCreative("ai_idea")}
-            disabled={generatingCreative}
-          >
-            💡 AI Idea
-          </button>
+
 
           <button
             onClick={() => {
@@ -476,26 +776,49 @@ export default function AIStudio() {
       )}
 
       {creativeResult && !generatingCreative && (
-        <div className="ai-creative-result">
-          <h3>✨ AI Result</h3>
-          <div className="ai-result-content">
+        <div
+          className="ai-creative-result"
+          style={{
+            display: "block",
+            width: "100%",
+            marginTop: "20px",
+            padding: "18px",
+            borderRadius: "14px",
+            background: "#ffffff",
+            border: "2px solid #b7dfc5",
+            boxSizing: "border-box"
+          }}
+        >
+          <h3 style={{ marginTop: 0 }}>✨ AP-STREAM AI Output</h3>
+
+          <div
+            className="ai-result-content"
+            style={{
+              whiteSpace: "pre-wrap",
+              wordBreak: "break-word",
+              lineHeight: 1.6,
+              minHeight: "60px"
+            }}
+          >
             {typeof creativeResult === "string"
               ? creativeResult
               : JSON.stringify(creativeResult, null, 2)}
           </div>
 
-          <button
-            onClick={() => {
-              const text =
-                typeof creativeResult === "string"
-                  ? creativeResult
-                  : JSON.stringify(creativeResult, null, 2);
-
-              navigator.clipboard?.writeText(text);
-            }}
-          >
-            📋 Copy AI Result
-          </button>
+          <div style={{ marginTop: "14px" }}>
+            <button
+              type="button"
+              onClick={() => {
+                const text =
+                  typeof creativeResult === "string"
+                    ? creativeResult
+                    : JSON.stringify(creativeResult, null, 2);
+                navigator.clipboard?.writeText(text);
+              }}
+            >
+              📋 Copy AI Result
+            </button>
+          </div>
         </div>
       )}
 

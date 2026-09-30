@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const db = require("../db");
+const { createJob } = require("../cloud/jobs");
 
 const router = express.Router();
 const uploadDir = path.join(__dirname, "..", "uploads", "shorts");
@@ -58,12 +59,28 @@ router.post("/upload", upload.single("video"), async (req, res) => {
 
     const short = result.rows[0];
 
+    const cloudJob = createJob({
+      type: "short-upload",
+      name: `Short upload: ${title}`,
+      status: "completed",
+      metadata: {
+        shortId: short?.id ?? null,
+        title,
+        fileSizeBytes: req.file.size || 0
+      }
+    });
+
     res.status(201).json({
       success: true,
       short: {
         ...short,
         videoUrl: `/uploads/shorts/${short.filename}`,
       },
+      cloudJob: {
+        id: cloudJob.id,
+        type: cloudJob.type,
+        status: cloudJob.status
+      }
     });
   } catch (error) {
     console.error("Short upload error:", error);

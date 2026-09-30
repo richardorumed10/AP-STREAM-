@@ -28,3 +28,126 @@ Thumbs.db
 .idea/
 backend/uploads/
 streaming/
+
+# AP-STREAM local/runtime files
+models/
+vite.pid
+frontend/dist/
+
+# Backup files
+*.backup*
+*.before-*
+
+# Local archives and backups
+*.zip
+backups/
+frontend/src-backup-*/
+frontend/src/**/*.backup
+frontend/src/**/*.before-*
+frontend/src/components/**/*.backup
+frontend/src/components/**/*.before-*
+
+# Runtime files
+*.pid
+
+# Local test media/data
+backend/*-test.*
+backend/test-audio/
+
+# Local archives and backups
+*.zip
+backups/
+frontend/src-backup-*/
+frontend/src/**/*.backup
+frontend/src/**/*.before-*
+frontend/src/components/**/*.backup
+frontend/src/components/**/*.before-*
+
+# Runtime files
+*.pid
+
+# Local test media/data
+backend/*-test.*
+backend/test-audio/
+
+# AP-STREAM production/local runtime data
+.env
+.env.*
+!.env.example
+
+# AI models and local runtimes
+models/
+ai-server.log
+streaming/mediamtx
+
+# Uploaded/generated media
+backend/uploads/
+backend/*.mp4
+backend/*.webm
+backend/*.mov
+backend/*.mp3
+backend/*.wav
+backend/*.jpg
+backend/*.png
+
+# Local archives/backups
+*.zip
+backups/
+*.backup
+*.before-*
+*.bak
+
+# Local runtime files
+*.pid
+*.log
+
+# Local databases/data
+backend/data/
+backend/*.db
+backend/*.sqlite
+backend/*.sqlite3
+
+# Node/Vite local artifacts
+node_modules/
+frontend/node_modules/
+frontend/dist/
+dist/
+.vite/
+
+# Temporary/local files
+call.txt
+frontend/call-block.txt
+
+# Additional local backup variants
+*.backup-*
+*.broken-backup
+*-backup
+*-backup.*
+*.ui-fix
+
+# Development/test audio
+frontend/public/music/test-song*.mp3
+
+# Development backup variants
+*.go-live-backup
+*.backup-football
+
+# Development/test audio
+frontend/public/music/test-song*.mp3
+
+# Local/obsolete root files
+/package.json
+/package-lock.json
+/start-ai-bg.sh
+/start-apstream-bg.sh
+
+# Obsolete local launcher
+/apstream-all.sh
+
+# Local AI runtime
+/ai/
+*.gguf
+*.gguf.*
+ai-server.log
+ai-runtime.log
+backend/auth.js

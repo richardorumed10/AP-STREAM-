@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./MusicPlayer.css";
 
-const songs = [
+const fallbackSongs = [
   {
     title: "Midnight Waves",
     artist: "AP-STREAM Artist",
@@ -12,15 +12,57 @@ const songs = [
     artist: "AP-STREAM Artist",
     src: "/music/african-pulse.mp3",
   },
-  {
-    title: "Test Song",
-    artist: "AP-STREAM Artist",
-    src: "/music/test-song-clean.mp3",
-  },
 ];
+
+const API_BASE =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:5000"
+    : `http://${window.location.hostname}:5000`;
 
 function MusicPlayer() {
   const audioRef = useRef(null);
+  const [songs, setSongs] = useState(fallbackSongs);
+  const [songsLoaded, setSongsLoaded] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadSongs() {
+      try {
+        const response = await fetch(`${API_BASE}/api/songs`);
+        const data = await response.json();
+
+        if (!cancelled && Array.isArray(data.songs) && data.songs.length > 0) {
+          setSongs(
+            data.songs.map((item) => ({
+              id: item.id,
+              title: item.title,
+              artist: item.artist_name || "AP-STREAM Artist",
+              src: item.audio_url.startsWith("http")
+                ? item.audio_url
+                : `${API_BASE}${item.audio_url}`,
+              cover: item.cover_url
+                ? (item.cover_url.startsWith("http")
+                    ? item.cover_url
+                    : `${API_BASE}${item.cover_url}`)
+                : null,
+            }))
+          );
+        }
+      } catch (error) {
+        console.error("AP-STREAM songs load error:", error);
+      } finally {
+        if (!cancelled) setSongsLoaded(true);
+      }
+    }
+
+    loadSongs();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const [songIndex, setSongIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
