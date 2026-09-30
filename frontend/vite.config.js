@@ -9,11 +9,11 @@ export default defineConfig({
     https: false,
     proxy: {
       "/api": {
-        target: "http://127.0.0.1:5000",
+        target: "https://ap-stream-3.onrender.com",
         changeOrigin: true
       },
       "/uploads": {
-        target: "http://127.0.0.1:5000",
+        target: "https://ap-stream-3.onrender.com",
         changeOrigin: true
       }
     }
