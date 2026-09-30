@@ -8,6 +8,10 @@ import Notifications from "./components/Notifications";
 import GroupsHub from "./components/GroupsHub";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
+
+const SOCKET_URL =
+  import.meta.env.VITE_SOCKET_URL ||
+  SOCKET_URL;
 import Home from "./Home";
 
 import ConnectionsHub from "./components/ConnectionsHub";
@@ -1300,7 +1304,7 @@ function App() {
       setCallOpen(true);
 
       const socket = socketRef.current || io(
-        `${window.location.protocol}//${window.location.hostname}:5000`,
+        SOCKET_URL,
         {
           transports: ["websocket", "polling"]
         }
@@ -1411,7 +1415,7 @@ function App() {
 
   useEffect(() => {
     const socket = socketRef.current || io(
-      `${window.location.protocol}//${window.location.hostname}:5000`,
+      SOCKET_URL,
       {
         transports: ["websocket", "polling"]
       }
@@ -1487,7 +1491,7 @@ function App() {
     if (socketRef.current) return socketRef.current;
 
     const socket = io(
-      `${window.location.protocol}//${window.location.hostname}:5000`,
+      SOCKET_URL,
       {
         transports: ["websocket", "polling"]
       }
@@ -3619,9 +3623,7 @@ function App() {
                       src={
                         short.video?.startsWith("http")
                           ? short.video
-                          : `${window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-                              ? "http://127.0.0.1:5000"
-                              : ""}${short.video || ""}`
+                          : short.video || ""
                       }
                       controls
                       playsInline

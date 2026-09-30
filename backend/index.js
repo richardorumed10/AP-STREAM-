@@ -100,7 +100,24 @@ app.use(helmet());
 
 app.locals.db = db;
 
-app.use(cors({ origin: ['http://127.0.0.1:5173', 'http://localhost:5173', 'http://localhost:5174', 'http://10.56.44.253:5174', 'http://10.48.206.175:5173', 'http://10.191.44.125:5174'] }));
+const allowedOrigins = [
+  'http://127.0.0.1:5173',
+  'http://localhost:5173',
+  'http://localhost:5174',
+  ...(process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(',').map((origin) => origin.trim()).filter(Boolean)
+    : [])
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('CORS origin not allowed'));
+  },
+  credentials: true
+}));
 app.use(express.json({ limit: '1mb' }));
     
 
@@ -783,8 +800,9 @@ const httpServer = http.createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: true,
-    methods: ["GET", "POST"]
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
