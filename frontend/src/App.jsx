@@ -9,9 +9,7 @@ import GroupsHub from "./components/GroupsHub";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 
-const SOCKET_URL =
-  import.meta.env.VITE_SOCKET_URL ||
-  SOCKET_URL;
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || window.location.origin;
 import Home from "./Home";
 
 import ConnectionsHub from "./components/ConnectionsHub";
@@ -2525,21 +2523,6 @@ function App() {
           </div>
         )}
 
-        {activeFeature === null && (
-          <div className="apstream-media-home">
-            <section className="apstream-home-shorts">
-              <div className="media-heading">
-                <h2>▶ SHORTS</h2>
-              </div>
-            </section>
-
-            <section className="apstream-home-videos">
-              <div className="media-heading">
-                <h2>🎬 VIDEOS</h2>
-              </div>
-            </section>
-          </div>
-        )}
 
         {activeFeature === "boda" && (
           <section id="boda" className="feature-view">
@@ -3604,6 +3587,7 @@ function App() {
         )}
 
         {/* SHORTS / REELS */}
+        {activeFeature === null && (
         <section id="shorts" className="shorts-section">
           <div className="shorts-heading">
             <h2>📱 AP-STREAM Shorts / Reels</h2>
@@ -3866,6 +3850,7 @@ function App() {
             </label>
           </div>
         </section>
+        )}
 
         {activeSection === "maps" && (
           <section id="maps" className="media-section ap-maps-section">
@@ -3908,6 +3893,7 @@ function App() {
           </section>
         )}
 
+        {activeFeature === null && (
         <section id="videos" className="media-section videos-vertical-section">
           <div className="media-heading">
             <h2>🎬 AP-STREAM Videos</h2>
@@ -4066,6 +4052,7 @@ function App() {
             )}
           </div>
         </section>
+        )}
 
       </main>
 
